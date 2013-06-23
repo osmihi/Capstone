@@ -1,0 +1,15 @@
+RewriteEngine On
+RewriteBase /
+RewriteCond %{REQUEST_URI} ^/(stats/|missing.html|failed_auth.html|error/).* [NC]
+
+# don't rewrite anything that really exists
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule .* - [L]
+
+RewriteRule ^([A-Za-z0-9]+)/([A-Za-z0-9]+)(/?.*)/?$			/?resource=$1&key=$2&%{QUERY_STRING}	[NC]
+
+RewriteCond %{QUERY_STRING} ^(.*)$
+RewriteRule ^(.*/)([^/]+)/([^/]+) $1?$2=$3&%1 [L]
+RewriteCond %{QUERY_STRING} ^(.*)$
+RewriteRule ^([^/]+)/ ?%1 [L]
+
