@@ -85,18 +85,10 @@ class APIRequest {
 		}
 	}
 	
-
-	
-	public function toString() {
-		$toStr = "\t\t\t<table>" . PHP_EOL;
-		$toStr .= "\t\t\t\t<tr>" . PHP_EOL . "\t\t\t\t\t<td>type</td>". PHP_EOL . "\t\t\t\t\t<td>" . $this->type . "</td>" . PHP_EOL . "\t\t\t\t</tr>" . PHP_EOL;
-		while ($p = current($this->params)) {
-			$toStr .= "\t\t\t\t<tr>" . PHP_EOL;	
-			$toStr .= "\t\t\t\t\t<td>" . key($this->params) . "</td>" . PHP_EOL . "\t\t\t\t\t<td>" . $p . "</td>" . PHP_EOL;
-			$toStr .= "\t\t\t\t<tr>" . PHP_EOL;
-			next($this->params);
-		}
-		$toStr .= "\t\t\t</table>" . PHP_EOL;
-		return $toStr;
-	}
+	public function jsonSerialize() {
+        return array(
+        	'jsonSupport' => 'isSadlyNot',
+        	'implemented' => 'yet'
+        );
+    }
 }

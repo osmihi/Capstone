@@ -14,17 +14,8 @@ class APIResponse {
 	public function respond(){
 		$this->setHeaders();
 
-		echo "<html>" . PHP_EOL;
-		echo "\t<body>" . PHP_EOL; 
-		echo "\t\t<p>" . PHP_EOL;
+		echo json_encode($this);
 
-		echo "\t\t\tHere's the response text:" . PHP_EOL;
-		echo "\t\t\t" . print_r($this->rq, true) . PHP_EOL;
-
-		echo "\t\t</p>" . PHP_EOL;
-		echo "\t</body>" . PHP_EOL;
-		echo "</html>" . PHP_EOL;
-		
 		exit;
 	}
 	
@@ -89,4 +80,11 @@ class APIResponse {
 
 		return ($statusCodes[$code]) ? $statusCodes[$code] : $statusCodes[500];
 	}
+	
+	public function jsonSerialize() {
+        return array(
+        	'jsonSupport' => 'isSadlyNot',
+        	'implemented' => 'yet'
+        );
+    }
 }

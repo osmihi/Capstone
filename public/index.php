@@ -95,11 +95,7 @@
 
 			</form> 
 
-			<div id="apiResult">
-
-				
-
-			</div>
+			<div id="apiResult"></div>
 
 		</div> <!-- page -->
 	</body>
