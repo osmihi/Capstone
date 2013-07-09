@@ -1,10 +1,5 @@
 <?php 
-	require_once('APIRequest.php');
-	require_once('APIResponse.php');
+	require_once('APIController.php');
 
-	$request = new APIRequest($_SERVER, $_REQUEST);
-
-	$response = new APIResponse($request);
-	
-	$response->respond();
+	$api = new APIController();
 ?>

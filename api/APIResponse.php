@@ -80,7 +80,7 @@ class APIResponse {
 
 		return ($statusCodes[$code]) ? $statusCodes[$code] : $statusCodes[500];
 	}
-	
+
 	public function jsonSerialize() {
         return array(
         	'jsonSupport' => 'isSadlyNot',

@@ -1,13 +1,6 @@
 <?php # APIRequest.php - represents a request made via the API
 
-class RequestType {
-	const CREATE = 0;
-	const READ = 1;
-	const UPDATE = 2;
-	const DELETE = 3;
-
-	private function __construct() {}
-}
+require_once('RequestType.php');
 
 class APIRequest {
 	private $requestURI;
