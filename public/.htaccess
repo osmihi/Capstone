@@ -1,0 +1,6 @@
+
+RewriteEngine on
+
+RewriteCond %{HTTP_HOST} ^ordrupapp.com$
+RewriteRule ^(.*)$ "http\:\/\/www\.ordrupapp\.com\/$1" [R=301,L]
+
