@@ -13,15 +13,15 @@ class APIController {
 
 	function __construct() {
 
-		$this->dbc = new DbConnection();
+		//$this->dbc = new DbConnection();
 		
-		//$request = new APIRequest($_SERVER, $_REQUEST);
+		$request = new APIRequest($_SERVER, $_REQUEST);
 
-		//$response = new APIResponse($request);
+		$response = new APIResponse($request);
 	
-		//$response->respond();
+		$response->respond();
 		
-		include('test.php');
+		//include('test.php');
 	
 	}
 }
