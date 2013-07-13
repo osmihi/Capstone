@@ -1,15 +1,10 @@
 <?php #APIResponse.php - builds a response from an API request
 
 class APIResponse {
-	private $rq;
-	
 	private $contentType = "application/json";
 	private $statusCode = 200;
 
-
-	function __construct(APIRequest $request) {
-		$this->rq = $request;
-	}
+	function __construct() {}
 
 	public function respond(){
 		$this->setHeaders();
@@ -19,7 +14,7 @@ class APIResponse {
 		exit;
 	}
 	
-	private function setHeaders() {
+	public function setHeaders() {
 		// Note: this code allows cross-server requests from anywhere. To restrict, we should 
 		// enclose this block in a condition checking $_SERVER['HTTP_ORIGIN'] against a whitelist.
    		{
