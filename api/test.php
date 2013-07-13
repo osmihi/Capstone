@@ -15,9 +15,6 @@
 				echo 'Read: ' 	. RequestType::READ . '<br />' . PHP_EOL;
 				echo 'Update: ' . RequestType::UPDATE . '<br />' . PHP_EOL;
 				echo 'Delete: ' . RequestType::DELETE . '<br />' . PHP_EOL;
-				
-				
-			
 			?></p>
 
 		</div> <!-- page -->
