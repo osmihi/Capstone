@@ -1,0 +1,70 @@
+<h3>TableID Bill</h3>
+
+<input type='button' value="Print" onclick="printBill()"/>
+
+<div id='billDetail' class='billDetail'>
+	<h4>Total: function? getBillTotal(tableID)</h4>
+	<div id='discountContainer' class='discountContainer'>
+		<strong>Discounts: how is this supposed to be implemented?</strong>
+		<br/>
+		Discount ID:
+		<input type='text' id='discountInput' class='discountInput'/>
+		<input type='button' value='Add discount'/>
+	</div>
+	<h4>Orders:</h4>
+	<div id='orders' class='orders'>
+		<div id='order_order1' class='orderDetail'>
+			<strong>List of OrderItems and prices</strong>
+			<table id='orderDetail_order1' class='orderDetail'>
+				<tr>
+					<td> OrderItem.PurchasePrice </td>
+					<td> MenuItem.Name </td>
+				</tr>
+				<tr>
+					<td> OrderItem.PurchasePrice </td>
+					<td> MenuItem.Name </td>
+				</tr>
+				<tr>
+					<td> OrderItem.PurchasePrice </td>
+					<td> MenuItem.Name </td>
+				</tr>
+				<tr>
+					<td> OrderItem.PurchasePrice </td>
+					<td> MenuItem.Name </td>
+				</tr>
+			</table>
+		</div>
+		<br/>
+		<div id='order_order2' class='orderDetail'>
+			<strong>List of OrderItems and prices</strong>
+			<table id='orderDetail_order2' class='orderDetail'>
+				<tr>
+					<td> OrderItem.PurchasePrice </td>
+					<td> MenuItem.Name </td>
+				</tr>
+				<tr>
+					<td> OrderItem.PurchasePrice </td>
+					<td> MenuItem.Name </td>
+				</tr>
+				<tr>
+					<td> OrderItem.PurchasePrice </td>
+					<td> MenuItem.Name </td>
+				</tr>
+				<tr>
+					<td> OrderItem.PurchasePrice </td>
+					<td> MenuItem.Name </td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+
+<style>
+	th {
+		padding-left: 10px;
+	}
+	td {
+		padding-left: 10px;
+	}
+</style>
+
