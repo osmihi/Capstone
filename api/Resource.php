@@ -16,9 +16,24 @@ abstract class Resource {
 	const DISCOUNT = 9;
 	const DISCOUNTED = 10;
 	
+	private static $rscMap = array(
+		"user" => Resource::USER,
+		"restaurant" => Resource::RESTAURANT,
+		"table" => Resource::TABLE,
+		"waitlist" => Resource::WAITLIST,
+		"menuitem" => Resource::MENUITEM,
+		"orderitem" => Resource::ORDERITEM,
+		"bill" => Resource::BILL,
+		"tip" => Resource::TIP,
+		"discount" => Resource::DISCOUNT,
+		"discounted" => Resource::DISCOUNTED
+	);
+	
 	protected $db;
-
+	
 	protected $keyName;
+	
+	protected $fieldMap;
 
 	function __construct(DbConnection $database) {
 		$this->db = $database;
@@ -26,6 +41,16 @@ abstract class Resource {
 
 	public function process($requestType, $params) {
 		
+	}
+	
+	public function loadFields(array $params) {
+		foreach ($params as $paramKey => $paramVal) {
+			foreach($this->fieldMap as $fieldKey => $fieldName) {
+				if (strcasecmp($paramKey, $fieldKey) == 0) {
+					$this->{$fieldName} = $paramVal;
+				}
+			}
+		}
 	}
 	
 	abstract protected function create($params);
@@ -45,62 +70,10 @@ abstract class Resource {
 			$rsc = get_class($rsc);
 		}
 
-		switch($rsc) {
-			case 'User':
-			case 'user':
-				$rscType = Resource::USER;
-				break;
-			case 'Restaurant':
-			case 'restaurant':
-				$rscType = Resource::RESTAURANT;
-				break;
-			case 'Table':
-			case 'table':
-				$rscType = Resource::TABLE;
-				break;
-			case 'WaitList':
-			case 'Waitlist':
-			case 'waitList':
-			case 'waitlist':
-				$rscType = Resource::WAITLIST;
-				break;
-			case 'MenuItem':
-			case 'Menuitem':
-			case 'menuItem':
-			case 'menuitem':
-				$rscType = Resource::MENUITEM;
-				break;
-			case 'OrderItem':
-			case 'Orderitem':
-			case 'orderItem':
-			case 'orderitem':
-				$rscType = Resource::ORDERITEM;
-				break;
-			case 'Order':
-			case 'order':
-				$rscType = Resource::ORDER;
-				break;
-			case 'Bill':
-			case 'bill':
-				$rscType = Resource::BILL;
-				break;
-			case 'Tip':
-			case 'tip':
-				$rscType = Resource::TIP;
-				break;
-			case 'Discount':
-			case 'discount':
-				$rscType = Resource::DISCOUNT;
-				break;
-			case 'Discounted':
-			case 'discounted':
-				$rscType = Resource::DISCOUNTED;
-				break;
-			default:
-				$rscType = false;
-				break;
+		foreach(self::$rscMap as $rscKey => $rscVal) {
+			if ( strcasecmp($rsc, $rscKey) == 0 ) $rscType == $rscVal;
 		}
-		
+
 		return $rscType;
 	}
 }

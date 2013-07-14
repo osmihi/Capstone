@@ -36,6 +36,10 @@ class APIRequest {
 		}
 	}
 
+	public function getParams() {
+		return $this->params;
+	}
+
 	public function getUserInfo() {
 		$userInfo = array();
 		
@@ -85,11 +89,4 @@ class APIRequest {
 			return false;
 		}
 	}
-	
-	public function jsonSerialize() {
-        return array(
-        	'jsonSupport' => 'isSadlyNot',
-        	'implemented' => 'yet'
-        );
-    }
 }

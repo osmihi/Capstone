@@ -2,10 +2,22 @@
 
 class Discounted extends Resource {
 	
+	protected $discountID;
+	protected $billID;
+
 	function __construct(DbConnection $dbc, array $params) {
 		parent::__construct($dbc);
+		
+		$this->keyName = ''; // key is discountID and billID
+		
+		$this->fieldMap = array(
+			"discountid" => "discountID",
+			"billid" => "billID"
+		);
+		
+		parent::loadFields($params);
 	}
-	
+
 	// Inherited methods
 	
 	public function create($params) {

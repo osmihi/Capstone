@@ -50,10 +50,12 @@ class APIController {
 
 			$this->user = new User($this->dbc, $userInfo);
 
-			if ( !$this->user->authenticate() ) throw new Exception("User not found.", 401);					
+			if ( !$this->user->authenticate() ) throw new Exception("Username / password not found.", 401);					
 
 			if ( !$this->user->authorize($this->request) ) throw new Exception("User not authorized for requested action.", 403);
 		
+			
+			
 			//$this->response->respond();
 					
 			exit;

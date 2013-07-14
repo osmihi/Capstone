@@ -2,12 +2,24 @@
 
 class Bill extends Resource {
 	
+	protected $billID;
+	protected $paid;
+
 	function __construct(DbConnection $dbc, array $params) {
 		parent::__construct($dbc);
+		
+		$this->keyName = 'billID';
+		
+		$this->fieldMap = array(
+			"billid" => "billID",
+			"paid" => "paid"
+		);
+		
+		parent::loadFields($params);
 	}
 	
 	// Inherited methods
-	
+
 	public function create($params) {
 		
 	}

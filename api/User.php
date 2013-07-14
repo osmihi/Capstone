@@ -8,66 +8,36 @@ require_once('AccessMatrix.php');
 
 class User extends Resource {
 
-	private $userID;
-	private $username;
-	private $passwordHash;
-	private $restaurantID;
-	private $role;
-	private $fName;
-	private $lName;
-
+	protected $userID;
+	protected $username;
+	protected $passwordHash;
+	protected $restaurantID;
+	protected $role;
+	protected $fName;
+	protected $lName;
+	
 	function __construct(DbConnection $dbc, array $params) {
 		parent::__construct($dbc);
 
 		$this->keyName = 'UserID';
+		
+		$this->fieldMap = array(
+			"userid" => "userID",
+			"username" => "username",
+			"password" => "passwordHash",
+			"passwordhash" => "passwordHash",
+			"restaurantid" => "restaurantID",
+			"role" => "role",
+			"fname" => "fName",
+			"lname" => "lName"
+		);
 
-		while ( $p = current($params) ) {
-			$currentKey = key($params);
-
-			switch ($currentKey) {
-				case 'UserID':
-				case 'userID':
-					$this->userID = $p;
-					break;
-				case 'Username':
-				case 'username':
-				case 'UserName':
-				case 'userName':
-					$this->username = $p;
-					break;
-				case 'Password':
-				case 'password':
-				case 'PasswordHash':
-				case 'passwordHash':
-					$this->passwordHash = $p;
-					break;
-				case 'RestaurantID':
-				case 'restaurantID':
-					$this->restaurantID = $p;
-					break;
-				case 'Role':
-				case 'role':
-					$this->role = $p;
-					break;
-				case 'FName':
-				case 'fName':
-					$this->fName = $p;
-					break;
-				case 'LName':
-				case 'lName':
-					$this->lName = $p;
-					break;
-				default:
-					break;
-			}
-
-			next($params);
-		}
+		parent::loadFields($params);
 	}
 	
 	public function authenticate() {
 		if ( !isset($this->username) || !isset($this->passwordHash) ) return false;
-		
+
 		$stmt = $this->db->prepare("SELECT `UserID`, `RestaurantID`, `Role`, `FName`, `LName` FROM `User` WHERE `Username` = :uname AND `PasswordHash` = :pwh LIMIT 0,1");
 		$stmt->bindValue(':uname', $this->username, PDO::PARAM_STR);
 		$stmt->bindValue(':pwh', $this->passwordHash, PDO::PARAM_STR);

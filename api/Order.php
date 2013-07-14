@@ -2,12 +2,28 @@
 
 class Order extends Resource {
 	
+	protected $orderID;
+	protected $tableID;
+	protected $billID;
+	protected $timestamp;
+
 	function __construct(DbConnection $dbc, array $params) {
 		parent::__construct($dbc);
+		
+		$this->keyName = 'orderID';
+		
+		$this->fieldMap = array(
+			"orderid" => "orderID",
+			"tableid" => "tableID",
+			"billid" => "billID",
+			"timestamp" => "timestamp"
+		);
+		
+		parent::loadFields($params);
 	}
 	
 	// Inherited methods
-	
+
 	public function create($params) {
 		
 	}

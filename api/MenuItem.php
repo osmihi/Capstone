@@ -2,12 +2,32 @@
 
 class MenuItem extends Resource {
 	
+	protected $menuItemID;
+	protected $restaurantID;
+	protected $name;
+	protected $category;
+	protected $prepTime;
+	protected $price;
+
 	function __construct(DbConnection $dbc, array $params) {
 		parent::__construct($dbc);
+		
+		$this->keyName = 'menuItemID';
+		
+		$this->fieldMap = array(
+			"menuitemid" => "menuItemID",
+			"restaurantid" => "restaurantID",
+			"name" => "name",
+			"category" => "category",
+			"preptime" => "prepTime",
+			"price" => "price"
+		);
+		
+		parent::loadFields($params);
 	}
-	
+
 	// Inherited methods
-	
+
 	public function create($params) {
 		
 	}
