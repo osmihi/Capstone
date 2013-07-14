@@ -20,7 +20,7 @@ function employeeScreen(user) {
 						$.ajax({
 							url : 'http://api.ordrupapp.com/users/' + $('#userID').val(),
 							type : 'DELETE',
-							data : ,
+							data : '',
 							success : function() {
 								alert('success');
 							}
