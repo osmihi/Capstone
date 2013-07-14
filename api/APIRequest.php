@@ -6,40 +6,27 @@ class APIRequest {
 	private $requestURI;
 	private $requestMethod;
 	private $requestType;
+	private $resource;
 	private $resourceType;
 	private $key;
 	private $params = array();
 
-	public function __construct($svr, $rq) {
-		$this->requestURI = $svr['REQUEST_URI'];
-		$this->requestMethod = $svr['REQUEST_METHOD'];
+	public function __construct() {
+		$this->requestURI = $_SERVER['REQUEST_URI'];
+		$this->requestMethod = $_SERVER['REQUEST_METHOD'];
 
-		switch ($svr['REQUEST_METHOD']) {
-			case "POST":
-				$this->requestType = RequestType::CREATE;
-				break;
-			case "GET":
-				$this->requestType = RequestType::READ;
-				break;
-			case "PUT":
-				$this->requestType = RequestType::UPDATE;
-				break;
-			case "DELETE":
-				$this->requestType = RequestType::DELETE;
-				break;
-			default:
-				break;
-		}
+		$this->requestType = RequestType::getRequestType($_SERVER['REQUEST_METHOD']);
 
-		$this->resourceType = $rq['resource'];
+		$this->resource = $_REQUEST['resource'];
+		$this->resourceType = Resource::getResourceType($this->resource);
 
-		if ( isset($rq['key']) && preg_match("/([0-9]+)/", $rq['key']) ) {
-			$this->key = $rq['key'];
+		if ( isset($_REQUEST['key']) && preg_match("/([0-9]+)/", $_REQUEST['key']) ) {
+			$this->key = $_REQUEST['key'];
 		} else {
 			$this->key = 0;
 		}
 		
-		$this->buildParams($rq);
+		$this->buildParams($_REQUEST);
 	}
 
 	private function buildParams($rq) {
@@ -49,8 +36,29 @@ class APIRequest {
 		}
 	}
 
+	public function getUserInfo() {
+		$userInfo = array();
+		
+		if ($this->hasParam('Username') && $this->hasParam('Password')) {
+			$userInfo['Username'] = $this->getParam('Username');
+
+			$userInfo['Password'] = $this->getParam('Password');
+
+		} else return false;
+
+		return $userInfo;
+	}
+
+	public function getResource() {
+		return $this->resource;
+	}
+	
 	public function getResourceType() {
 		return $this->resourceType;
+	}
+	
+	public function getRequestType() {
+		return $this->requestType;
 	}
 	
 	public function getParam($key) {

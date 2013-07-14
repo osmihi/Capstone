@@ -1,58 +1,66 @@
 <?php # APIController.php - Controller for API functions
 
+	require_once('DbConnection.php');
+
+	require_once('RequestType.php');
+	require_once('Role.php');
+
 	require_once('AccessMatrix.php');
-	
+
+	require_once('Resource.php');
+	require_once('User.php');
+	require_once('Restaurant.php');
+	require_once('Table.php');
+	require_once('WaitList.php');
+	require_once('MenuItem.php');
+	require_once('OrderItem.php');
+	require_once('Order.php');
+	require_once('Bill.php');
+	require_once('Tip.php');
+	require_once('Discount.php');
+	require_once('Discounted.php');
+
 	require_once('APIRequest.php');
 	require_once('APIResponse.php');
-	
-	require_once('DbConnection.php');
-	
-	require_once('RequestType.php');
-	require_once('Resource.php');
-	require_once('Role.php');
-	require_once('User.php');
-	
 
 class APIController {
 	
 	private $dbc;
 
+	private $request;
+	private $response;
+
+	private $user;
+
 	function __construct() {
 
-		$this->dbc = new DbConnection();
-		
-		//$request = new APIRequest($_SERVER, $_REQUEST);
+		try {
+			$this->response = new APIResponse();
 
-		//$response = new APIResponse($request);
-	
-		//$response->respond();
+			// this line is in here for testing only. setHeaders should be private and only called by APIResponse in respond()
+			$this->response->setHeaders();
+
+			$this->dbc = new DbConnection();
+
+			$this->request = new APIRequest();
+
+			$userInfo = $this->request->getUserInfo();
+
+			if (!$userInfo) throw new Exception("No user info in request.", 400);
+
+			$this->user = new User($this->dbc, $userInfo);
+
+			if ( !$this->user->authenticate() ) throw new Exception("User not found.", 401);					
+
+			if ( !$this->user->authorize($this->request) ) throw new Exception("User not authorized for requested action.", 403);
 		
-		//include('test.php');
-		
-		$stmt = $this->dbc->prepare("SELECT * FROM `Restaurant` LIMIT :start,:number");
-		$stmt->bindValue(':start', 0, PDO::PARAM_INT);
-		$stmt->bindValue(':number', 10, PDO::PARAM_INT);
-		
-		$res = $this->dbc->execute($stmt);
-		
-		echo "<pre>" . PHP_EOL;
-		
-		foreach ($res as $r) {
-			echo $r['RestaurantID'] . ": " . $r['Name'] . "<br />" . PHP_EOL;
+			//$this->response->respond();
+					
+			exit;
+
+		} catch (Exception $e) {
+			echo $e->getMessage();
 		}
-		
-		echo "Can manager read tables? " . AccessMatrix::authorize(Role::MANAGER,Resource::TABLE,RequestType::READ) . PHP_EOL;
-
-		echo "Can wait staff delete restaurant? " . AccessMatrix::authorize(Role::WAIT_STAFF,Resource::RESTAURANT,RequestType::DELETE) . PHP_EOL;
-		
-		echo "Can wait staff read waitlist? " . AccessMatrix::authorize(Role::WAIT_STAFF,Resource::WAITLIST,RequestType::READ) . PHP_EOL;
-		
-		echo "Can hostess read waitlist? " . AccessMatrix::authorize(Role::HOSTESS,Resource::WAITLIST,RequestType::READ) . PHP_EOL;
-		
-		echo "</pre>" . PHP_EOL;
-		
-		
-	
 	}
 }
 
