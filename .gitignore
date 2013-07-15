@@ -6,3 +6,5 @@
 *.war
 *.ear
 Project Documents/Thumbs.db
+.project
+.metadata
