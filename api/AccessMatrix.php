@@ -1,9 +1,5 @@
 <?php # AccessMatrix.php - this class allows us to check what each role is allowed to do
 
-require_once('RequestType.php');
-require_once('Role.php');
-require_once('Resource.php');
-
 class AccessMatrix {
 
 	private	static $matrix = array(

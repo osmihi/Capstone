@@ -7,18 +7,18 @@
 
 	require_once('AccessMatrix.php');
 
-	require_once('Resource.php');
-	require_once('User.php');
-	require_once('Restaurant.php');
-	require_once('Table.php');
-	require_once('WaitList.php');
-	require_once('MenuItem.php');
-	require_once('OrderItem.php');
-	require_once('Order.php');
-	require_once('Bill.php');
-	require_once('Tip.php');
-	require_once('Discount.php');
-	require_once('Discounted.php');
+	require_once('resource/Resource.php');
+	require_once('resource/User.php');
+	require_once('resource/Restaurant.php');
+	require_once('resource/Table.php');
+	require_once('resource/WaitList.php');
+	require_once('resource/MenuItem.php');
+	require_once('resource/OrderItem.php');
+	require_once('resource/Order.php');
+	require_once('resource/Bill.php');
+	require_once('resource/Tip.php');
+	require_once('resource/Discount.php');
+	require_once('resource/Discounted.php');
 
 	require_once('APIRequest.php');
 	require_once('APIResponse.php');
@@ -53,15 +53,27 @@ class APIController {
 			if ( !$this->user->authenticate() ) throw new Exception("Username / password not found.", 401);					
 
 			if ( !$this->user->authorize($this->request) ) throw new Exception("User not authorized for requested action.", 403);
-		
-			
-			
+
+			$this->request->addParam("RestaurantID", $this->user->getField('RestaurantID'));
+
+			// test code
+			$wl = new WaitList($this->dbc, $this->request->getParams());
+
+			echo "create(): ";
+			var_dump($wl->create());
+			echo "read(): ";
+			var_dump($wl->read());
+			echo "update(): ";
+			var_dump($wl->update());
+			echo "delete(): ";
+			var_dump($wl->delete());
+
 			//$this->response->respond();
 					
 			exit;
 
 		} catch (Exception $e) {
-			echo $e->getMessage();
+			echo $e.getCode() . ': ' . $e->getMessage();
 		}
 	}
 }

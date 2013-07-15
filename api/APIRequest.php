@@ -1,7 +1,5 @@
 <?php # APIRequest.php - represents a request made via the API
 
-require_once('RequestType.php');
-
 class APIRequest {
 	private $requestURI;
 	private $requestMethod;
