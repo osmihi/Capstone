@@ -55,25 +55,28 @@ class APIController {
 			if ( !$this->user->authorize($this->request) ) throw new Exception("User not authorized for requested action.", 403);
 
 			$this->request->addParam("RestaurantID", $this->user->getField('RestaurantID'));
+			
+			// Create the resource
+			$rsc = Resource::getResource($this->request->getResourceType(), $this->dbc, $this->request->getParams());
 
-			// test code
-			$wl = new WaitList($this->dbc, $this->request->getParams());
+			if ( !$rsc ) throw new Exception("Error creating resource.", 400);
 
 			echo "create(): ";
-			var_dump($wl->create());
+			var_dump($rsc->create());
 			echo "read(): ";
-			var_dump($wl->read());
+			var_dump($rsc->read());
 			echo "update(): ";
-			var_dump($wl->update());
+			var_dump($rsc->update());
 			echo "delete(): ";
-			var_dump($wl->delete());
+			var_dump($rsc->delete());
 
 			//$this->response->respond();
 					
 			exit;
 
 		} catch (Exception $e) {
-			echo $e.getCode() . ': ' . $e->getMessage();
+			// really this should actually set the status code of the response
+			echo $e->getCode() . ': ' . $e->getMessage();
 		}
 	}
 }

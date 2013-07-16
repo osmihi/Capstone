@@ -15,7 +15,13 @@ class Bill extends Resource {
 			"billid" => "BillID",
 			"paid" => "Paid"
 		);
-		
+
+		// Required fields for each operation
+		$this->createFields = array();
+ 		$this->readFields = array("BillID");
+ 		$this->updateFields = array("BillID");
+ 		$this->deleteFields = array("BillID");
+ 
 		parent::loadFields($params);
 	}
 }

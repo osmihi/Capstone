@@ -18,6 +18,12 @@ class Discounted extends Resource {
 			"billid" => "BillID"
 		);
 		
+		// Required fields for each operation
+		$this->createFields = array("DiscountID", "BillID");
+ 		$this->readFields = array("DiscountedID");
+ 		$this->updateFields = array("DiscountedID");
+ 		$this->deleteFields = array("DiscountedID");
+
 		parent::loadFields($params);
 	}
 }

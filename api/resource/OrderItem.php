@@ -12,9 +12,9 @@ class OrderItem extends Resource {
 
 	function __construct(DbConnection $dbc, array $params) {
 		parent::__construct($dbc);
-		
+
 		$this->keyName = 'OrderItemID';
-		
+
 		$this->fieldMap = array(
 			"orderitemid" => "OrderItemID",
 			"menuitemid" => "MenuItemID",
@@ -23,7 +23,13 @@ class OrderItem extends Resource {
 			"purchaseprice" => "PurchasePrice",
 			"notes" => "Notes"
 		);
-		
+
+		// Required fields for each operation
+		$this->createFields = array("OrderID", "MenuItemID", "PurchasePrice");
+ 		$this->readFields = array("OrderItemID");
+ 		$this->updateFields = array("OrderItemID");
+ 		$this->deleteFields = array("OrderItemID");
+
 		parent::loadFields($params);
 	}
 }

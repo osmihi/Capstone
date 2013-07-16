@@ -20,6 +20,12 @@ class Order extends Resource {
 			"timestamp" => "Timestamp"
 		);
 		
+		// Required fields for each operation
+		$this->createFields = array("TableID", "BillID");
+ 		$this->readFields = array("OrderID");
+ 		$this->updateFields = array("OrderID");
+ 		$this->deleteFields = array("OrderID");
+
 		parent::loadFields($params);
 	}
 }

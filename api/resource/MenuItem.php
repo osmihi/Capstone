@@ -23,7 +23,13 @@ class MenuItem extends Resource {
 			"preptime" => "PrepTime",
 			"price" => "Price"
 		);
-		
+
+		// Required fields for each operation
+		$this->createFields = array("RestaurantID", "Name", "Category", "PrepTime");
+ 		$this->readFields = array("MenuItemID");
+ 		$this->updateFields = array("MenuItemID");
+ 		$this->deleteFields = array("MenuItemID");
+
 		parent::loadFields($params);
 	}
 }

@@ -11,12 +11,12 @@ class User extends Resource {
 	protected $FName;
 	protected $LName;
 	protected $Locked;
-	
+
 	function __construct(DbConnection $dbc, array $params) {
 		parent::__construct($dbc);
 
 		$this->keyName = 'UserID';
-		
+
 		$this->fieldMap = array(
 			"userid" => "UserID",
 			"username" => "Username",
@@ -29,9 +29,15 @@ class User extends Resource {
 			"locked" => "Locked"
 		);
 
+		// Required fields for each operation
+		$this->createFields = array("Username", "PasswordHash", "RestaurantID", "Role", "FName", "LName");
+ 		$this->readFields = array("UserID", "RestaurantID");
+ 		$this->updateFields = array("UserID", "RestaurantID");
+ 		$this->deleteFields = array("UserID", "RestaurantID");
+
 		parent::loadFields($params);
 	}
-	
+
 	public function authenticate() {
 		if ( !isset($this->Username) || !isset($this->PasswordHash) ) return false;
 
@@ -53,7 +59,7 @@ class User extends Resource {
 			return true;
 		}
 	}
-	
+
 	public function authorize(APIRequest $rq) {
 		$role = Role::getRole($this->Role);
 		$rscType = $rq->getResourceType(); 

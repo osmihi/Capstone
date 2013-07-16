@@ -21,12 +21,13 @@ class WaitList extends Resource {
 			"size" => "Size",
 			"timestamp" => "Timestamp"
  		);
- 		
- 		$this->createFields = array("RestaurantId", "Name", "Size");
- 		$this->readFields = array("WaitListId", "RestaurantId");
- 		$this->updateFields = array("WaitListId", "RestaurantId");
- 		$this->deleteFields = array("WaitListId", "RestaurantId");
-		
+
+ 		// Required fields for each operation
+ 		$this->createFields = array("RestaurantID", "Name", "Size");
+ 		$this->readFields = array("WaitListID", "RestaurantID");
+ 		$this->updateFields = array("WaitListID", "RestaurantID");
+ 		$this->deleteFields = array("WaitListID", "RestaurantID");
+
 		parent::loadFields($params);
 	}
 }

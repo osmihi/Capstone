@@ -24,7 +24,13 @@ class Table extends Resource {
 			"capacity" => "Capacity",
 			"status" => "Status"
 		);
-		
+
+		// Required fields for each operation
+		$this->createFields = array("RestaurantID", "Number");
+ 		$this->readFields = array("TableID", "RestaurantID");
+ 		$this->updateFields = array("TableID", "RestaurantID");
+ 		$this->deleteFields = array("TableID", "RestaurantID");
+
 		parent::loadFields($params);
 	}
 }

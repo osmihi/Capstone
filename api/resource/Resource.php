@@ -20,6 +20,7 @@ abstract class Resource {
 		"waitlist" => Resource::WAITLIST,
 		"menuitem" => Resource::MENUITEM,
 		"orderitem" => Resource::ORDERITEM,
+		"order" => Resource::ORDER,
 		"bill" => Resource::BILL,
 		"tip" => Resource::TIP,
 		"discount" => Resource::DISCOUNT,
@@ -48,15 +49,15 @@ abstract class Resource {
 	}
 	
 	public function loadFields(array $params) {
-		if ( isset($params['key']) && !isset($params[$this->keyName]) ) {
-			$params[$this->keyName] = $params['key'];
-		}
-
 		foreach ($params as $paramKey => $paramVal) {
 			$fieldName = $this->getFieldName($paramKey);
 			if ($fieldName) {
 				$this->{$fieldName} = $paramVal;
 			}
+		}
+
+		if ( isset($params['key']) ) {
+			$this->{$this->keyName} = $params['key'];
 		}
 	}
 	
@@ -88,8 +89,12 @@ abstract class Resource {
 		}
 		return $field;
 	}
+	
+	public function getPrimaryKey() {
+		return $this->{$this->keyName};
+	}
 
-	protected function verifyRequiredFields($requiredFields, $params) {
+	protected function verifyRequiredFields(array $requiredFields, array $params) {
 
 		$params = $params + $this->getFields();
 
@@ -142,9 +147,53 @@ abstract class Resource {
 		}
 
 		foreach(self::$rscMap as $rscKey => $rscVal) {
-			if ( strcasecmp($rsc, $rscKey) == 0 ) $rscType == $rscVal;
+			if ( strcasecmp($rsc, $rscKey) == 0 ) $rscType = $rscVal;
 		}
 
 		return $rscType;
+	}
+	
+	public static function getResource($rscType, DbConnection $dbc, array $params) {
+		if ($rscType){
+			switch($rscType) {
+				case Resource::USER:
+					return new User($dbc, $params);
+					break;
+				case Resource::RESTAURANT:
+					return new Restaurant($dbc, $params);
+					break;
+				case Resource::TABLE:
+					return new Table($dbc, $params);
+					break;
+				case Resource::WAITLIST:
+					return new WaitList($dbc, $params);
+					break;
+				case Resource::MENUITEM:
+					return new MenuItem($dbc, $params);
+					break;
+				case Resource::ORDERITEM:
+					return new OrderItem($dbc, $params);
+					break;
+				case Resource::ORDER:
+					return new Order($dbc, $params);
+					break;
+				case Resource::BILL:
+					return new Bill($dbc, $params);
+					break;
+				case Resource::TIP:
+					return new Tip($dbc, $params);
+					break;
+				case Resource::DISCOUNT:
+					return new Discount($dbc, $params);
+					break;
+				case Resource::DISCOUNTED:
+					return new Discounted($dbc, $params);
+					break;
+				default:
+					return false;
+					break;
+			}
+		}
+		return false;
 	}
 }
