@@ -1,11 +1,11 @@
 <?php # Role.php - an 'enum' for user roles
 
 class Role {
-	const ADMINISTRATOR = 0;
-	const MANAGER = 1;
-	const WAIT_STAFF = 2;
-	const KITCHEN_STAFF = 3;
-	const HOSTESS = 4;
+	const ADMINISTRATOR = 1;
+	const MANAGER = 2;
+	const WAIT_STAFF = 3;
+	const KITCHEN_STAFF = 4;
+	const HOSTESS = 5;
 	
 	public static function getRole($roleStr) {
 		$role = false;

@@ -1,10 +1,10 @@
 <?php # RequestType.php - an 'enum' for request types
 
 class RequestType {
-	const CREATE = 0;
-	const READ = 1;
-	const UPDATE = 2;
-	const DELETE = 3;
+	const CREATE = 1;
+	const READ = 2;
+	const UPDATE = 3;
+	const DELETE = 4;
 	
 	public static function getRequestType($type) {
 		$rqt = false;

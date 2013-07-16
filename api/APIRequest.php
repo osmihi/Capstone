@@ -23,8 +23,15 @@ class APIRequest {
 		} else {
 			$this->key = 0;
 		}
-		
+
 		$this->buildParams($_REQUEST);
+
+		// Special procedure needed to obtains PUT or DELETE parameters
+		if ( $this->requestType == RequestType::UPDATE || $this->requestType == RequestType::DELETE ) {
+			parse_str(file_get_contents("php://input"),$putParams);
+			$this->buildParams($putParams);
+		}
+
 	}
 
 	private function buildParams($rq) {

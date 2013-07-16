@@ -1,17 +1,17 @@
 <?php #Resource.php - abstract superclass for database objects
 
 abstract class Resource {
-	const USER = 0;
-	const RESTAURANT = 1;
-	const TABLE = 2;
-	const WAITLIST = 3;
-	const MENUITEM = 4;
-	const ORDERITEM = 5;
-	const ORDER = 6;
-	const BILL = 7;
-	const TIP = 8;
-	const DISCOUNT = 9;
-	const DISCOUNTED = 10;
+	const USER = 1;
+	const RESTAURANT = 2;
+	const TABLE = 3;
+	const WAITLIST = 4;
+	const MENUITEM = 5;
+	const ORDERITEM = 6;
+	const ORDER = 7;
+	const BILL = 8;
+	const TIP = 9;
+	const DISCOUNT = 10;
+	const DISCOUNTED = 11;
 	
 	private static $rscMap = array(
 		"user" => Resource::USER,
@@ -44,13 +44,10 @@ abstract class Resource {
 		$this->db = $database;
 	}
 
-	public function process($requestType, $params) {
-		
-	}
-	
 	public function loadFields(array $params) {
 		foreach ($params as $paramKey => $paramVal) {
 			$fieldName = $this->getFieldName($paramKey);
+
 			if ($fieldName) {
 				$this->{$fieldName} = $paramVal;
 			}
@@ -95,9 +92,6 @@ abstract class Resource {
 	}
 
 	protected function verifyRequiredFields(array $requiredFields, array $params) {
-
-		$params = $params + $this->getFields();
-
 		$verified = !empty($params);
 
 		foreach ($requiredFields as $fieldName) {
@@ -116,27 +110,61 @@ abstract class Resource {
 	}	
 
 	public function create(array $params = array()) {
+		$params = $params + $this->getFields();
 		if (!$this->verifyRequiredFields($this->createFields, $params)) return false;
 		return true;
 	}
 
 	public function read(array $params = array()) {
+		$params = $params + $this->getFields();
 		if (!$this->verifyRequiredFields($this->readFields, $params)) return false;
-		return true; 	
+
+		$fieldNames = "";
+		$delim = "";
+		foreach ($this->fieldMap as $f) {
+			$fieldNames .= $delim . "`" . $f . "`";
+			$delim = ", "; 
+		}
+		
+		$reqFields = "";
+		$delim = " ";
+		foreach ($this->readFields as $f) {
+			$reqFields .= $delim . "`" . $f . "` = :" . $f . "Value ";
+			$delim = " AND "; 
+		}
+
+		$stmt = $this->db->prepare("SELECT ". $fieldNames . " FROM `" . get_class($this) . "` WHERE " . $reqFields);
+		foreach ($this->readFields as $f)
+			$stmt->bindValue(':' . $f . "Value", $params[$f], Resource::getPDOParamType($params[$f]));
+
+		$res = $this->db->execute($stmt);
+
+		return $res; 	
 	}
 
 	public function update(array $params = array()) {
+		$params = $params + $this->getFields();
 		if (!$this->verifyRequiredFields($this->updateFields, $params)) return false;
 		return true;		
 	}
 
 	public function delete(array $params = array()) {
+		$params = $params + $this->getFields();
 		if (!$this->verifyRequiredFields($this->deleteFields, $params)) return false;
 		return true;
 	}
 
-	public function jsonSerialize() {
-		
+	public function getJson() {
+		$json  = "{" . PHP_EOL;
+		$delim = "";
+		foreach($this->fieldMap as $f) {
+			$json .= $delim;
+			$json .= "\t" . json_encode($f) . ":" . json_encode($this->{$f});
+			$delim = "," . PHP_EOL;
+		}
+		$json .= PHP_EOL . "}" . PHP_EOL;
+
+		return $json;
 	}
 	
 	public static function getResourceType($rsc) {
@@ -195,5 +223,18 @@ abstract class Resource {
 			}
 		}
 		return false;
+	}
+
+	public static function getPDOParamType($value) {
+		if (is_int($value))
+			return PDO::PARAM_INT;
+		elseif (is_bool($value))
+			return PDO::PARAM_BOOL;
+		elseif (is_null($value))
+			return PDO::PARAM_NULL;
+		elseif (is_string($value))
+			return PDO::PARAM_STR;
+		else 
+			return false;
 	}
 }
