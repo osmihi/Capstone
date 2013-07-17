@@ -69,7 +69,11 @@ class APIRequest {
 	public function getRequestType() {
 		return $this->requestType;
 	}
-	
+
+	public function getKey() {
+		return $this->key;
+	}
+
 	public function getParam($key) {
 		if (isset($this->params[$key])) {
 			return $this->params[$key];

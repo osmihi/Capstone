@@ -40,23 +40,18 @@
 						params += paramFields.get(i++).value + "=" + paramFields.get(i++) + "&";
 					}
 
-					function doStuff() {
-						//do something
-					}
-
-
 					$.ajax({
 						url : "http://api.ordrupapp.com/" + $('#resource').val().toLowerCase() + "/" + $('#key').val(),
 						type : $('input:radio[name=rqType]:checked').val(),
 						data : $('.parameter[value!=""]').serialize(),
-						//contentType: "application/json; charset=utf-8",
-						//dataType: "jsonp",
-						error : function() {
-							$('#apiResult').append('<p>Error</p>');
+						//contentType: "application/json",
+						dataType: "json",
+						crossDomain:true,
+						error : function(data, textStatus, errorThrown) {
+							$('#apiResult').append("Error: " + textStatus + " : " + errorThrown);
 						},
 						success : function(data) {
-							console.log(data);
-							$('#apiResult').append(data);
+							$('#apiResult').append("Success. " + data.toString());
 						}
 					});
 				});

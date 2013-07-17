@@ -22,6 +22,8 @@
 
 	require_once('APIRequest.php');
 	require_once('APIResponse.php');
+	
+	require_once('QueryHelper.php');
 
 class APIController {
 	
@@ -39,7 +41,7 @@ class APIController {
 
 			// this line is in here for testing only. setHeaders should be private and only called by APIResponse in respond()
 			$this->response->setHeaders();
-			
+
 			// Connect to the database
 			$this->dbc = new DbConnection();
 
@@ -61,35 +63,45 @@ class APIController {
 			$this->request->addParam("RestaurantID", $this->user->getField('RestaurantID'));
 			
 			// Create the resource
-			$rsc = Resource::getResource($this->request->getResourceType(), $this->dbc, $this->request->getParams());
+			$rsc = false;
+//			if ( $this->request->getKey() > 0 )
+				$rsc = Resource::getResource($this->request->getResourceType(), $this->dbc, $this->request->getParams());
+//			else {/*otherwise get resource collection*/} 
+				
 
 			if ( !$rsc ) throw new Exception("Error creating resource.", 400);
 
 			// Carry out the request on the resource
 			$result = false;
-
+			
 			switch($this->request->getRequestType()) {
 				case RequestType::CREATE;
-					$result = $rsc->create();
+					if ( $this->request->getKey() > 0 ) throw new Exception("Invalid request. Do not provide an ID for the resource being created.", 400);
+					$result = $rsc->create($this->request->getParams());
+
+					if ( !$result ) throw new Exception("The request could not be carried out. The selected resource may not exist, or all required fields may not have been provided.", 206);
+					else $rsc->loadFields($result[0]);
+
 					break;
 				case RequestType::READ;
-					$result = $rsc->read();
+					$result = $rsc->read($this->request->getParams());
+					
+					// This message should really actually give you what the required fields are.
+					if ( !$result ) throw new Exception("The request could not be carried out. The selected resource may not exist, or all required fields may not have been provided.", 206);
+					else $rsc->loadFields($result[0]);
+
 					break;
 				case RequestType::UPDATE;
-					$result = $rsc->update();
+					$result = $rsc->update($this->request->getParams());
+
 					break;
 				case RequestType::DELETE;
-					$result = $rsc->delete();
+					$result = $rsc->delete($this->request->getParams());
+
 					break;
 				default:
 					$result = false;
 					break; 
-			}
-
-			// This message should really actually give you what the required fields are.
-			if ( !$result ) throw new Exception("The request could not be carried out. Try including all required fields.", 206);
-			else {
-				$rsc->loadFields($result[0]);
 			}
 			
 			echo $rsc->getJson() . PHP_EOL;

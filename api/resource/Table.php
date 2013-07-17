@@ -19,7 +19,6 @@ class Table extends Resource {
 			"tableid" => "TableID",
 			"restaurantid" => "RestaurantID",
 			"userid" => "UserID",
-			"assignee" => "UserID",
 			"number" => "Number",
 			"capacity" => "Capacity",
 			"status" => "Status"

@@ -44,6 +44,7 @@ abstract class Resource {
 		$this->db = $database;
 	}
 
+	// loads a bunch of params into the corresponding fields on this object
 	public function loadFields(array $params) {
 		foreach ($params as $paramKey => $paramVal) {
 			$fieldName = $this->getFieldName($paramKey);
@@ -57,7 +58,8 @@ abstract class Resource {
 			$this->{$this->keyName} = $params['key'];
 		}
 	}
-	
+
+	// gets the database field name of a given param name
 	protected function getFieldName($paramKey) {
 		foreach($this->fieldMap as $fieldKey => $fieldName) {
 			if (strcasecmp($paramKey, $fieldKey) == 0) {
@@ -67,6 +69,7 @@ abstract class Resource {
 		return false;
 	}
 
+	// Returns an array of all the database fields of this resource
 	public function getFields() {
 		$fields = array();
 		foreach ($this->fieldMap as $key => $value) {
@@ -77,6 +80,7 @@ abstract class Resource {
 		return $fields;
 	}
 
+	// Gets a field by key name
 	public function getField($key) {
 		$field = false;
 		$fieldName = $this->getFieldName($key);
@@ -86,11 +90,13 @@ abstract class Resource {
 		}
 		return $field;
 	}
-	
+
+	// returns the value of this resource's primary key
 	public function getPrimaryKey() {
 		return $this->{$this->keyName};
 	}
 
+	// checks that a given set of params in the 2nd argument contains values for the fields in the 1st argument
 	protected function verifyRequiredFields(array $requiredFields, array $params) {
 		$verified = !empty($params);
 
@@ -107,17 +113,63 @@ abstract class Resource {
 		}
 
 		return $verified;
-	}	
+	}
 
+	// checks whether a single param (2nd arg) matches one of the keys in an array (1st arg)
+	protected function verifyRequiredField(array $requiredFields, $paramKey) {
+		foreach ($requiredFields as $fieldName) {
+			if ( strcasecmp($fieldName, $paramKey) == 0 )
+				return true;
+		}
+		return false;
+	}
+
+	// CRUD Operations
+	
 	public function create(array $params = array()) {
-		$params = $params + $this->getFields();
-		if (!$this->verifyRequiredFields($this->createFields, $params)) return false;
-		return true;
+		$allFields = $params + $this->getFields();
+		if (!$this->verifyRequiredFields($this->createFields, $allFields)) return false;
+
+		$done = array();
+		$fieldsList = array();
+		$valuesList = array();
+
+		foreach ($allFields as $fKey => $fVal) {
+			if ($this->getFieldName($fKey)) {
+				if ( !in_array($this->getFieldName($fKey), $done) ) {
+					$fieldsList[] = $this->getFieldName($fKey);
+					$valuesList[] = $fVal;
+					$done[] = $this->getFieldName($fKey);
+				}
+			}
+		}
+		
+		$stmt = $this->db->prepare("INSERT INTO `". get_class($this) . "` (" . QueryHelper::buildFieldsList($fieldsList) . ") VALUES (" . QueryHelper::buildBindList($fieldsList) . ")");
+		for ($i = 0; $i < count($fieldsList); $i++) {
+			$stmt->bindValue(':' . $fieldsList[$i] . 'Value', $valuesList[$i], Resource::getPDOParamType($valuesList[$i]));
+		}
+		
+		$res = $this->db->executeInsert($stmt);
+
+		if ( !$res ) return false;
+		
+		$fieldNames = "";
+		$delim = "";
+		foreach ($this->fieldMap as $f) {
+			$fieldNames .= $delim . "`" . $f . "`";
+			$delim = ", "; 
+		}
+
+		$stmt = $this->db->prepare("SELECT ". $fieldNames . " FROM `" . get_class($this) . "` WHERE `" . $this->keyName . "` = LAST_INSERT_ID()");
+
+		$res = $this->db->execute($stmt);
+
+		return $res;
 	}
 
 	public function read(array $params = array()) {
-		$params = $params + $this->getFields();
-		if (!$this->verifyRequiredFields($this->readFields, $params)) return false;
+		$allFields = $params + $this->getFields();
+		if ( !$this->verifyRequiredFields($this->readFields, $allFields) ) return false;
 
 		$fieldNames = "";
 		$delim = "";
@@ -125,27 +177,38 @@ abstract class Resource {
 			$fieldNames .= $delim . "`" . $f . "`";
 			$delim = ", "; 
 		}
-		
-		$reqFields = "";
+
+		$whereFields = "";
 		$delim = " ";
 		foreach ($this->readFields as $f) {
-			$reqFields .= $delim . "`" . $f . "` = :" . $f . "Value ";
+			$whereFields .= $delim . "`" . $f . "` = :" . $f . "Value ";
 			$delim = " AND "; 
 		}
 
-		$stmt = $this->db->prepare("SELECT ". $fieldNames . " FROM `" . get_class($this) . "` WHERE " . $reqFields);
+		foreach ($params as $pKey => $pVal) {
+			if ($this->getFieldName($pKey) && !$this->verifyRequiredField($this->readFields, $pKey)) {
+				$whereFields .= $delim . "`" . $pKey . "` = :" . $pKey . "Value ";
+			}
+		}
+
+		$stmt = $this->db->prepare("SELECT ". $fieldNames . " FROM `" . get_class($this) . "` WHERE " . $whereFields);
 		foreach ($this->readFields as $f)
-			$stmt->bindValue(':' . $f . "Value", $params[$f], Resource::getPDOParamType($params[$f]));
+			$stmt->bindValue(':' . $f . "Value", $allFields[$f], Resource::getPDOParamType($allFields[$f]));
+		foreach ($params as $pKey => $pVal) {
+			if ($this->getFieldName($pKey) && !$this->verifyRequiredField($this->readFields, $pKey)) {
+				$stmt->bindValue(':' . $pKey . "Value", $pVal, Resource::getPDOParamType($pVal));
+			}
+		}
 
 		$res = $this->db->execute($stmt);
 
-		return $res; 	
+		return $res;
 	}
 
 	public function update(array $params = array()) {
 		$params = $params + $this->getFields();
 		if (!$this->verifyRequiredFields($this->updateFields, $params)) return false;
-		return true;		
+		return true;
 	}
 
 	public function delete(array $params = array()) {
@@ -153,7 +216,8 @@ abstract class Resource {
 		if (!$this->verifyRequiredFields($this->deleteFields, $params)) return false;
 		return true;
 	}
-
+	
+	// Returns the object formatted as JSON data
 	public function getJson() {
 		$json  = "{" . PHP_EOL;
 		$delim = "";
@@ -162,10 +226,12 @@ abstract class Resource {
 			$json .= "\t" . json_encode($f) . ":" . json_encode($this->{$f});
 			$delim = "," . PHP_EOL;
 		}
-		$json .= PHP_EOL . "}" . PHP_EOL;
+		$json .= PHP_EOL. "}" . PHP_EOL;
 
 		return $json;
 	}
+	
+	// Static methods
 	
 	public static function getResourceType($rsc) {
 		$rscType = false;
@@ -226,7 +292,7 @@ abstract class Resource {
 	}
 
 	public static function getPDOParamType($value) {
-		if (is_int($value))
+		if (strval(intval($value)) == $value)
 			return PDO::PARAM_INT;
 		elseif (is_bool($value))
 			return PDO::PARAM_BOOL;
