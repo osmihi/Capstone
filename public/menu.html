@@ -1,0 +1,42 @@
+    <html>
+        <body>
+           <script>
+              function handleSelect(account) {
+                var appetizers = "<table><tr><td>chicken wings &nbsp&nbsp $5.00</td><tr><td>friut salads &nbsp&nbsp $5.00</td><tr><td>butter fingers &nbsp&nbsp $5.00</td><tr><td>House Soup &nbsp&nbsp $5.00</td></table>";
+                var mainDish = "<table><tr><td>Steak&nbsp&nbsp $12.00</td><tr><td>Burger &nbsp&nbsp $7.00</td><tr><td>Ribs &nbsp&nbsp $5.00</td><tr><td>Alfredo &nbsp&nbsp $10.00</td></table>";
+                var desserts = "<table><tr><td>Cheese Cake &nbsp&nbsp $5.00</td><tr><td>Sundae &nbsp&nbsp $5.00</td><tr><td>Pie &nbsp&nbsp $5.00</td></tr></table>";
+                var drinks = "<table><tr><td>Beer &nbsp&nbsp $5.00</td><tr><td>Wine &nbsp&nbsp $7.00</td><tr><td>Long Island &nbsp&nbsp $6.00</td><tr><td>Mojito&nbsp&nbsp $5.00</td></table>";
+                
+                switch(account)
+                {
+               case "appetizers":
+                document.getElementById("menuCategory").innerHTML = appetizers
+                break;
+              case "mainDish":
+                document.getElementById("menuCategory").innerHTML = mainDish
+                break;
+              case "desserts":
+                document.getElementById("menuCategory").innerHTML = desserts
+                break;
+              case "drinks":
+                document.getElementById("menuCategory").innerHTML = drinks
+                break;
+    
+            }
+             }
+        </script>
+        <select name="menuDropdown" id="menuDropdown" onLoad="handleSelect(this.value)" onChange="handleSelect(this.value)">
+        <option value="appetizers">Appetizers</option>
+        <option value="mainDish">Main Dish</option>
+        <option value="desserts">Desserts</option>
+        <option value="drinks">Drinks</option>
+        </select>
+     <div id="menuCategory"></div>
+     
+     <td><input type="button" value="Add New Menu Item" onClick="location.href='menuitem.html';"></td>
+     <td><input type="button" value="Specials" onClick="location.href='discount.html';"></td>
+    
+    
+    
+     </body>
+ </html>
