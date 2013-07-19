@@ -47,4 +47,16 @@ class QueryHelper {
 
 		return $list;
 	}
+	
+	public static function buildWhereList(array$fields, $continue = false) {
+		$list = "";
+		$delim = $continue ? " AND " : "";
+		
+		foreach ($fields as $f) {
+			$list .= $delim . '`' . $f . '` = :' . $f . 'Value ';
+			$delim = " AND ";	
+		}
+
+		return $list;
+	}
 }

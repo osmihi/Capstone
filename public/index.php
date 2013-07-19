@@ -45,8 +45,8 @@
 						type : $('input:radio[name=rqType]:checked').val(),
 						data : $('.parameter[value!=""]').serialize(),
 						//contentType: "application/json",
-						dataType: "json",
-						crossDomain:true,
+						//dataType: "json",
+						//crossDomain:true,
 						error : function(data, textStatus, errorThrown) {
 							$('#apiResult').append("Error: " + textStatus + " : " + errorThrown);
 						},

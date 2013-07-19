@@ -143,16 +143,16 @@ abstract class Resource {
 				}
 			}
 		}
-		
+
 		$stmt = $this->db->prepare("INSERT INTO `". get_class($this) . "` (" . QueryHelper::buildFieldsList($fieldsList) . ") VALUES (" . QueryHelper::buildBindList($fieldsList) . ")");
 		for ($i = 0; $i < count($fieldsList); $i++) {
 			$stmt->bindValue(':' . $fieldsList[$i] . 'Value', $valuesList[$i], Resource::getPDOParamType($valuesList[$i]));
 		}
-		
+
 		$res = $this->db->executeInsert($stmt);
 
 		if ( !$res ) return false;
-		
+
 		$fieldNames = "";
 		$delim = "";
 		foreach ($this->fieldMap as $f) {
@@ -206,14 +206,44 @@ abstract class Resource {
 	}
 
 	public function update(array $params = array()) {
-		$params = $params + $this->getFields();
-		if (!$this->verifyRequiredFields($this->updateFields, $params)) return false;
+		$allFields = $params + $this->getFields();
+		if (!$this->verifyRequiredFields($this->updateFields, $allFields)) return false;
 		return true;
 	}
 
 	public function delete(array $params = array()) {
-		$params = $params + $this->getFields();
-		if (!$this->verifyRequiredFields($this->deleteFields, $params)) return false;
+		$allFields = $params + $this->getFields();
+		if (!$this->verifyRequiredFields($this->deleteFields, $allFields)) return false;
+
+		$done = array();
+		$fieldsList = array();
+		$valuesList = array();
+
+		foreach ($allFields as $fKey => $fVal) {
+			if ($this->getFieldName($fKey)) {
+				if ( !in_array($this->getFieldName($fKey), $done) ) {
+					$fieldsList[] = $this->getFieldName($fKey);
+					$valuesList[] = $fVal;
+					$done[] = $this->getFieldName($fKey);
+				}
+			}
+		}
+
+		$stmt = $this->db->prepare("DELETE FROM `". get_class($this) . "` WHERE " . QueryHelper::buildWhereList($fieldsList));
+		for ($i = 0; $i < count($fieldsList); $i++) {
+			$stmt->bindValue(':' . $fieldsList[$i] . 'Value', $valuesList[$i], Resource::getPDOParamType($valuesList[$i]));
+		}
+
+		$res = $this->db->executeInsert($stmt);
+
+		var_dump($res);
+		
+		if ( !$res ) return false;		
+
+		foreach ($this->fieldMap as $f) {
+			$this->{$f} = null;
+		}
+
 		return true;
 	}
 	
