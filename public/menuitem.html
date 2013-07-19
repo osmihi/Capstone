@@ -1,0 +1,76 @@
+
+
+
+
+<script type="text/JavaScript">
+function confirmDelete(){
+var agree=CONFIRM("Are you sure you want to delete this item?");
+if (agree)
+     return TRUE ;
+else
+     return FALSE ;
+}
+</script>
+ 
+
+
+
+  <h3>Add Menu Item</h3>
+    
+  <form name="addmenuitem" method="put" >
+      <table width="50%" height="100" align="left">
+              <tr valign="middle">
+               		<td align="right" width="120" > Category Name:</td>
+                    <td width="170">
+                      	<select name="MenuItem.Category">
+                            <option value="appetizer">Appetizer</option>
+                            <option value="Main Course">Main Course</option>
+                            <option value="dessert">Dessert</option>
+                            <option value="drink">Drink</option>
+                 		</select> </td>
+                </tr>
+                <tr valign="middle">
+                	<td align="right" width="120" > Menu item Name:</td>
+                    <td width="170"><input type="text" name="MenuItem.Name"/></td>
+                </tr>              
+                <tr valign="middle">	    
+                	<td align="right"> Menu Item Price:</td>
+                    <td colspan="2"><input type="text" name="MenuItem.Price"/></td>
+                </tr>
+                <tr valign="middle">	    
+                  	<td align="right">Prep Time(mins):</td>
+                    <td width="170">
+                    	<select name="Menuitem.PrepTime">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                            <option value="25">25</option>
+                       		<option value="30">30</option>
+                            <option value="35">35</option>
+                            <option value="40">40</option>
+                            <option value="45">45</option>
+                            <option value="50">50</option>
+                            <option value="55">55</option>
+                            <option value="60">60</option>
+                 		</select> </td>
+                    
+                </tr>              
+                <tr valign="middle">
+                    <td valign="right">Item Description:</td>
+                    <td colspan="2"> 
+                     <textarea name="ItemDescription" cols="30" rows="1"></textarea></td>
+                </tr>              
+                
+                <tr align="center">
+                      <td colspan="2" align="center"> 
+                            <input type="submit" value="Add"/> 
+                            <input type="button" value="Delete" onClick="confirmDelete();"  />
+                            <input type="button" value="Cancel" onclick="location.href='menu.html';"></td>
+                      </td>
+                </tr>
+          </table>
+    </form>
+    
+      
+  
