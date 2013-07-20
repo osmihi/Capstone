@@ -306,7 +306,7 @@ abstract class Resource {
 			$json .= "\t" . json_encode($f) . ":" . json_encode($this->{$f});
 			$delim = "," . PHP_EOL;
 		}
-		$json .= PHP_EOL. "}" . PHP_EOL;
+		$json .= PHP_EOL. "}";
 
 		return $json;
 	}

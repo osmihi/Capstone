@@ -4,16 +4,49 @@ class APIResponse {
 	private $contentType = "application/json";
 	private $statusCode = 200;
 
+	private $message;
+	private $data;
+
 	function __construct() {}
 
-	public function respond(){
+	public function respond() {
 		$this->setHeaders();
 
-		echo json_encode($this);
+		echo $this->getJson();
 
 		exit;
 	}
 	
+	public function getJson() {
+		$json = "";
+		$json .= "{" . PHP_EOL;
+		$json .= "\t\"currentTimestamp\":\"" . date(DATE_RFC822) . "\"," . PHP_EOL;
+		$json .= "\t\"statusCode\":\"" . $this->statusCode . "\"," . PHP_EOL;
+		$json .= "\t\"status\":\"" . $this->getStatusMessage($this->statusCode) . "\"," . PHP_EOL;
+		$json .= "\t\"message\":\"" . $this->message . "\"," . PHP_EOL;
+		
+		if ($this->data != "") {
+			$json .= "\t\"data\":[";
+			$json .= $this->data . PHP_EOL;
+			$json .= "\t]" . PHP_EOL;
+		}
+		
+		$json .= "}";	
+		return $json;
+	}
+	
+	public function addData(Resource $rsc) {
+		$this->data .= $this->data == "" ? "" : "," . PHP_EOL;
+
+		foreach ( explode(PHP_EOL, $rsc->getJson()) as $line ) {
+			$this->data .= PHP_EOL . "\t\t" . $line;
+		}
+	}
+	
+	public function setMessage($msg) {
+		$this->message = $msg;
+	}
+
 	public function setHeaders() {
 		// Note: this code allows cross-server requests from anywhere. To restrict, we should 
 		// enclose this block in a condition checking $_SERVER['HTTP_ORIGIN'] against a whitelist.
@@ -27,7 +60,11 @@ class APIResponse {
 		header( "HTTP/1.1 " . $this->statusCode . " " . $this->getStatusMessage($this->statusCode) );
 		header( "Content-Type:" . $this->contentType );
 	}
-	
+
+	public function setStatusCode($code) {
+		$this->statusCode = $code;
+	}
+
 	public function getStatusMessage($code) {
 		$statusCodes = array(
 			100 => 'Continue',  
@@ -75,11 +112,4 @@ class APIResponse {
 
 		return ($statusCodes[$code]) ? $statusCodes[$code] : $statusCodes[500];
 	}
-
-	public function jsonSerialize() {
-        return array(
-        	'jsonSupport' => 'isSadlyNot',
-        	'implemented' => 'yet'
-        );
-    }
 }

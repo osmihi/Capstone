@@ -40,13 +40,12 @@ class APIController {
 		try {
 			$this->response = new APIResponse();
 
-			// this line is in here for testing only. setHeaders should be private and only called by APIResponse in respond()
-			$this->response->setHeaders();
-
 			// Connect to the database
 			$this->dbc = new DbConnection();
 
 			$this->request = new APIRequest();
+			
+			if ( !$this->request->getResourceType() ) throw new Exception("Invalid resource requested.", 400);
 
 			// Verify that user credentials were provided in the request
 			$userInfo = $this->request->getUserInfo();
@@ -93,25 +92,19 @@ class APIController {
 
 			if ( !$result ) throw new Exception("The request could not be carried out. The selected resource may not exist, or all required fields may not have been provided.", 206);
 
-			echo "{" . PHP_EOL;
-			echo "\"data\":[" . PHP_EOL;
-			$delim = "";
 			foreach($result as $r) {
-				echo $delim . $r->getJson();
-				$delim = "," . PHP_EOL;
+				$this->response->addData($r);
 			}
-			echo "]" . PHP_EOL;
-			echo "}";
-
+			
 		} catch (Exception $e) {
-			// really this should actually set the status code of the response
-			echo $e->getCode() . ': ' . $e->getMessage();
+			$this->response->setStatusCode($e->getCode());
+			$this->response->setMessage($e->getMessage());
 		}
 
-		//$this->response->respond();
+		$this->response->respond();
 				
 		exit;
-		
+
 	}
 }
 
