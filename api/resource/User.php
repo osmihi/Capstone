@@ -31,17 +31,33 @@ class User extends Resource {
 
 		// Required fields for each operation
 		$this->createFields = array("Username", "PasswordHash", "RestaurantID", "Role", "FName", "LName");
- 		$this->readFields = array("UserID", "RestaurantID");
+ 		$this->readFields = array("RestaurantID");
  		$this->updateFields = array("UserID", "RestaurantID");
  		$this->deleteFields = array("UserID", "RestaurantID");
 
 		parent::loadFields($params);
 	}
 
+	public function create(array $params = array()) {
+		$params = $this->hashPassword($params);
+		$this->passwordHash = SHA1($this->passwordHash);
+		return parent::create($params);
+	}
+	
+	private function hashPassword(array $params) {
+		foreach($params as $pKey => $pVal) {
+			if ($this->getFieldName($pKey) == 'PasswordHash') {
+				$params[$pKey] = SHA1($pVal);
+			}
+		}
+		
+		return $params;
+	}
+	
 	public function authenticate() {
 		if ( !isset($this->Username) || !isset($this->PasswordHash) ) return false;
 
-		$stmt = $this->db->prepare("SELECT `UserID`, `RestaurantID`, `Role`, `FName`, `LName` FROM `User` WHERE `Username` = :uname AND `PasswordHash` = :pwh AND `Locked` = 0 LIMIT 0,1");
+		$stmt = $this->db->prepare("SELECT `UserID`, `RestaurantID`, `Role`, `FName`, `LName` FROM `User` WHERE `Username` = :uname AND `PasswordHash` = SHA1(:pwh) AND `Locked` = 0 LIMIT 0,1");
 		$stmt->bindValue(':uname', $this->Username, PDO::PARAM_STR);
 		$stmt->bindValue(':pwh', $this->PasswordHash, PDO::PARAM_STR);
 

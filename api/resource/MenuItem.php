@@ -26,9 +26,9 @@ class MenuItem extends Resource {
 
 		// Required fields for each operation
 		$this->createFields = array("RestaurantID", "Name", "Category", "PrepTime");
- 		$this->readFields = array("MenuItemID");
- 		$this->updateFields = array("MenuItemID");
- 		$this->deleteFields = array("MenuItemID");
+ 		$this->readFields = array("RestaurantID");
+ 		$this->updateFields = array("MenuItemID", "RestaurantID");
+ 		$this->deleteFields = array("MenuItemID", "RestaurantID");
 
 		parent::loadFields($params);
 	}

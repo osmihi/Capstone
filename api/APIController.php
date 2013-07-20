@@ -65,10 +65,7 @@ class APIController {
 			
 			// Create the resource
 			$rsc = false;
-//			if ( $this->request->getKey() > 0 )
-				$rsc = ResourceType::getResource($this->request->getResourceType(), $this->dbc, $this->request->getParams());
-//			else {/*otherwise get resource collection*/} 
-				
+			$rsc = ResourceType::getResource($this->request->getResourceType(), $this->dbc, $this->request->getParams());	
 
 			if ( !$rsc ) throw new Exception("Error creating resource.", 400);
 
@@ -79,31 +76,32 @@ class APIController {
 				case RequestType::CREATE;
 					if ( $this->request->getKey() > 0 ) throw new Exception("Invalid request. Do not provide an ID for the resource being created.", 400);
 					$result = $rsc->create($this->request->getParams());
-
-					if ( !$result ) throw new Exception("The request could not be carried out. The selected resource may not exist, or all required fields may not have been provided.", 206);
-
 					break;
 				case RequestType::READ;
 					$result = $rsc->read($this->request->getParams());
-					
-					// This message should really actually give you what the required fields are.
-					if ( !$result ) throw new Exception("The request could not be carried out. The selected resource may not exist, or all required fields may not have been provided.", 206);
-
 					break;
 				case RequestType::UPDATE;
 					$result = $rsc->update($this->request->getParams());
-
 					break;
 				case RequestType::DELETE;
 					$result = $rsc->delete($this->request->getParams());
-
 					break;
 				default:
 					$result = false;
 					break; 
 			}
-			
-			echo $rsc->getJson() . PHP_EOL;
+
+			if ( !$result ) throw new Exception("The request could not be carried out. The selected resource may not exist, or all required fields may not have been provided.", 206);
+
+			echo "{" . PHP_EOL;
+			echo "\"data\":[" . PHP_EOL;
+			$delim = "";
+			foreach($result as $r) {
+				echo $delim . $r->getJson();
+				$delim = "," . PHP_EOL;
+			}
+			echo "]" . PHP_EOL;
+			echo "}";
 
 		} catch (Exception $e) {
 			// really this should actually set the status code of the response

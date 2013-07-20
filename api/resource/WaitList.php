@@ -24,7 +24,7 @@ class WaitList extends Resource {
 
  		// Required fields for each operation
  		$this->createFields = array("RestaurantID", "Name", "Size");
- 		$this->readFields = array("WaitListID", "RestaurantID");
+ 		$this->readFields = array("RestaurantID");
  		$this->updateFields = array("WaitListID", "RestaurantID");
  		$this->deleteFields = array("WaitListID", "RestaurantID");
 

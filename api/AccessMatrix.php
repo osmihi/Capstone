@@ -5,7 +5,7 @@ class AccessMatrix {
 	private	static $matrix = array(
 		ResourceType::USER => array(
 			Role::ADMINISTRATOR => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
-			Role::MANAGER => array(RequestType::READ, RequestType::UPDATE),
+			Role::MANAGER => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE),
 			Role::WAIT_STAFF => array(),
 			Role::KITCHEN_STAFF => array(),
 			Role::HOSTESS => array()

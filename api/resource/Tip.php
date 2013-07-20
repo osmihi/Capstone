@@ -24,7 +24,7 @@ class Tip extends Resource {
 		
 		// Required fields for each operation
  		$this->createFields = array("UserID", "BillID", "Amount");
- 		$this->readFields = array("TipID");
+ 		$this->readFields = array();
  		$this->updateFields = array("TipID");
  		$this->deleteFields = array("TipID");
 

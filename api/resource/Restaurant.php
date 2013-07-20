@@ -18,7 +18,7 @@ class Restaurant extends Resource {
 
 		// Required fields for each operation
 		$this->createFields = array("Name");
- 		$this->readFields = array("RestaurantID");
+ 		$this->readFields = array();
  		$this->updateFields = array("RestaurantID");
  		$this->deleteFields = array("RestaurantID");
 

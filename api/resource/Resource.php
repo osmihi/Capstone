@@ -28,7 +28,7 @@ abstract class Resource {
 			}
 		}
 
-		if ( isset($params['key']) ) {
+		if ( isset($params['key']) && $params['key'] != 0 ) {
 			$this->{$this->keyName} = $params['key'];
 		}
 	}
@@ -134,53 +134,64 @@ abstract class Resource {
 			$delim = ", "; 
 		}
 
-		$stmt = $this->db->prepare("SELECT ". $fieldNames . " FROM `" . get_class($this) . "` WHERE `" . $this->keyName . "` = LAST_INSERT_ID()");
+		$stmt = $this->db->prepare("SELECT ". $fieldNames . " FROM `" . get_class($this) . "` WHERE `" . $this->keyName . "` = LAST_INSERT_ID() LIMIT 0,1");
 
 		$res = $this->db->execute($stmt);
 
-		if ($res) $this->loadFields($res[0]);
-		
-		return $res;
+		if ( !$res or count($res) < 1 ) return false;
+
+		$resources = array();
+
+		$this->loadFields($res[0]);
+
+		foreach( $res as $r ) {
+			$currentRsc = ResourceType::getResource(ResourceType::getResourceType($this), $this->db, array());
+			$currentRsc->loadFields($r);
+			$resources[] = $currentRsc;
+		}
+
+		return $resources;
 	}
 
 	public function read(array $params = array()) {
 		$allFields = $params + $this->getFields();
 		if ( !$this->verifyRequiredFields($this->readFields, $allFields) ) return false;
 
-		$fieldNames = "";
-		$delim = "";
-		foreach ($this->fieldMap as $f) {
-			$fieldNames .= $delim . "`" . $f . "`";
-			$delim = ", "; 
-		}
+		$done = array();
+		$fieldsList = array();
+		$valuesList = array();
 
-		$whereFields = "";
-		$delim = " ";
-		foreach ($this->readFields as $f) {
-			$whereFields .= $delim . "`" . $f . "` = :" . $f . "Value ";
-			$delim = " AND "; 
-		}
-
-		foreach ($params as $pKey => $pVal) {
-			if ($this->getFieldName($pKey) && !$this->verifyRequiredField($this->readFields, $pKey)) {
-				$whereFields .= $delim . "`" . $pKey . "` = :" . $pKey . "Value ";
+		foreach ($allFields as $fKey => $fVal) {
+			if ($this->getFieldName($fKey)) {
+				if ( !in_array($this->getFieldName($fKey), $done) ) {
+					$fieldsList[] = $this->getFieldName($fKey);
+					$valuesList[] = $fVal;
+					$done[] = $this->getFieldName($fKey);
+				}
 			}
 		}
 
-		$stmt = $this->db->prepare("SELECT ". $fieldNames . " FROM `" . get_class($this) . "` WHERE " . $whereFields);
-		foreach ($this->readFields as $f)
-			$stmt->bindValue(':' . $f . "Value", $allFields[$f], ResourceType::getPDOParamType($allFields[$f]));
-		foreach ($params as $pKey => $pVal) {
-			if ($this->getFieldName($pKey) && !$this->verifyRequiredField($this->readFields, $pKey)) {
-				$stmt->bindValue(':' . $pKey . "Value", $pVal, ResourceType::getPDOParamType($pVal));
-			}
+		$stmt = $this->db->prepare("SELECT ". QueryHelper::buildFieldsList(array_unique($this->fieldMap)) . " FROM `" . get_class($this) . "` WHERE " . QueryHelper::buildWhereList($fieldsList));
+		for ($i = 0; $i < count($fieldsList); $i++) {
+			$stmt->bindValue(':' . $fieldsList[$i] . 'Value', $valuesList[$i], ResourceType::getPDOParamType($valuesList[$i]));
 		}
 
 		$res = $this->db->execute($stmt);
 
-		if ($res) $this->loadFields($res[0]);
-		
-		return $res;
+		if ( !$res or count($res) < 1 ) return false;
+
+		$resources = array();
+
+		$this->loadFields($res[0]);
+
+		foreach( $res as $r ) {
+			$currentRsc = ResourceType::getResource(ResourceType::getResourceType($this), $this->db, array());
+			$currentRsc->loadFields($r);
+			$resources[] = $currentRsc;
+		}
+
+		return $resources;
+	
 	}
 
 	public function update(array $params = array()) {
@@ -216,9 +227,9 @@ abstract class Resource {
 		}
 
 		$res = $this->db->executeInsert($stmt);
-
-		if ( !$stmt->rowCount() < 1 ) return false;
 		
+		if ( $stmt->rowCount() < 1 ) return false;
+
 		$fieldNames = "";
 		$delim = "";
 		foreach ($this->fieldMap as $f) {
@@ -233,10 +244,20 @@ abstract class Resource {
 
 		$res = $this->db->execute($stmt);
 
-		if ($res) $this->loadFields($res[0]);
-		
-		return $res;
-	}
+		if ( !$res or count($res) < 1 ) return false;
+
+		$resources = array();
+
+		$this->loadFields($res[0]);
+
+		foreach( $res as $r ) {
+			$currentRsc = ResourceType::getResource(ResourceType::getResourceType($this), $this->db, array());
+			$currentRsc->loadFields($r);
+			$resources[] = $currentRsc;
+		}
+
+		return $resources;
+}
 
 	public function delete(array $params = array()) {
 		$allFields = $params + $this->getFields();
@@ -263,13 +284,17 @@ abstract class Resource {
 
 		$res = $this->db->executeInsert($stmt);
 
-		if ( !$stmt->rowCount() < 1 ) return false;		
+		if ( !$res or count($res) < 1 ) return false;
+
+		$resources = array();
 
 		foreach ($this->fieldMap as $f) {
 			$this->{$f} = null;
 		}
 
-		return true;
+		$resources[] = $this;
+
+		return $resources;
 	}
 	
 	// Returns the object formatted as JSON data
@@ -284,5 +309,5 @@ abstract class Resource {
 		$json .= PHP_EOL. "}" . PHP_EOL;
 
 		return $json;
-	}	
+	}
 }

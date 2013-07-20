@@ -22,7 +22,7 @@ class Order extends Resource {
 		
 		// Required fields for each operation
 		$this->createFields = array("TableID", "BillID");
- 		$this->readFields = array("OrderID");
+ 		$this->readFields = array();
  		$this->updateFields = array("OrderID");
  		$this->deleteFields = array("OrderID");
 

@@ -84,10 +84,10 @@
 				<br />
 
 				<h4>User data</h4>
-				<label for="Username">Username</label>
-				<input id="Username" type="text" name="Username" class="parameter" value="bootsy.collins"/>
-				<label for="Password">Password</label>
-				<input id="Password" type="text" name="Password" class="parameter" value="password"/>
+				<label for="auth_Username">Username</label>
+				<input id="auth_Username" type="text" name="auth_Username" class="parameter" value="bootsy.collins"/>
+				<label for="auth_Password">Password</label>
+				<input id="auth_Password" type="text" name="auth_Password" class="parameter" value="password"/>
 				<br />
 				<br />
 

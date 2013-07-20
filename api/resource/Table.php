@@ -26,7 +26,7 @@ class Table extends Resource {
 
 		// Required fields for each operation
 		$this->createFields = array("RestaurantID", "Number");
- 		$this->readFields = array("TableID", "RestaurantID");
+ 		$this->readFields = array("RestaurantID");
  		$this->updateFields = array("TableID", "RestaurantID");
  		$this->deleteFields = array("TableID", "RestaurantID");
 

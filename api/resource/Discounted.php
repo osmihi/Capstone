@@ -20,7 +20,7 @@ class Discounted extends Resource {
 		
 		// Required fields for each operation
 		$this->createFields = array("DiscountID", "BillID");
- 		$this->readFields = array("DiscountedID");
+ 		$this->readFields = array();
  		$this->updateFields = array("DiscountedID");
  		$this->deleteFields = array("DiscountedID");
 

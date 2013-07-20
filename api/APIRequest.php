@@ -48,10 +48,10 @@ class APIRequest {
 	public function getUserInfo() {
 		$userInfo = array();
 		
-		if ($this->hasParam('Username') && $this->hasParam('Password')) {
-			$userInfo['Username'] = $this->getParam('Username');
+		if ($this->hasParam('auth_Username') && $this->hasParam('auth_Password')) {
+			$userInfo['Username'] = $this->getParam('auth_Username');
 
-			$userInfo['Password'] = $this->getParam('Password');
+			$userInfo['Password'] = $this->getParam('auth_Password');
 
 		} else return false;
 

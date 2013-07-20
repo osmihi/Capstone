@@ -24,9 +24,9 @@ class Discount extends Resource {
 
 		// Required fields for each operation
 		$this->createFields = array("RestaurantID", "DiscountCode", "Type");
- 		$this->readFields = array("DiscountID");
- 		$this->updateFields = array("DiscountID");
- 		$this->deleteFields = array("DiscountID");
+ 		$this->readFields = array("RestaurantID");
+ 		$this->updateFields = array("DiscountID", "RestaurantID");
+ 		$this->deleteFields = array("DiscountID", "RestaurantID");
 
 		parent::loadFields($params);
 	}
