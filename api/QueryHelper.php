@@ -48,10 +48,12 @@ class QueryHelper {
 		return $list;
 	}
 	
-	public static function buildWhereList(array$fields, $continue = false) {
+	public static function buildWhereList(array $fields, $continue = false) {
 		$list = "";
 		$delim = $continue ? " AND " : "";
-		
+
+		if (empty($fields)) $list .= " 1 = 1 ";
+
 		foreach ($fields as $f) {
 			$list .= $delim . '`' . $f . '` = :' . $f . 'Value ';
 			$delim = " AND ";	
@@ -60,7 +62,7 @@ class QueryHelper {
 		return $list;
 	}
 	
-	public static function buildUpdateValuesList(array$fields, $continue = false) {
+	public static function buildUpdateValuesList(array $fields, $continue = false) {
 		$list = "";
 		$delim = $continue ? ", " : "";
 		

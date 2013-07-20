@@ -40,6 +40,8 @@ class APIController {
 		try {
 			$this->response = new APIResponse();
 
+			$this->response->setHeaders(); // for debugging
+
 			// Connect to the database
 			$this->dbc = new DbConnection();
 
@@ -93,12 +95,15 @@ class APIController {
 			if ( !$result ) throw new Exception("The request could not be carried out. The selected resource may not exist, or all required fields may not have been provided.", 206);
 
 			foreach($result as $r) {
-				$this->response->addData($r);
+				$this->response->addData($r->getJson());
 			}
 			
 		} catch (Exception $e) {
 			$this->response->setStatusCode($e->getCode());
 			$this->response->setMessage($e->getMessage());
+			if ($e->getCode() == 206) {
+				$this->response->addData($rsc->getRequiredFieldsJson());
+			}
 		}
 
 		$this->response->respond();

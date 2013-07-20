@@ -72,6 +72,7 @@ abstract class Resource {
 
 	// checks that a given set of params in the 2nd argument contains values for the fields in the 1st argument
 	protected function verifyRequiredFields(array $requiredFields, array $params) {
+		if (empty($requiredFields)) return true;
 		$verified = !empty($params);
 
 		foreach ($requiredFields as $fieldName) {
@@ -91,15 +92,15 @@ abstract class Resource {
 
 	// checks whether a single param (2nd arg) matches one of the keys in an array (1st arg)
 	protected function verifyRequiredField(array $requiredFields, $paramKey) {
+		if (empty($requiredFields)) return true;
 		foreach ($requiredFields as $fieldName) {
 			if ( strcasecmp($fieldName, $paramKey) == 0 )
 				return true;
 		}
 		return false;
 	}
-
-	// CRUD Operations
 	
+	// CRUD Operations
 	public function create(array $params = array()) {
 		$allFields = $params + $this->getFields();
 		if (!$this->verifyRequiredFields($this->createFields, $allFields)) return false;
@@ -307,6 +308,17 @@ abstract class Resource {
 			$delim = "," . PHP_EOL;
 		}
 		$json .= PHP_EOL. "}";
+
+		return $json;
+	}
+	
+	public function getRequiredFieldsJson() {
+		$json  = "{" . PHP_EOL;
+		$json .= "\t\"create\"\t:\t" . json_encode($this->createFields) . PHP_EOL;
+		$json .= "\t\"read\"\t\t:\t" . json_encode($this->readFields) . PHP_EOL;
+		$json .= "\t\"update\"\t:\t" . json_encode($this->updateFields) . PHP_EOL;
+		$json .= "\t\"delete\"\t:\t" . json_encode($this->deleteFields) . PHP_EOL;
+		$json .= "}";
 
 		return $json;
 	}

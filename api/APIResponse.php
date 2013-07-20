@@ -20,25 +20,34 @@ class APIResponse {
 	public function getJson() {
 		$json = "";
 		$json .= "{" . PHP_EOL;
-		$json .= "\t\"currentTimestamp\":\"" . date(DATE_RFC822) . "\"," . PHP_EOL;
+
 		$json .= "\t\"statusCode\":\"" . $this->statusCode . "\"," . PHP_EOL;
 		$json .= "\t\"status\":\"" . $this->getStatusMessage($this->statusCode) . "\"," . PHP_EOL;
-		$json .= "\t\"message\":\"" . $this->message . "\"," . PHP_EOL;
-		
+
+		if ($this->message != "") {
+			$json .= "\t\"message\":\"" . $this->message . "\"," . PHP_EOL;
+		}
+
+		$json .= "\t\"currentTimestamp\":\"" . date(DATE_RFC822) . "\"";
+
 		if ($this->data != "") {
+			$json .= "," . PHP_EOL;
+			$json .= PHP_EOL;
 			$json .= "\t\"data\":[";
 			$json .= $this->data . PHP_EOL;
 			$json .= "\t]" . PHP_EOL;
+		} else {
+			$json .= PHP_EOL;
 		}
 		
 		$json .= "}";	
 		return $json;
 	}
 	
-	public function addData(Resource $rsc) {
+	public function addData($jsonData) {
 		$this->data .= $this->data == "" ? "" : "," . PHP_EOL;
 
-		foreach ( explode(PHP_EOL, $rsc->getJson()) as $line ) {
+		foreach ( explode(PHP_EOL, $jsonData) as $line ) {
 			$this->data .= PHP_EOL . "\t\t" . $line;
 		}
 	}

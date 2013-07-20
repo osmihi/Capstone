@@ -17,8 +17,8 @@ class Bill extends Resource {
 		);
 
 		// Required fields for each operation
-		$this->createFields = array();
- 		$this->readFields = array();
+		$this->createFields = array("Paid");
+ 		$this->readFields = array("BillID");
  		$this->updateFields = array("BillID");
  		$this->deleteFields = array("BillID");
  

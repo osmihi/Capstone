@@ -26,7 +26,7 @@ class OrderItem extends Resource {
 
 		// Required fields for each operation
 		$this->createFields = array("OrderID", "MenuItemID", "PurchasePrice");
- 		$this->readFields = array();
+ 		$this->readFields = array("OrderID");
  		$this->updateFields = array("OrderItemID");
  		$this->deleteFields = array("OrderItemID");
 
