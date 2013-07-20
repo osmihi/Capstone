@@ -16,7 +16,7 @@ class APIRequest {
 		$this->requestType = RequestType::getRequestType($_SERVER['REQUEST_METHOD']);
 
 		$this->resource = $_REQUEST['resource'];
-		$this->resourceType = Resource::getResourceType($this->resource);
+		$this->resourceType = ResourceType::getResourceType($this->resource);
 
 		if ( isset($_REQUEST['key']) && preg_match("/([0-9]+)/", $_REQUEST['key']) ) {
 			$this->key = $_REQUEST['key'];

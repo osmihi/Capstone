@@ -2,6 +2,7 @@
 
 	require_once('DbConnection.php');
 
+	require_once('ResourceType.php');
 	require_once('RequestType.php');
 	require_once('Role.php');
 
@@ -65,7 +66,7 @@ class APIController {
 			// Create the resource
 			$rsc = false;
 //			if ( $this->request->getKey() > 0 )
-				$rsc = Resource::getResource($this->request->getResourceType(), $this->dbc, $this->request->getParams());
+				$rsc = ResourceType::getResource($this->request->getResourceType(), $this->dbc, $this->request->getParams());
 //			else {/*otherwise get resource collection*/} 
 				
 
@@ -80,7 +81,6 @@ class APIController {
 					$result = $rsc->create($this->request->getParams());
 
 					if ( !$result ) throw new Exception("The request could not be carried out. The selected resource may not exist, or all required fields may not have been provided.", 206);
-					else $rsc->loadFields($result[0]);
 
 					break;
 				case RequestType::READ;
@@ -88,7 +88,6 @@ class APIController {
 					
 					// This message should really actually give you what the required fields are.
 					if ( !$result ) throw new Exception("The request could not be carried out. The selected resource may not exist, or all required fields may not have been provided.", 206);
-					else $rsc->loadFields($result[0]);
 
 					break;
 				case RequestType::UPDATE;

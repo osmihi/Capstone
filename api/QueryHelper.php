@@ -59,4 +59,16 @@ class QueryHelper {
 
 		return $list;
 	}
+	
+	public static function buildUpdateValuesList(array$fields, $continue = false) {
+		$list = "";
+		$delim = $continue ? ", " : "";
+		
+		foreach ($fields as $f) {
+			$list .= $delim . '`' . $f . '` = :' . $f . 'Value ';
+			$delim = ", ";	
+		}
+
+		return $list;
+	} 
 }

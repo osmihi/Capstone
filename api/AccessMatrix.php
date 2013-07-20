@@ -3,77 +3,77 @@
 class AccessMatrix {
 
 	private	static $matrix = array(
-		Resource::USER => array(
+		ResourceType::USER => array(
 			Role::ADMINISTRATOR => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
 			Role::MANAGER => array(RequestType::READ, RequestType::UPDATE),
 			Role::WAIT_STAFF => array(),
 			Role::KITCHEN_STAFF => array(),
 			Role::HOSTESS => array()
 		),
-		Resource::RESTAURANT => array(
+		ResourceType::RESTAURANT => array(
 			Role::ADMINISTRATOR => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
 			Role::MANAGER => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
 			Role::WAIT_STAFF => array(RequestType::READ),
 			Role::KITCHEN_STAFF => array(RequestType::READ),
 			Role::HOSTESS => array(RequestType::READ)
 		),
-		Resource::TABLE => array(
+		ResourceType::TABLE => array(
 			Role::ADMINISTRATOR => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
 			Role::MANAGER => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
 			Role::WAIT_STAFF => array(RequestType::READ),
 			Role::KITCHEN_STAFF => array(RequestType::READ),
 			Role::HOSTESS => array(RequestType::READ, RequestType::UPDATE)
 		),
-		Resource::WAITLIST => array(
+		ResourceType::WAITLIST => array(
 			Role::ADMINISTRATOR => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
 			Role::MANAGER => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
 			Role::WAIT_STAFF => array(),
 			Role::KITCHEN_STAFF => array(),
 			Role::HOSTESS => array(RequestType::READ, RequestType::UPDATE)
 		),
-		Resource::MENUITEM => array(
+		ResourceType::MENUITEM => array(
 			Role::ADMINISTRATOR => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
 			Role::MANAGER => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
 			Role::WAIT_STAFF => array(RequestType::READ),
 			Role::KITCHEN_STAFF => array(RequestType::READ),
 			Role::HOSTESS => array(RequestType::READ)
 		),
-		Resource::ORDERITEM => array(
+		ResourceType::ORDERITEM => array(
 			Role::ADMINISTRATOR => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
 			Role::MANAGER => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
 			Role::WAIT_STAFF => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
 			Role::KITCHEN_STAFF => array(RequestType::READ,RequestType::UPDATE),
 			Role::HOSTESS => array(RequestType::READ)
 		),
-		Resource::ORDER => array(
+		ResourceType::ORDER => array(
 			Role::ADMINISTRATOR => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
 			Role::MANAGER => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
 			Role::WAIT_STAFF => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
 			Role::KITCHEN_STAFF => array(RequestType::READ),
 			Role::HOSTESS => array(RequestType::READ)
 		),
-		Resource::BILL => array(
+		ResourceType::BILL => array(
 			Role::ADMINISTRATOR => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
 			Role::MANAGER => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
 			Role::WAIT_STAFF => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
 			Role::KITCHEN_STAFF => array(),
 			Role::HOSTESS => array()
 		),
-		Resource::TIP => array(
+		ResourceType::TIP => array(
 			Role::ADMINISTRATOR => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
 			Role::MANAGER => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
 			Role::WAIT_STAFF => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
 			Role::KITCHEN_STAFF => array(),
 			Role::HOSTESS => array()
 		),
-		Resource::DISCOUNT => array(
+		ResourceType::DISCOUNT => array(
 			Role::ADMINISTRATOR => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
 			Role::MANAGER => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
 			Role::WAIT_STAFF => array(RequestType::READ),
 			Role::KITCHEN_STAFF => array(),
 			Role::HOSTESS => array()
 		),
-		Resource::DISCOUNTED => array(
+		ResourceType::DISCOUNTED => array(
 			Role::ADMINISTRATOR => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
 			Role::MANAGER => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
 			Role::WAIT_STAFF => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
