@@ -42,7 +42,7 @@ function drawTable(table) {
 		'</div>'
 	);
 
-	$('#tableSeating' + table.TableID).click(function() {
+	$('#tableSeating' + table.TableID + ".Available").click(function() {
 		request("table", table.TableID, RequestType.UPDATE, userInfo, "status=Occupied", function() {
 			request("waitlist", selectedParty.WaitListID, RequestType.DELETE, userInfo, "", waitListScreen, function() {
 				request("table", table.TableID, RequestType.UPDATE, userInfo, "status=Available", waitListScreen);
