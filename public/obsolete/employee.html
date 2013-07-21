@@ -1,0 +1,47 @@
+<h3>Employee</h3>
+
+<form>
+
+	<input type="hidden" id="userID" value=""/>
+
+	First Name:  
+	<input type="text" class="employeeInfo" id="firstName" name="firstName" value=""/>
+	<br />
+	Last Name:
+	<input type="text" class="employeeInfo" id="lastName" name="lastName" value=""/>
+	<br /> 
+	
+	<table>
+		<tr>
+			<td>Employee's role:</td>
+			<td>
+				<div id = "empRole">
+				<select name="dropdown">
+				<option value="Host">Host</option>
+				<option value="Waiter">Waiter</option>
+				<option value="KitchenStaff">Kitchen</option>
+				<option value="Manager">Manager</option>
+				</select>
+				</div>
+			</td>
+		</tr>
+	</table>
+	User Name:
+	<input type="text" class="employeeInfo" id="userName" name="userName" value=""/>
+	<br />
+	Password:
+	<input type="text" class="employeeInfo" id="password" name="password" value=""/>
+	<br />
+	
+
+	<input type="checkbox" class="employeeInfo" id="locked" name="locked"/>
+	Locked
+	<br />
+
+	<input type="button" id="deleteBtn" value="Delete"/>
+	<br />
+
+	<input type="button" id="updateBtn" value="Update"/>
+	<br />
+
+</form>
