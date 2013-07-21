@@ -8,7 +8,7 @@ class AccessMatrix {
 			Role::MANAGER => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE),
 			Role::WAIT_STAFF => array(),
 			Role::KITCHEN_STAFF => array(),
-			Role::HOSTESS => array()
+			Role::HOSTESS => array(RequestType::READ)
 		),
 		ResourceType::RESTAURANT => array(
 			Role::ADMINISTRATOR => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
@@ -29,7 +29,7 @@ class AccessMatrix {
 			Role::MANAGER => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
 			Role::WAIT_STAFF => array(),
 			Role::KITCHEN_STAFF => array(),
-			Role::HOSTESS => array(RequestType::READ, RequestType::UPDATE)
+			Role::HOSTESS => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE)
 		),
 		ResourceType::MENUITEM => array(
 			Role::ADMINISTRATOR => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),

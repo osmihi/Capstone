@@ -23,7 +23,7 @@ class Role {
 			case 'Kitchen Staff':
 				$role = Role::KITCHEN_STAFF;
 				break;
-			case 'Hostess':
+			case 'Host':
 				$role = Role::HOSTESS;
 				break;
 			default:

@@ -40,13 +40,15 @@ class APIController {
 		try {
 			$this->response = new APIResponse();
 
-			$this->response->setHeaders(); // for debugging
+			//$this->response->setHeaders(); // for debugging
 
 			// Connect to the database
 			$this->dbc = new DbConnection();
 
 			$this->request = new APIRequest();
 			
+			if ( !$this->request->getRequestType() ) throw new Exception("Invalid request type:" . $_SERVER['REQUEST_METHOD'], 200);
+
 			if ( !$this->request->getResourceType() ) throw new Exception("Invalid resource requested.", 400);
 
 			// Verify that user credentials were provided in the request
@@ -107,10 +109,8 @@ class APIController {
 		}
 
 		$this->response->respond();
-				
+
 		exit;
 
 	}
 }
-
-

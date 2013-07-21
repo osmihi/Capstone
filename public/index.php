@@ -2,60 +2,186 @@
 
 <html>
 	<head>
-		<title>OrDrUp API Tester</title>
+		<title>OrDrUp</title>
 
 		<script src="scripts/jquery-1.10.1.min.js" type="text/javascript"></script>
 
-		<script type="text/javascript">
-			function drop(elementId) {
-				$('#' + elementId + 'Row').remove();
+		<!-- <script src="employee.js" type="text/javascript"></script> -->
+
+		<style>
+			.waitList {
+				border: 2px solid purple;
+				padding: 5px;
+				margin: 5px;
+				background-color: orange;
+				width: 220px;
+				font-family: Verdana, Arial, Helvetica, sans-serif;
+				font-size: 90%;
+				line-height: 1.2em;
+			}
+			
+			.tableSeating {
+				border: 2px solid yellow;
+				padding: 5px;
+				margin: 5px;
+				background-color: pink;
+				width: 220px;
+				font-family: Verdana, Arial, Helvetica, sans-serif;
+				font-size: 90%;
+				line-height: 1.2em;
+			}
+			
+			.tableSeating.Available {
+				background-color:green;
+			}
+			
+			.tableSeating.Occupied {
+				background-color:lightGray;
+			}
+		</style>
+
+		<script>
+
+			var userInfo = "auth_Username=joe.smith&auth_Password=password";
+			var selectedParty = "";
+
+			RequestType = {
+				CREATE : "POST",
+				READ : "GET",
+				UPDATE : "PUT",
+				DELETE : "DELETE"
+			}
+
+			function request(resource, key, rqType, userInfoString, dataString, successFunc, errorFunc) {
+				if (key == null)
+					key = "";
+
+				$.ajax({
+					url : "http://api.ordrupapp.com/" + resource + "/" + key,
+					type : rqType,
+					data : userInfoString + "&" + dataString,
+					error : function(response, textStatus, errorThrown) {
+						errorFunc(response, textStatus, errorThrown);
+					},
+					success : function(response) {
+						successFunc(response);
+					}
+				});
+			}
+
+			function loadScreen(pageName, dataObject, func) {
+				$.ajax({
+					url : pageName + '.html',
+					success : function(data) {
+						$('#page').html(data);
+						func(dataObject);
+					}
+				});
+			}
+
+			/*
+			 var user = eval({
+			 'userID' : 5,
+			 'firstName' : 'Bootsy',
+			 'lastName' : 'Collins',
+			 'locked' : 'true'
+			 });
+			 */
+
+			function sortByTimestamp(objA, objB) {
+				if ( objA.Timestamp > objB.Timestamp ) return -1;
+				else return 1; 
+			}
+
+			function buildWaitlistScreen(response) {
+				var waitLists = response.data;
+
+				waitLists.sort(sortByTimestamp);
+
+				$('#page').html("");
+
+				for ( i = 0; i < waitLists.length; i++) {
+					drawWaitlist(waitLists[i]);
+				}
+			}
+
+			function drawWaitlist(waitList) {
+				$('#page').append(
+					'<div id="waitList' + waitList.WaitListID + '" class="waitList">' + 
+						'Name: ' + waitList.Name + '<br />' + 
+						'Size: ' + waitList.Size + '<br />' + 
+						'Timestamp: ' + waitList.Timestamp + '<br />' + 
+					'</div>'
+				);
+
+				$('#waitList' + waitList.WaitListID).click(function() {
+					seatingScreen(waitList);
+				});
+			}
+
+			function seatingScreen(waitList) {
+				selectedParty = waitList;
+				request("table", "", RequestType.READ, userInfo, ""/*"status=Available"*/, buildSeatingScreen);
+			}
+
+			function buildSeatingScreen(response) {
+				$('#page').html("");
+
+				var tables = response.data;
+
+				tables.sort(function(a, b) {
+					if (a.Number < b.Number) return -1;
+					else return 1;
+				});
+
+				for ( i = 0; i < tables.length; i++) {
+					drawTable(tables[i]);
+				}
+
+				request("user", "", RequestType.READ, userInfo, "role=Wait Staff", fillInWaitStaff);
+			}
+			
+			function fillInWaitStaff(response) {
+				$('.assigneeUserID').each(function () {
+					for (i = 0; i < response.data.length; i++) {
+						if ( this.innerHTML == response.data[i].UserID ) {
+							this.innerHTML = response.data[i].FName + " " + response.data[i].LName; 
+						}
+					}
+				});
+			}
+			
+			function drawTable(table) {
+				var userString = $.isNumeric(table.UserID) ? table.UserID : "None";
+				
+				$('#page').append(
+					'<div id="tableSeating' + table.TableID + '" class="tableSeating ' + table.Status + '">' + 
+						'Number: ' + table.Number + '<br />' + 
+						'Capacity: ' + table.Capacity + '<br />' + 
+						'Status: ' + table.Status + '<br />' +
+						'Assignee: <span class="assigneeUserID">' + userString + '</span><br />' + 
+					'</div>'
+				);
+
+				$('#tableSeating' + table.TableID).click(function() {
+					request("table", table.TableID, RequestType.UPDATE, userInfo, "status=Occupied", function() {
+						request("waitlist", selectedParty.WaitListID, RequestType.DELETE, userInfo, "", waitListScreen, function() {
+							request("table", table.TableID, RequestType.UPDATE, userInfo, "status=Available", waitListScreen);
+						});
+					});
+				});
+			}
+
+			function waitListScreen() {
+				request("waitlist", "", RequestType.READ, userInfo, "", buildWaitlistScreen);
 			}
 
 			$(function() {
+				waitListScreen();
 
-				$('#paramName').keyup(function() {
-					$('#paramName').val($('#paramName').val().replace(/\W/g, ''));
-				});
-
-				$('#addParam').click(function() {
-					var pName = $('#paramName').val();
-					if (pName != "") {
-						var toAdd = '<tr id="' + pName + 'Row">';
-						toAdd += '<td><input type="button" value="X" onClick="drop(\'' + pName + '\');"/></td>';
-						toAdd += '<td><label for="' + pName + '"/>' + pName + ': </label></td>';
-						toAdd += '<td><input id="' + pName + '" name="' + pName + '" type="text" class="parameter"/></td>';
-						toAdd += '</tr><br />';
-						$('#addedParams').append(toAdd);
-					}
-
-					$('#paramName').val('');
-				});
-
-				$('#submit').click(function() {
-					var paramFields = $('.param[value != ""]');
-					var params = "";
-					var i = 0;
-
-					while (i < paramFields.size()) {
-						params += paramFields.get(i++).value + "=" + paramFields.get(i++) + "&";
-					}
-
-					$.ajax({
-						url : "http://api.ordrupapp.com/" + $('#resource').val().toLowerCase() + "/" + $('#key').val(),
-						type : $('input:radio[name=rqType]:checked').val(),
-						data : $('.parameter[value!=""]').serialize(),
-						//contentType: "application/json",
-						//dataType: "json",
-						//crossDomain:true,
-						error : function(data, textStatus, errorThrown) {
-							$('#apiResult').append("Error: " + textStatus + " : " + errorThrown);
-						},
-						success : function(data) {
-							$('#apiResult').append("Success. " + data.toString());
-						}
-					});
-				});
+				//loadScreen('employee', user, employeeScreen);
 			});
+
 		</script>
 
 	</head>
@@ -63,57 +189,7 @@
 	<body>
 		<div id="page">
 
-			<h3>API Tester</h3>
-
-			<form id="apiTest">
-				<label for="resource">Resource: </label>
-				<input id="resource" type="text" name="resource"/>
-				<label for="key">Key: </label>
-				<input id="key" type="number" name="key"/>
-				<br />
-
-				<input id="rqGet" type="radio" name="rqType" value="GET"/>
-				<label for="rqGet">GET (Read)</label>
-				<input id="rqPost" type="radio" name="rqType" value="POST"/>
-				<label for="rqPost">POST (Create)</label>
-				<input id="rqPut" type="radio" name="rqType" value="PUT"/>
-				<label for="rqPut">PUT (Update)</label>
-				<input id="rqDelete" type="radio" name="rqType" value="DELETE"/>
-				<label for="rqDelete">DELETE (Delete)</label>
-				<br />
-				<br />
-
-				<h4>User data</h4>
-				<label for="auth_Username">Username</label>
-				<input id="auth_Username" type="text" name="auth_Username" class="parameter" value="bootsy.collins"/>
-				<label for="auth_Password">Password</label>
-				<input id="auth_Password" type="text" name="auth_Password" class="parameter" value="password"/>
-				<br />
-				<br />
-
-				<input id="submit" type="button" value="Submit Request"/>
-				<br />
-				<br />
-
-				<h4>Additional Parameters:</h4>
-
-				<input id="paramName" type="text" name="paramName"/>
-				<input id="addParam" type="button" name="addParam" value="Add Param"/>
-				<br />
-				<br />
-
-				<div>
-					<pre>
-						<table id="addedParams"></table>
-					</pre>
-				</div>
-
-			</form>
-
-			<div id="apiResult"></div>
-
 		</div>
 		<!-- page -->
 	</body>
-
 </html>
