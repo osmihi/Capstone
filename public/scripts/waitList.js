@@ -63,7 +63,7 @@ function addPartyToWaitList(){
 
 //Creates box containing party information
 function drawWaitlist(waitList) {
-	//Add div with party waitlist info to page div
+	//Add div with party waitlist info to page div  
 	$('#page').append(
 			'<div id="waitList' + waitList.WaitListID + '" class="waitList">'
 					+ 'Name: ' + waitList.Name + '<br />' 
