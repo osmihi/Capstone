@@ -11,6 +11,9 @@ class User extends Resource {
 	protected $FName;
 	protected $LName;
 	protected $Locked;
+	
+	// Authorization
+	private $authCode;
 
 	function __construct(DbConnection $dbc, array $params) {
 		parent::__construct($dbc);
@@ -36,6 +39,8 @@ class User extends Resource {
  		$this->deleteFields = array("UserID", "RestaurantID");
 
 		parent::loadFields($params);
+		
+		if (isset($params['authCode'])) $this->authCode = $params['authCode'];
 	}
 
 	public function create(array $params = array()) {
@@ -55,25 +60,47 @@ class User extends Resource {
 	}
 	
 	public function authenticate() {
-		if ( !isset($this->Username) || !isset($this->PasswordHash) ) return false;
+		if ( !isset($this->authCode) && (!isset($this->Username) || !isset($this->PasswordHash)) ) return false;
 
-		$stmt = $this->db->prepare("SELECT `UserID`, `RestaurantID`, `Role`, `FName`, `LName` FROM `User` WHERE `Username` = :uname AND `PasswordHash` = SHA1(:pwh) AND `Locked` = 0 LIMIT 0,1");
-		$stmt->bindValue(':uname', $this->Username, PDO::PARAM_STR);
-		$stmt->bindValue(':pwh', $this->PasswordHash, PDO::PARAM_STR);
+		if ( isset($this->authCode) ) {
+			
+			$authArr = explode(":", $this->authCode, 2);
+			$authID = substr($authArr[0],10);
 
-		$res = $this->db->execute($stmt);
+			if ( strval( intval($authID) ) != $authID ) return false;
+					
+			$stmt = $this->db->prepare("SELECT `UserID`, `Username`, `PasswordHash`, `RestaurantID`, `Role`, `FName`, `LName` FROM `User` WHERE `UserID` = :uid LIMIT 0,1");
+			$stmt->bindValue(':uid', $authID, PDO::PARAM_STR);
 
-		if (count($res) < 1) {
-			return false;
+			$res = $this->db->execute($stmt);
+
+			if (count($res) < 1) return false;
+
+			$prefix = substr( md5(date("Y-m-d")), 0, 10 );
+
+			if ( $this->authCode != $prefix . $authID . ":" . SHA1($res[0]['Username'] . $res[0]['PasswordHash']) ) return false;
+
 		} else {
-			$this->UserID = $res[0]['UserID'];
-			$this->RestaurantID = $res[0]['RestaurantID'];
-			$this->Role = $res[0]['Role'];
-			$this->FName = $res[0]['FName'];
-			$this->LName = $res[0]['LName'];
-			$this->Locked = $res[0]['Locked'];
-			return true;
+		
+			$stmt = $this->db->prepare("SELECT `UserID`, `Username`, `PasswordHash`, `RestaurantID`, `Role`, `FName`, `LName` FROM `User` WHERE `Username` = :uname AND `PasswordHash` = SHA1(:pwh) AND `Locked` = 0 LIMIT 0,1");
+			$stmt->bindValue(':uname', $this->Username, PDO::PARAM_STR);
+			$stmt->bindValue(':pwh', $this->PasswordHash, PDO::PARAM_STR);
+
+			$res = $this->db->execute($stmt);
+	
+			if (count($res) < 1) return false;
 		}
+		
+		$this->UserID = $res[0]['UserID'];
+		$this->Username = $res[0]['Username'];
+		$this->PasswordHash = $res[0]['PasswordHash'];
+		$this->RestaurantID = $res[0]['RestaurantID'];
+		$this->Role = $res[0]['Role'];
+		$this->FName = $res[0]['FName'];
+		$this->LName = $res[0]['LName'];
+		$this->Locked = $res[0]['Locked'];
+		return true;
+	
 	}
 
 	public function authorize(APIRequest $rq) {
@@ -82,5 +109,21 @@ class User extends Resource {
 		$rqType = $rq->getRequestType();
 
 		return AccessMatrix::authorize($role, $rscType, $rqType);
+	}
+	
+	// Returns the object formatted as JSON data (override to hide password)
+	public function getJson() {
+		$json  = "{" . PHP_EOL;
+		$delim = "";
+		foreach($this->fieldMap as $f) {
+			if ($f != 'PasswordHash') {
+				$json .= $delim;
+				$json .= "\t" . json_encode($f) . ":" . json_encode($this->{$f});
+				$delim = "," . PHP_EOL;
+			}
+		}
+		$json .= PHP_EOL. "}";
+
+		return $json;
 	}
 }

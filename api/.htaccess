@@ -6,6 +6,9 @@ RewriteCond %{REQUEST_URI} ^/(stats/|missing.html|failed_auth.html|error/).* [NC
 RewriteCond %{REQUEST_FILENAME} -f
 RewriteRule .* - [L]
 
+# special case: ignore login
+# RewriteRule ^/?login$ /login.php [L]
+
 RewriteRule ^([A-Za-z0-9_-]+)/([0-9]+)(/?.*)$						/?resource=$1&key=$2&%{QUERY_STRING}	[NC,L]
 RewriteRule ^([A-Za-z0-9_-]+)/?$									/?resource=$1&%{QUERY_STRING}			[NC,L]
 

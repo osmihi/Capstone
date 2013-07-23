@@ -7,8 +7,7 @@ class ConnectionFactory {
     
     private function __construct() {}
     
-    public static function getFactory()
-    {
+    public static function getFactory() {
         if (!self::$factory)
             self::$factory = new ConnectionFactory();
         return self::$factory;
