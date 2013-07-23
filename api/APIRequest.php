@@ -53,6 +53,9 @@ class APIRequest {
 
 			$userInfo['Password'] = $this->getParam('auth_Password');
 
+		} elseif ( $this->hasParam('authCode') ) {
+			$userInfo['authCode'] = $this->getParam('authCode');
+
 		} else return false;
 
 		return $userInfo;

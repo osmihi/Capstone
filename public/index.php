@@ -1,3 +1,5 @@
+<?php session_start();?>
+
 <!DOCTYPE html>
 
 <html>
@@ -8,16 +10,24 @@
 
 		<script src="scripts/jquery-1.10.1.min.js" type="text/javascript"></script>
 		<script src="scripts/common.js" type="text/javascript"></script>
+		<script src="scripts/header.js" type="text/javascript"></script>
 		<script src="scripts/waitList.js" type="text/javascript"></script>
 		<script src="scripts/seating.js" type="text/javascript"></script>
 
 		<script>
 
 			$(function() {
-				var role = "";
-				while (role == "") {
-					role = prompt("Enter role: \n(Manager, Host, Wait Staff, Kitchen Staff)", "Host");
 
+				var role = "";
+
+				<?php
+					if ( isset($_SESSION['authCode']) ) {
+						echo "userInfo = 'authCode=" . $_SESSION['authCode'] . "&';" . PHP_EOL;
+						echo "\t\t\t\trole = '" . $_SESSION['userRole'] . "';" . PHP_EOL;
+					}
+				?>
+
+				while (typeof userInfo === 'undefined' || userInfo == "") {
 					switch (role) {
 						case "Manager":
 						case "manager":
@@ -46,7 +56,7 @@
 							// screen function here
 							break;
 						default:
-							role = "";
+							role = prompt("Enter role: \n(Manager, Host, Wait Staff, Kitchen Staff)", "Host");
 							break;
 					}
 				}
@@ -57,9 +67,7 @@
 	</head>
 
 	<body>
-		<div id="page">
-
-		</div>
-		<!-- page -->
+		<div id="header"></div>
+		<div id="page"></div>
 	</body>
 </html>
