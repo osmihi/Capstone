@@ -1,7 +1,7 @@
 //Called to render waitList screen
 function waitListScreen() {
 	//API call: request(resource, key, rqType, userInfoString, dataString, successFunc, errorFunc)
-	request("waitlist", "", RequestType.POST, userInfo, "", buildWaitlistScreen);
+	request("waitlist", "", RequestType.READ, userInfo, "", buildWaitlistScreen);
 }
 
 //response is result of API request call
@@ -57,7 +57,7 @@ function addPartyToWaitList(){
 	alert("partyName: "+partyName);
 	var partySize = $('#partySizeInput').val();
 	alert("partySize: "+ partySize);
-	request("waitlist", "", RequestType.PUT, userInfo, "Name="+partyName+"&Size="+partySize, buildWaitlistScreen);
+	request("waitlist", "", RequestType.UPDATE, userInfo, "Name="+partyName+"&Size="+partySize, buildWaitlistScreen);
 }
 
 //Creates box containing party information

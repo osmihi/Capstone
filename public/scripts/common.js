@@ -5,7 +5,10 @@ RequestType = {
 	CREATE : "POST",
 	READ : "GET",
 	UPDATE : "PUT",
-	DELETE : "DELETE"
+	DELETE : "DELETE",
+	POST : "POST",
+	GET  : "GET",
+	PUT : "PUT"
 }
 
 function request(resource, key, rqType, userInfoString, dataString,
