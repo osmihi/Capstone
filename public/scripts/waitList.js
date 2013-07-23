@@ -33,18 +33,18 @@ function drawAddToWaitListForm() {
 	//Add a div with inputs to enter a new party
 	$('#page').append(
 			'<div id="addToWaitListForm"  class="addToWaitListForm">'
-					+'<table>'
+				+'<table>'
 					+'<tr>' 
-					+'<td> Party Name: </td>' 
-					+'<td><input type="text" id="partyNameInput" value=""/></td>'
+						+'<td> Party Name: </td>' 
+						+'<td><input type="text" id="partyNameInput" value=""/></td>'
 					+'</tr>'
 					+'<tr>'
-					+'<td> Party Size </td>'
-					+'<td><input type="text" id="partySizeInput" value="" maxlength="2" style="width:30px"/></td>'
+						+'<td> Party Size </td>'
+						+'<td><input type="text" id="partySizeInput" value="" maxlength="2" style="width:30px"/></td>'
 					+'</tr>'
-					+'</table>'
-					+'<input type=button id="addPartyButton" value="Add"/><br />'
-				+'</div>);
+				+'</table>'
+				+'<input type=button id="addPartyButton" value="Add"/><br />'
+			+'</div>');
 
 	//Add click function to button
 	$('#addPartyButton').click(function() {
@@ -56,7 +56,7 @@ function addPartyToWaitList(){
 	var partyName = $('#partyNameInput').val();
 	alert("partyName: "+partyName);
 	var partySize = $('#partySizeInput').val();
-	alert("partySize"+ partySize);
+	alert("partySize: "+ partySize);
 	request("waitlist", "", RequestType.PUT, userInfo, "Name="+partyName+"&Size="+partySize, buildWaitlistScreen);
 }
 
