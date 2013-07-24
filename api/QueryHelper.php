@@ -5,13 +5,14 @@ class QueryHelper {
 	private function __construct() {}
 
 	// Takes an array and makes it a backtick-quoted, comma separated list
-	public static function buildFieldsList(array $fieldNames, $continue = false) {
+	public static function buildFieldsList(array $fieldNames, $tableName = null, $continue = false) {
 		$list = "";
 		$quote = "`";
 		$delim = $continue ? ", " : "";
-
+		$table = $tableName != null ? '`' . $tableName . '`.' : '';
+		
 		foreach ($fieldNames as $f) {
-				$list .= $delim . $quote . $f . $quote;
+				$list .= $delim . $table . $quote . $f . $quote;
 				$delim = ", ";	
 		}
 
@@ -48,15 +49,16 @@ class QueryHelper {
 		return $list;
 	}
 	
-	public static function buildWhereList(array $fields, $continue = false) {
+	public static function buildWhereList(array $fields, $tableName = null, $continue = false) {
 		$list = "";
 		$delim = $continue ? " AND " : "";
+		$table = $tableName != null ? '`' . $tableName . '`.' : '';
 
 		if (empty($fields)) $list .= " 1 = 1 ";
 
 		foreach ($fields as $f) {
-			$list .= $delim . '`' . $f . '` = :' . $f . 'Value ';
-			$delim = " AND ";	
+			$list .= $delim . $table . '`' . $f . '` = :' . $f . 'Value ';
+			$delim = " AND ";
 		}
 
 		return $list;

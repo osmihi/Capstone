@@ -37,8 +37,8 @@ class Order extends Resource {
 			if (strcasecmp($pKey, 'RestaurantID') == 0) $rId = $pVal;
 		}
 
-		$join = " INNER JOIN `Table` ON `Table`.`RestaurantID` = " . $rId . " ";
+		$join = " INNER JOIN `Table` ON `Order`.`TableID` = `Table`.`TableID` AND `Table`.`RestaurantID` = " . $rId . " ";
 
-		parent::read($params, $join);
+		return parent::read($params, $join);
 	}
 }
