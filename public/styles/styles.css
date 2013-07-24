@@ -52,3 +52,25 @@ div#page {
 .tableSeating.Occupied {
 	background-color: lightGray;
 }
+
+.userInfoBox {
+	border: 2px double green;
+	text-align:right;
+}
+
+.userFullName {
+	font-size: 24pt;
+}
+
+.userRole {
+	font-size: 18pt;
+}
+
+.navButton {
+	margin:1em;
+	padding:1em;
+	border: 2px outset gray;
+	font-size: 16pt;
+	cursor:pointer;
+	display:inline;
+}

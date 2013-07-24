@@ -42,6 +42,7 @@ class LoginController {
 
 			$_SESSION['authCode'] = $prefix . $this->user->getField('UserID') . ":" . SHA1($this->user->getField('Username') . $this->user->getField('PasswordHash'));
 			$_SESSION['userRole'] = $this->user->getField('Role');
+			$_SESSION['UserID'] = $this->user->getField('UserID');
 
 			$authCodeJson = "{" . "\"authCode\" : " . json_encode($_SESSION['authCode']) . "}";
 			

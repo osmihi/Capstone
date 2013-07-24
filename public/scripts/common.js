@@ -1,4 +1,7 @@
 var userInfo;
+var userID;
+var userRole;
+
 var selectedParty;
 
 RequestType = {
@@ -11,8 +14,7 @@ RequestType = {
 	PUT : "PUT"
 }
 
-function request(resource, key, rqType, userInfoString, dataString,
-		successFunc, errorFunc) {
+function request(resource, key, rqType, userInfoString, dataString, successFunc, errorFunc) {
 	if (key == null)
 		key = "";
 
@@ -21,7 +23,7 @@ function request(resource, key, rqType, userInfoString, dataString,
 		type : rqType,
 		data : userInfoString + "&" + dataString,
 		error : function(response, textStatus, errorThrown) {
-			errorFunc(response, textStatus, errorThrown);
+			if (typeof errorFunc !== 'undefined') errorFunc(response, textStatus, errorThrown);
 		},
 		success : function(response) {
 			successFunc(response);

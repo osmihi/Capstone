@@ -7,6 +7,8 @@ class Order extends Resource {
 	protected $TableID;
 	protected $BillID;
 	protected $Timestamp;
+	
+	protected $RestaurantID;
 
 	function __construct(DbConnection $dbc, array $params) {
 		parent::__construct($dbc);
@@ -21,11 +23,22 @@ class Order extends Resource {
 		);
 		
 		// Required fields for each operation
-		$this->createFields = array("TableID", "BillID");
- 		$this->readFields = array("TableID");
+		$this->createFields = array("TableID");
+ 		$this->readFields = array("RestaurantID");
  		$this->updateFields = array("OrderID");
  		$this->deleteFields = array("OrderID");
 
 		parent::loadFields($params);
+	}
+	
+	public function read(array $params = array(), $join = null) {
+		$rId;
+		foreach ($params as $pKey => $pVal) {
+			if (strcasecmp($pKey, 'RestaurantID') == 0) $rId = $pVal;
+		}
+
+		$join = " INNER JOIN `Table` ON `Table`.`RestaurantID` = " . $rId . " ";
+
+		parent::read($params, $join);
 	}
 }

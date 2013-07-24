@@ -10,7 +10,7 @@
 
 		<script src="scripts/jquery-1.10.1.min.js" type="text/javascript"></script>
 		<script src="scripts/common.js" type="text/javascript"></script>
-		<script src="scripts/header.js" type="text/javascript"></script>
+		<script src="scripts/navBar.js" type="text/javascript"></script>
 		<script src="scripts/waitList.js" type="text/javascript"></script>
 		<script src="scripts/seating.js" type="text/javascript"></script>
 
@@ -23,10 +23,13 @@
 				<?php
 					if ( isset($_SESSION['authCode']) ) {
 						echo "userInfo = 'authCode=" . $_SESSION['authCode'] . "&';" . PHP_EOL;
-						echo "\t\t\t\trole = '" . $_SESSION['userRole'] . "';" . PHP_EOL;
+						echo "\t\t\t\tuserID = '" . $_SESSION['UserID'] . "';" . PHP_EOL;
+						echo "\t\t\t\tuserRole = '" . $_SESSION['userRole'] . "';" . PHP_EOL;
 					}
 				?>
-
+				
+				navBar();
+/*
 				while (typeof userInfo === 'undefined' || userInfo == "") {
 					switch (role) {
 						case "Manager":
@@ -39,8 +42,8 @@
 						case "host":
 						case "hostess":
 							userInfo = "auth_Username=joe.smith&auth_Password=password";
-							waitListScreen();
-							break;
+*/							waitListScreen();
+/*							break;
 						case "Wait Staff":
 						case "wait staff":
 						case "waitStaff":
@@ -60,6 +63,7 @@
 							break;
 					}
 				}
+*/
 			});
 
 		</script>

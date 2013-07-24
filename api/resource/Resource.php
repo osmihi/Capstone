@@ -103,6 +103,7 @@ abstract class Resource {
 	// CRUD Operations
 	public function create(array $params = array()) {
 		$allFields = $params + $this->getFields();
+
 		if (!$this->verifyRequiredFields($this->createFields, $allFields)) return false;
 
 		$done = array();
@@ -154,7 +155,7 @@ abstract class Resource {
 		return $resources;
 	}
 
-	public function read(array $params = array()) {
+	public function read(array $params = array(), $join = "") {
 		$allFields = $params + $this->getFields();
 		if ( !$this->verifyRequiredFields($this->readFields, $allFields) ) return false;
 
@@ -172,7 +173,7 @@ abstract class Resource {
 			}
 		}
 
-		$stmt = $this->db->prepare("SELECT ". QueryHelper::buildFieldsList(array_unique($this->fieldMap)) . " FROM `" . get_class($this) . "` WHERE " . QueryHelper::buildWhereList($fieldsList));
+		$stmt = $this->db->prepare("SELECT ". QueryHelper::buildFieldsList(array_unique($this->fieldMap)) . " FROM `" . get_class($this) . "` " . $join . " WHERE " . QueryHelper::buildWhereList($fieldsList));
 		for ($i = 0; $i < count($fieldsList); $i++) {
 			$stmt->bindValue(':' . $fieldsList[$i] . 'Value', $valuesList[$i], ResourceType::getPDOParamType($valuesList[$i]));
 		}

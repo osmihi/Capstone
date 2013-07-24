@@ -40,7 +40,7 @@ class APIController {
 		try {
 			$this->response = new APIResponse();
 
-			//$this->response->setHeaders(); // for debugging
+			$this->response->setHeaders(); // for debugging
 
 			// Connect to the database
 			$this->dbc = new DbConnection();
@@ -74,7 +74,7 @@ class APIController {
 
 			// Carry out the request on the resource
 			$result = false;
-			
+
 			switch($this->request->getRequestType()) {
 				case RequestType::CREATE;
 					if ( $this->request->getKey() > 0 ) throw new Exception("Invalid request. Do not provide an ID for the resource being created.", 400);

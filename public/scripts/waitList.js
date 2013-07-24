@@ -1,11 +1,11 @@
 //Called to render waitList screen
 function waitListScreen() {
 	//API call: request(resource, key, rqType, userInfoString, dataString, successFunc, errorFunc)
-	request("waitlist", "", RequestType.READ, userInfo, "", buildWaitlistScreen);
+	request("waitlist", "", RequestType.READ, userInfo, "", buildWaitListScreen);
 }
 
 //response is result of API request call
-function buildWaitlistScreen(response) {
+function buildWaitListScreen(response) {
 	var waitLists = response.data;
 
 //Sort waitLists in descending order by timestamp (oldest time stamp first) 
@@ -54,10 +54,8 @@ function drawAddToWaitListForm() {
 
 function addPartyToWaitList(){
 	var partyName = $('#partyNameInput').val();
-	alert("partyName: "+partyName);
 	var partySize = $('#partySizeInput').val();
-	alert("partySize: "+ partySize);
-	request("waitlist", "", RequestType.UPDATE, userInfo, "Name="+partyName+"&Size="+partySize, buildWaitlistScreen);
+	request("waitlist", "", RequestType.CREATE, userInfo, "Name="+partyName+"&Size="+partySize, waitListScreen);
 }
 
 //Creates box containing party information
