@@ -24,6 +24,9 @@ function navBar() {
 }
 
 function buildLogin() {
+	//Wipe page clean (remove previous existing content)
+	$('#header').html("");
+
 	$('#header').append(
 		'<form id="loginForm" action="javascript:void(0);">' +
 			'<label for="username">Username </label>' +
