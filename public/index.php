@@ -16,54 +16,22 @@
 
 		<script>
 
+			userInfo = "<?php if (isset($_SESSION['authCode'])) echo 'authCode=' . $_SESSION['authCode']?>";
+			userID = "<?php if (isset($_SESSION['authCode'])) echo $_SESSION['UserID']?>";
+			userRole = "<?php if (isset($_SESSION['authCode'])) echo $_SESSION['userRole']?>";
+
+			NavInitial = new Array();
+			NavInitial['Manager'] = ["tablesScreen"];
+			NavInitial['Host'] = ["waitListScreen"];
+			NavInitial['Wait Staff'] = ["tablesScreen"];
+			NavInitial['Kitchen Staff'] = ["orderQueueScreen"];
+
 			$(function() {
 
-				var role = "";
-
-				<?php
-					if ( isset($_SESSION['authCode']) ) {
-						echo "userInfo = 'authCode=" . $_SESSION['authCode'] . "&';" . PHP_EOL;
-						echo "\t\t\t\tuserID = '" . $_SESSION['UserID'] . "';" . PHP_EOL;
-						echo "\t\t\t\tuserRole = '" . $_SESSION['userRole'] . "';" . PHP_EOL;
-					}
-				?>
-				
 				navBar();
-/*
-				while (typeof userInfo === 'undefined' || userInfo == "") {
-					switch (role) {
-						case "Manager":
-						case "manager":
-							userInfo = "auth_Username=bootsy.collins&auth_Password=password";
-							// screen function here
-							break;
-						case "Host":
-						case "Hostess":
-						case "host":
-						case "hostess":
-							userInfo = "auth_Username=joe.smith&auth_Password=password";
-*/							waitListScreen();
-/*							break;
-						case "Wait Staff":
-						case "wait staff":
-						case "waitStaff":
-						case "WaitStaff":
-							userInfo = "auth_Username=q.tip&auth_Password=password";
-							// screen function here
-							break;
-						case "Kitchen Staff":
-						case "kitchen staff":
-						case "kitchenStaff":
-						case "KitchenStaff":
-							userInfo = "auth_Username=nate.dogg&auth_Password=password";
-							// screen function here
-							break;
-						default:
-							role = prompt("Enter role: \n(Manager, Host, Wait Staff, Kitchen Staff)", "Host");
-							break;
-					}
-				}
-*/
+
+				if (userRole != '')	window[NavInitial[userRole]]();
+
 			});
 
 		</script>

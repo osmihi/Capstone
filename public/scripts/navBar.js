@@ -2,15 +2,13 @@
 // put buttons in it depending on role
 // each button will display a screen
 
-NavButtons = new Array();
-
+var NavButtons = new Array();
 NavButtons['Manager'] = ["waitListScreen", "seatingScreen", "orderQueueScreen", "usersScreen", "tablesScreen", "discountsScreen", "menuScreen"];
 NavButtons['Host'] = ["waitListScreen", "seatingScreen"];
 NavButtons['Wait Staff'] = ["tablesScreen"];
 NavButtons['Kitchen Staff'] = ["orderQueueScreen"];
 
-ScreenNames = new Array();
-
+var ScreenNames = new Array();
 ScreenNames["waitListScreen"] = 'Wait List';
 ScreenNames["seatingScreen"] = 'Seating';
 ScreenNames["orderQueueScreen"] = 'Kitchen';
@@ -21,7 +19,37 @@ ScreenNames["menuScreen"] = 'Menu';
 
 function navBar() {
 	// get the info necessary to make the nav bar and call build function
-	request("user", userID, RequestType.READ, userInfo, "", buildNavBar);
+	if (userID != '' && userInfo != '') request("user", userID, RequestType.READ, userInfo, "", buildNavBar);
+	else buildLogin();
+}
+
+function buildLogin() {
+	$('#header').append(
+		'<form id="loginForm" action="javascript:void(0);">' +
+			'<label for="username">Username </label>' +
+			'<input type="text" id="username" name="username">' + '</input>' + '<br />' +
+			'<label for="password">Password </label>' +
+			'<input type="password" id="password" name="password">' + '</input>' + '<br />' +	
+			'<input id="loginSubmit" type="submit" value="Log In">' + '<br />' +
+			'<span id="loginMessage"></span>' +
+		'</form>');
+	
+	$('#loginSubmit').click(function() {
+		var uName = $("#username").val();
+		var uPass = $("#password").val();
+
+		$.ajax({
+			url : "http://www.ordrupapp.com/login",
+			type : "POST",
+			data : "auth_Username=" + uName + "&" + "auth_Password=" + uPass,
+			error : function(response, textStatus, errorThrown) {
+				$('#loginMessage').html('Login failed.');
+			},
+			success : function(response) {
+				window.location.href = "http://www.ordrupapp.com/";
+			}
+		});
+	});
 }
 
 function buildNavBar(response) {
@@ -48,8 +76,22 @@ function drawUserInfo(fName, lName, role) {
 	$('#header').append(
 		'<div id="userInfo" class="userInfoBox">' +
 			'<div class="userFullName">' + fName + ' ' + lName + '</div>' +
-			'<div class="userRole">' + role + '</div>' +				
+			'<div class="userRole">' + role + '</div>' +
+			'<input id="logoutSubmit" type="submit" value="Log Out">' + '<br />' +
 		'</div>');
+	
+	$('#logoutSubmit').click(function() {
+		$.ajax({
+			url : "http://www.ordrupapp.com/logout",
+			type : "GET",
+			error : function(response, textStatus, errorThrown) {
+				window.location.href = "http://www.ordrupapp.com/";
+			},
+			success : function(response) {
+				window.location.href = "http://www.ordrupapp.com/";
+			}
+		});
+	});
 }
 
 function makeNavButton(screenName) {

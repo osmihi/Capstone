@@ -4,7 +4,7 @@ var userRole;
 
 var selectedParty;
 
-RequestType = {
+var RequestType = {
 	CREATE : "POST",
 	READ : "GET",
 	UPDATE : "PUT",
