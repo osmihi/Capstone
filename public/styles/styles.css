@@ -34,6 +34,8 @@ div#page {
 	line-height: 1.2em;
 }
 
+
+
 .tableSeating {
 	border: 2px solid yellow;
 	padding: 5px;
@@ -73,4 +75,16 @@ div#page {
 	font-size: 16pt;
 	cursor:pointer;
 	display:inline;
+}
+
+
+.discount {
+	border: 2px solid purple;
+	padding: 5px;
+	margin: 5px;
+	background-color: orange;
+	width: 300px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 90%;
+	line-height: 1.2em;
 }
