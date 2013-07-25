@@ -14,6 +14,7 @@
 		<script src="scripts/waitList.js" type="text/javascript"></script>
 		<script src="scripts/seating.js" type="text/javascript"></script>
 		<script src="scripts/tables.js" type="text/javascript"></script>
+		<script src="scripts/discounts.js" type="text/javascript"></script>
 
 		<script>
 
