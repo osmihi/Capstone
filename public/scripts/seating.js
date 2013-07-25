@@ -14,7 +14,7 @@ function buildSeatingScreen(response) {
 	});
 
 	for ( i = 0; i < tables.length; i++) {
-		drawTable(tables[i]);
+		drawTableSeating(tables[i]);
 	}
 
 	request("user", "", RequestType.READ, userInfo, "role=Wait Staff", fillInWaitStaff);
@@ -30,9 +30,9 @@ function fillInWaitStaff(response) {
 	});
 }
 
-function drawTable(table) {
+function drawTableSeating(table) {
 	var userString = $.isNumeric(table.UserID) ? table.UserID : "None";
-	
+
 	$('#page').append(
 		'<div id="tableSeating' + table.TableID + '" class="tableSeating ' + table.Status + '">' + 
 			'Number: ' + table.Number + '<br />' + 
