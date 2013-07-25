@@ -32,7 +32,7 @@
 
 				navBar();
 
-				if (userRole != '')	window[NavInitial[userRole]]();
+				if (userRole != '')	{window[NavInitial[userRole]]();}
 
 			});
 
