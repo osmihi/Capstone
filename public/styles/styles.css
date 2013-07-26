@@ -35,7 +35,6 @@ div#page {
 }
 
 
-
 .tableSeating {
 	border: 2px solid yellow;
 	padding: 5px;
@@ -87,4 +86,27 @@ div#page {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 90%;
 	line-height: 1.2em;
+}
+
+.tableTables {
+	border: 2px solid yellow;
+	padding: 5px;
+	margin: 5px;
+	background-color: white;
+	width: 220px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 90%;
+	line-height: 1.2em;
+}
+
+.tableTables.Available {
+	background-color: green;
+}
+
+.tableTables.Occupied {
+	background-color: lightGray;
+}
+
+.tableStatus {
+	cursor: pointer;
 }

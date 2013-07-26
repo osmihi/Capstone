@@ -94,6 +94,8 @@ class ResourceType {
 			return PDO::PARAM_BOOL;
 		elseif (is_null($value))
 			return PDO::PARAM_NULL;
+		elseif (strcasecmp($value, 'NULL') == 0)
+			return PDO::PARAM_NULL;
 		elseif (is_string($value))
 			return PDO::PARAM_STR;
 		else 

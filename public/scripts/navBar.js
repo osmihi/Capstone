@@ -103,8 +103,6 @@ function makeNavButton(screenName) {
 			ScreenNames[screenName] +
 		'</a></div>'
 	).click(function() {
-		alert(screenName);
-		alert(window[screenName]);
 		window[screenName]();
 	});
 }
