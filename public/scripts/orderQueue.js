@@ -4,7 +4,6 @@ function orderQueueScreen() {
 	request("order", "", RequestType.READ, userInfo, "", buildOrderQueueScreen);
 }
 
-
 function buildOrderQueueScreen(response){
 	//alert("buildOrderQueueScreen(response)");
 	var orders = response.data;
@@ -25,21 +24,12 @@ function buildOrderQueueScreen(response){
 	request("table", "", RequestType.READ, userInfo, "", fillInTableNumbers);
 	request("menuItem", "", RequestType.READ, userInfo, "", drawMenuItemInfo);
 	
-	//Add click functions
-	$('.orderItem').click(function() {
-		var orderItemId = $(this).find(".orderItemIdHolder").val();
-		alert("orderItemId = " + orderItemId);
-//		getOrderItemForStatusUpdate(orderItemId); 
-	});
 	
+	request("menuItem", "", RequestType.READ, userInfo, "", addClickEvents);
+
+		
 }
 
-//function drawOrderDiv(order){
-//	drawOrderHeading(order);
-//	//alert("drawOrderDiv: order.OrderID = "+ order.OrderID);
-//	request("orderItem", "", RequestType.READ, userInfo, "OrderID="+ order.OrderID, drawOrderItems, alert("failure in drawOrderDiv"));
-//	//$('#page').append('</div>');
-//}
 
 
 function drawOrderHeading(order){
@@ -80,8 +70,8 @@ function drawOrderItems(response){
 		var orderItemStatus = orderItems[i].Status;
 		var orderItemString =
 			'<div id="orderItem'+ orderItems[i].OrderID + '" class="orderItem orderItemStatus'+orderItems[i].Status+'">' +
-				'<input type="hidden" class="orderItemIdHolder" value="'+ orderItems[i].OrderItemID +'"></div>' +
-				'<div class="menuItemID'+ orderItems[i].MenuItemID +'"></div>' +
+			'<input type="hidden" class="orderItemIdHolder" value="'+ orderItems[i].OrderItemID +'"/>' +	
+			'<div class="menuItemID'+ orderItems[i].MenuItemID +'"></div>' +
 				'<div class="statusDiv">Status: ';
 		if(orderItemStatus == "Ready") orderItemString += 'Ready';
 		else if(orderItemStatus == "InPrep") orderItemString += 'In Prep';
@@ -90,19 +80,15 @@ function drawOrderItems(response){
 		var orderDivId = '#order'+orderItems[i].OrderID;
 		$(orderDivId).append(orderItemString);
 	}
+	//Add click functions
+
 }
 
 function drawMenuItemInfo(response){
 	alert("drawMenuItemInfo");
 	var menuItems = response.data;
 	for(i=0; i<menuItems.length; i++){
-//		alert("menuItem.MenuItemID = " + menuItems[i].MenuItemID);
-//		alert("menuItem.Category = " + menuItems[i].Category);
-//		alert("menuItem.PrepTime = " + menuItems[i].PrepTime);
 		var menuItemDivClass = '.menuItemID' + menuItems[i].MenuItemID;
-//		alert("menuItemDivClass = " + menuItemDivClass);
-//		alert("menuItemDivID = " + menuItemDivID);
-//		alert("$(menuItemDivID).length " + $(menuItemDivID).length);
 		if($(menuItemDivClass).length > 0){
 			var menuItemInfo = 
 				'<div class="menuItemInfo">' +
@@ -123,30 +109,15 @@ function drawMenuItemInfo(response){
 	}
 }
 
+function addClickEvents(){
+	$('.orderItem').click(function() {
+			var orderItemId = $(this).find(".orderItemIdHolder").val();
+			alert("orderItemId = " + orderItemId);
+//			getOrderItemForStatusUpdate(orderItemId); 
+	});	
+}
 
-//function drawMenuItemInfo(response){
-//	alert("drawMenuItemInfo");
-//	var menuItem = response.data[0];
-//	alert("menuItem.MenuItemID = " + menuItem.MenuItemID);
-//	alert("menuItem.Category = " + menuItem.Category);
-//	alert("menuItem.PrepTime = " + menuItem.PrepTime);
-//	var menuItemInfo = 
-//		'<div class="menuItemInfo">' +
-//			'<div class="menuItemInfoSnippet">' +
-//				menuItem.Name +
-//			'</div>' +
-//			'<div class="menuItemInfoSnippet">' +
-//				menuItem.Category +
-//			'</div>' +
-//			'<div class="menuItemInfoSnippet">' +
-//				menuItem.PrepTime +
-//			'</div>' +
-//		'</div>'; 
-//	alert("menuItemInfo = " + menuItemInfo);
-//	var menuItemDivID = '#menuItemID' + menuItem.MenuItemID;
-//	alert("menuItemDivID = " + menuItemDivID);
-//	$(menuItemDivID).append(menuItemInfo);
-//}
+
 
 
 
