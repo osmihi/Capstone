@@ -26,10 +26,21 @@ class OrderItem extends Resource {
 
 		// Required fields for each operation
 		$this->createFields = array("OrderID", "MenuItemID", "PurchasePrice");
- 		$this->readFields = array("OrderID");
+ 		$this->readFields = array("RestaurantID");
  		$this->updateFields = array("OrderItemID");
  		$this->deleteFields = array("OrderItemID");
 
 		parent::loadFields($params);
+	}
+	
+	public function read(array $params = array(), $join = null) {
+		$rId;
+		foreach ($params as $pKey => $pVal) {
+			if (strcasecmp($pKey, 'RestaurantID') == 0) $rId = $pVal;
+		}
+
+		$join = " INNER JOIN `MenuItem` ON `MenuItem`.`MenuItemID` = `OrderItem`.`MenuItemID` AND `MenuItem`.`RestaurantID` = " . $rId . " ";
+
+		return parent::read($params, $join);
 	}
 }

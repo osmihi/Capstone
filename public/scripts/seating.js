@@ -1,6 +1,6 @@
 function seatingScreen(waitList) {
 	selectedParty = waitList;
-	request("table", "", RequestType.READ, userInfo, ""/*"status=Available"*/, buildSeatingScreen);
+	request("table", "", RequestType.READ, userInfo, "", buildSeatingScreen);
 }
 
 function buildSeatingScreen(response) {

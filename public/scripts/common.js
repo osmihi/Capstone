@@ -3,6 +3,7 @@ var userID;
 var userRole;
 
 var selectedParty;
+var selectedTable;
 
 var RequestType = {
 	CREATE : "POST",
@@ -29,4 +30,23 @@ function request(resource, key, rqType, userInfoString, dataString, successFunc,
 			successFunc(response);
 		}
 	});
+}
+
+// Utilities
+
+// http://stackoverflow.com/questions/1960473/unique-values-in-an-array
+Array.prototype.getUnique = function(){
+   var u = {}, a = [];
+   for(var i = 0, l = this.length; i < l; ++i){
+      if(u.hasOwnProperty(this[i])) {
+         continue;
+      }
+      a.push(this[i]);
+      u[this[i]] = 1;
+   }
+   return a;
+}
+
+function money(currency) {
+	return Number(currency.replace(/[^0-9\.]+/g,""));
 }
