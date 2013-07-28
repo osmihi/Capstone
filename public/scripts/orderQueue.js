@@ -25,6 +25,13 @@ function buildOrderQueueScreen(response){
 	request("table", "", RequestType.READ, userInfo, "", fillInTableNumbers);
 	request("menuItem", "", RequestType.READ, userInfo, "", drawMenuItemInfo);
 	
+	//Add click functions
+	$('.orderItem').click(function() {
+		var orderItemId = $(this).find(".orderItemIdHolder").val();
+		alert("orderItemId = " + orderItemId);
+//		getOrderItemForStatusUpdate(orderItemId); 
+	});
+	
 }
 
 //function drawOrderDiv(order){
@@ -73,6 +80,7 @@ function drawOrderItems(response){
 		var orderItemStatus = orderItems[i].Status;
 		var orderItemString =
 			'<div id="orderItem'+ orderItems[i].OrderID + '" class="orderItem orderItemStatus'+orderItems[i].Status+'">' +
+				'<input type="hidden" class="orderItemIdHolder" value="'+ orderItems[i].OrderItemID +'"></div>' +
 				'<div class="menuItemID'+ orderItems[i].MenuItemID +'"></div>' +
 				'<div class="statusDiv">Status: ';
 		if(orderItemStatus == "Ready") orderItemString += 'Ready';
@@ -81,8 +89,6 @@ function drawOrderItems(response){
 		orderItemString += '</div>';	
 		var orderDivId = '#order'+orderItems[i].OrderID;
 		$(orderDivId).append(orderItemString);
-		
-//		request("menuItem", orderItems[i].MenuItemID, RequestType.READ, userInfo, "", drawMenuItemInfo);
 	}
 }
 
@@ -94,7 +100,7 @@ function drawMenuItemInfo(response){
 //		alert("menuItem.Category = " + menuItems[i].Category);
 //		alert("menuItem.PrepTime = " + menuItems[i].PrepTime);
 		var menuItemDivClass = '.menuItemID' + menuItems[i].MenuItemID;
-		alert("menuItemDivClass = " + menuItemDivClass);
+//		alert("menuItemDivClass = " + menuItemDivClass);
 //		alert("menuItemDivID = " + menuItemDivID);
 //		alert("$(menuItemDivID).length " + $(menuItemDivID).length);
 		if($(menuItemDivClass).length > 0){
