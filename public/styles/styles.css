@@ -109,3 +109,26 @@ div#page {
 .tableStatus {
 	cursor: pointer;
 }
+
+.order {
+	border: 2px solid black;
+}
+
+.orderHeadingInfo {
+	display: inline;
+	margin-right: 5em;
+}
+
+.orderItemInfo {
+	display: inline;
+	margin-right: 5em;
+}
+
+.orderItem {
+	margin-left: 2em;
+}
+
+.menuItemInfoSnippet{
+	display: inline;
+	margin-right: 5em;
+}
