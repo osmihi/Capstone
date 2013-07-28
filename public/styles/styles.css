@@ -148,3 +148,9 @@ div#page {
 	display: inline;
 	margin-right: 5em;
 }
+
+.billButton {
+	cursor:pointer;
+	background-color:blue;
+	display:inline;
+}

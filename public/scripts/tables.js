@@ -50,7 +50,7 @@ function drawTableTable(table, userData) {
 			'Capacity: ' + table.Capacity + '<br />' + 
 			'Status: <span id="table' + table.TableID + 'Status" class="tableStatus">' + table.Status + '</span><br />' +
 			'Assignee:' + userOptions + '<br />' + 
-			'<div id="table' + table.TableID + 'Bill">' + billAction + ' Bill' + '</div>' +
+			'<div id="table' + table.TableID + 'Bill" class="billButton">' + billAction + ' Bill' + '</div>' +
 		'</div>'
 	);
 
@@ -74,6 +74,9 @@ function drawTableTable(table, userData) {
 	$('#table' + table.TableID + 'Assignee').change(function() {
 		request("table", table.TableID, RequestType.UPDATE, userInfo, "UserID=" + $(this).val(), function(response) {});
 	});
-	
-	// TODO make click functions for various buttons in there above...
+
+	$('#table' + table.TableID + 'Bill').click(function() {
+		selectedTable = table;
+		billScreen();
+	});
 }
