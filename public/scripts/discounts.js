@@ -28,9 +28,9 @@ function buildDiscountScreen(response) {
 		discountCode = $(this).parents(".discount:first").find(".discountCode").val();
 		discountValue = $(this).parents(".discount:first").find(".discountValue").val();
 		discountType = $(this).parents(".discount:first").find(".discountType").val();
-		alert(discountCode);
-		alert(discountValue);
-		alert(discountType);
+//		alert(discountCode);
+//		alert(discountValue);
+//		alert(discountType);
 		addDiscount(discountCode, discountValue, discountType);
 	});
 	
@@ -115,7 +115,7 @@ function addDiscount(discountCode, discountValue, discountType){
 // API call: request(resource, key, rqType, userInfoString, dataString,
 // successFunc, errorFunc)
 function updateDiscount(discountID, discountCode, discountValue, discountType){
-	alert(discountID + discountCode + discountValue + discountType)
+	//alert(discountID + discountCode + discountValue + discountType)
 	request("discount", discountID, RequestType.UPDATE, userInfo, 
 			"DiscountID=" + discountID +
 			"&DiscountCode=" + discountCode + 
