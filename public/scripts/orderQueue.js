@@ -72,8 +72,7 @@ function drawOrderItems(response){
 	for (i = 0; i < orderItems.length; i++) {
 		var orderItemStatus = orderItems[i].Status;
 		var orderItemString =
-			'<div id="orderItem'+ orderItems[i].OrderID + '" class="orderItem orderItem'+orderItems[i].Status+'">' +
-				'<input type="hidden" class="orderItemIdHolder" value="'+ orderItems[i].OrderID +'"/>'
+			'<div id="orderItem'+ orderItems[i].OrderID + '" class="orderItem orderItemStatus'+orderItems[i].Status+'">' +
 				'<div class="menuItemID'+ orderItems[i].MenuItemID +'"></div>' +
 				'<div class="statusDiv">Status: ';
 		if(orderItemStatus == "Ready") orderItemString += 'Ready';
@@ -82,22 +81,20 @@ function drawOrderItems(response){
 		orderItemString += '</div>';	
 		var orderDivId = '#order'+orderItems[i].OrderID;
 		$(orderDivId).append(orderItemString);
+		
+//		request("menuItem", orderItems[i].MenuItemID, RequestType.READ, userInfo, "", drawMenuItemInfo);
 	}
-	$('.orderItem').click(function() {
-		var orderItemId = $(this).find(".orderItemIdHolder").val();
-		getOrderItemForStatusUpdate(orderItemId); 
-	});
 }
 
 function drawMenuItemInfo(response){
-//	alert("drawMenuItemInfo");
+	alert("drawMenuItemInfo");
 	var menuItems = response.data;
 	for(i=0; i<menuItems.length; i++){
 //		alert("menuItem.MenuItemID = " + menuItems[i].MenuItemID);
 //		alert("menuItem.Category = " + menuItems[i].Category);
 //		alert("menuItem.PrepTime = " + menuItems[i].PrepTime);
 		var menuItemDivClass = '.menuItemID' + menuItems[i].MenuItemID;
-		//alert("menuItemDivClass = " + menuItemDivClass);
+		alert("menuItemDivClass = " + menuItemDivClass);
 //		alert("menuItemDivID = " + menuItemDivID);
 //		alert("$(menuItemDivID).length " + $(menuItemDivID).length);
 		if($(menuItemDivClass).length > 0){
@@ -113,30 +110,13 @@ function drawMenuItemInfo(response){
 					'Prep time: ' + menuItems[i].PrepTime + ' min' +
 					'</div>' +
 				'</div>'; 
-//			alert("menuItemInfo = " + menuItemInfo);
+			alert("menuItemInfo = " + menuItemInfo);
 			
 			$(menuItemDivClass).append(menuItemInfo);	
 		}	
 	}
 }
 
-function getOrderItemForStatusUpdate(orderItemId){
-	alert("getOrderItemForStatusUpdate("+orderItemId+")");
-	request("orderItem", orderItemId, RequestType.READ, userInfo, "", updateOrderItemStatus);
-}
-
-function updateOrderItemStatus(response){
-	alert("updateOrderItemStatus");
-	var orderItem = response.data[0];
-	var currentStatus = orderItem.Status;
-	var newStatus = "InPrep"
-	if(currentStatus == "InPrep"){
-		newStatus = "Ready";
-	} else if(currentStatus == "Ready"){
-		return;
-	} 
-	request("orderItem", orderItem.OrderItemId, RequestType.READ, userInfo, "Status="+newStatus, orderQueueScreen);
-}
 
 //function drawMenuItemInfo(response){
 //	alert("drawMenuItemInfo");
