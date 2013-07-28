@@ -51,7 +51,7 @@ div#page {
 }
 
 .tableSeating.Occupied {
-	background-color: lightGray;
+	background-color:#303030;
 }
 
 .userInfoBox {
@@ -103,7 +103,7 @@ div#page {
 }
 
 .tableTables.Occupied {
-	background-color: lightGray;
+	background-color: #303030;
 }
 
 .tableStatus {
@@ -120,33 +120,34 @@ div#page {
 	margin-right: 10em;
 }
 
+
 .orderItemInfo {
 	display: inline;
 	margin-right: 5em;
 }
 
-.orderItemNew {
+.orderItemStatusNew {
 	margin-left: 2em;
 	border: 1px solid black;
-	background-color:#FFFFFF
+	background-color:#FF0000; 
 }
 
-.orderItemInPrep {
+.orderItemStatusInPrep {
 	margin-left: 2em;
 	border: 1px solid black;
-	background-color:#FFFF00
+	background-color:#FFFF00;
 }
 
-.orderItemReady {
+.orderItemStatusReady{
 	margin-left: 2em;
 	border: 1px solid black;
-	background-color:#808080
+	background-color:#008000;
 }
 
 
 .menuItemInfoSnippet{
 	display: inline;
-	margin-right: 5em;
+	margin-right: 5em; 
 }
 
 .billButton {
