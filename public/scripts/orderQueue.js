@@ -23,11 +23,8 @@ function buildOrderQueueScreen(response){
 	}
 	request("table", "", RequestType.READ, userInfo, "", fillInTableNumbers);
 	request("menuItem", "", RequestType.READ, userInfo, "", drawMenuItemInfo);
-	
-	
 	request("menuItem", "", RequestType.READ, userInfo, "", addClickEvents);
-
-		
+	
 }
 
 
@@ -65,6 +62,7 @@ function drawOrderItems(response){
 	//alert("drawOrderItems");
 	//alert("response.data[0].OrderItemID: " + response.data[0].OrderItemID);
 	var orderItems = response.data;
+	
 	//alert("orderItems.length ="+ orderItems.length)
 	for (i = 0; i < orderItems.length; i++) {
 		var orderItemStatus = orderItems[i].Status;
@@ -85,7 +83,7 @@ function drawOrderItems(response){
 }
 
 function drawMenuItemInfo(response){
-	alert("drawMenuItemInfo");
+//	alert("drawMenuItemInfo");
 	var menuItems = response.data;
 	for(i=0; i<menuItems.length; i++){
 		var menuItemDivClass = '.menuItemID' + menuItems[i].MenuItemID;
@@ -102,7 +100,7 @@ function drawMenuItemInfo(response){
 					'Prep time: ' + menuItems[i].PrepTime + ' min' +
 					'</div>' +
 				'</div>'; 
-			alert("menuItemInfo = " + menuItemInfo);
+//			alert("menuItemInfo = " + menuItemInfo);
 			
 			$(menuItemDivClass).append(menuItemInfo);	
 		}	
@@ -112,12 +110,25 @@ function drawMenuItemInfo(response){
 function addClickEvents(){
 	$('.orderItem').click(function() {
 			var orderItemId = $(this).find(".orderItemIdHolder").val();
-			alert("orderItemId = " + orderItemId);
-//			getOrderItemForStatusUpdate(orderItemId); 
+//			alert("orderItemId = " + orderItemId);
+			getOrderItemForStatusUpdate(orderItemId); 
 	});	
 }
 
+function getOrderItemForStatusUpdate(orderItemId){
+//	alert("getOrderItemForStatusUpdate");
+	request("orderItem", orderItemId, RequestType.READ, userInfo, "", setOrderItemStatus);
+}
 
+function setOrderItemStatus(response){
+	var orderItem = response.data[0];
+	var currentStatus = orderItem.Status;
+	var newStatus = "InPrep";
+	if(currentStatus == "InPrep"){ newStatus = "Ready";}
+	else if(currentStatus == "Ready") {return;}
+	request("orderItem", orderItem.OrderItemID, RequestType.UPDATE, userInfo, "Status="+newStatus, orderQueueScreen);
+	
+}
 
 
 
