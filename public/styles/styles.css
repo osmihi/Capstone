@@ -128,19 +128,19 @@ div#page {
 .orderItemNew {
 	margin-left: 2em;
 	border: 1px solid black;
-	background-color:#FFFFFF
+	background-color:#FF0000;
 }
 
 .orderItemInPrep {
 	margin-left: 2em;
 	border: 1px solid black;
-	background-color:#FFFF00
+	background-color:#FFFF00;
 }
 
 .orderItemReady {
 	margin-left: 2em;
 	border: 1px solid black;
-	background-color:#808080
+	background-color:#008000;
 }
 
 
