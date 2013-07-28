@@ -51,7 +51,7 @@ div#page {
 }
 
 .tableSeating.Occupied {
-	background-color: lightGray;
+	background-color:#303030;
 }
 
 .userInfoBox {
@@ -103,7 +103,7 @@ div#page {
 }
 
 .tableTables.Occupied {
-	background-color: lightGray;
+	background-color: #303030;
 }
 
 .tableStatus {
