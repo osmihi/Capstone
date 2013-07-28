@@ -2,9 +2,10 @@
 // shows all the bills for all the orders at a table
 // itemized, with total
 // allows user to print the bill
-// has payment stub for submitting & processing a payment
+// has payment stub for submitting & processing a payment-*///////////////////////////////
 // if manager, can edit bill amounts
 // can add discounts to the bill too I suppose
+// and need tips too
 
 function billScreen() {
 	request("bill", "", RequestType.READ, userInfo, "", function(response) {
@@ -25,9 +26,27 @@ function billScreen() {
 function buildBillScreen() {
 	$('#page').html("");
 
-	// remove orders not at this table
+	// assemble nested data structures
 	for (var i = 0; i < billScreen.orderData.length; i++) {
-		if (billScreen.orderData[i].TableID != selectedTable.TableID) {
+		if (billScreen.orderData[i].TableID == selectedTable.TableID) {
+			billScreen.orderData[i].orderItems = new Array();
+			for (var j = 0; j < billScreen.orderItemData.length; j++) {
+				if (billScreen.orderItemData[j].OrderID == billScreen.orderData[i].OrderID) {
+					billScreen.orderData[i].orderItems.push(billScreen.orderItemData[j]);
+					for (var k = 0; k < billScreen.menuItemData.length; k++) {
+						if (billScreen.menuItemData[k].MenuItemID == billScreen.orderItemData[j].MenuItemID) {
+							billScreen.orderItemData[j].menuItem = billScreen.menuItemData[k];
+						}
+					}
+				}
+			}
+			for (var j = 0; j < billScreen.billData.length; j++) {
+				if (billScreen.billData[j].BillID == billScreen.orderData[i].BillID) {
+					billScreen.orderData[i].bill = billScreen.billData[j]; 
+				}
+			}
+		} else {
+			// remove order from the array if it's not for this table
 			billScreen.orderData.splice(i, 1);
 		}
 	}
@@ -36,7 +55,9 @@ function buildBillScreen() {
 		if (a.Timestamp < b.Timestamp) return -1;
 		else return 1;
 	});
-
+	
+	console.log(billScreen.orderData);
+/*
 	// grab whichever bills apply to the orders at this table
 	var billList = new Array();
 	for (var i = 0; i < billScreen.orderData.length; i++) {
@@ -52,7 +73,8 @@ function buildBillScreen() {
 			}
 		}
 		drawBill(thisBill);
-	}	
+	}
+*/	
 }
 
 function drawBill(thisBill) {
@@ -77,7 +99,7 @@ function drawBill(thisBill) {
 		});
 	}
 
-	$('#bill' + thisOrder.BillID + 'Bill').append(
+	$('#bill' + thisBill.BillID + 'Bill').append(
 		'<div id="bill' + thisBill.BillID + 'Total" ' + 'class="bill">' +
 			'<div class="billTotal">' + parseFloat(billTotal).toFixed(2) + '</div>' +
 		'</div>'
