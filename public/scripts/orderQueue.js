@@ -84,20 +84,20 @@ function drawOrderItems(response){
 		$(orderDivId).append(orderItemString);
 	}
 	$('.orderItem').click(function() {
-		alert("$('.orderItem').click(function())");
-		//request("order", table.TableID, RequestType.UPDATE, userInfo, "status=Occupied", function() 
+		var orderItemId = $(this).find(".orderItemIdHolder").val();
+		getOrderItemForStatusUpdate(orderItemId); 
 	});
 }
 
 function drawMenuItemInfo(response){
-	alert("drawMenuItemInfo");
+//	alert("drawMenuItemInfo");
 	var menuItems = response.data;
 	for(i=0; i<menuItems.length; i++){
 //		alert("menuItem.MenuItemID = " + menuItems[i].MenuItemID);
 //		alert("menuItem.Category = " + menuItems[i].Category);
 //		alert("menuItem.PrepTime = " + menuItems[i].PrepTime);
 		var menuItemDivClass = '.menuItemID' + menuItems[i].MenuItemID;
-		alert("menuItemDivClass = " + menuItemDivClass);
+		//alert("menuItemDivClass = " + menuItemDivClass);
 //		alert("menuItemDivID = " + menuItemDivID);
 //		alert("$(menuItemDivID).length " + $(menuItemDivID).length);
 		if($(menuItemDivClass).length > 0){
@@ -113,15 +113,29 @@ function drawMenuItemInfo(response){
 					'Prep time: ' + menuItems[i].PrepTime + ' min' +
 					'</div>' +
 				'</div>'; 
-			alert("menuItemInfo = " + menuItemInfo);
+//			alert("menuItemInfo = " + menuItemInfo);
 			
 			$(menuItemDivClass).append(menuItemInfo);	
 		}	
 	}
 }
 
-function updateOrderItemStatus(){
-	
+function getOrderItemForStatusUpdate(orderItemId){
+	alert("getOrderItemForStatusUpdate("+orderItemId+")");
+	request("orderItem", orderItemId, RequestType.READ, userInfo, "", updateOrderItemStatus);
+}
+
+function updateOrderItemStatus(response){
+	alert("updateOrderItemStatus");
+	var orderItem = response.data[0];
+	var currentStatus = orderItem.Status;
+	var newStatus = "InPrep"
+	if(currentStatus == "InPrep"){
+		newStatus = "Ready";
+	} else if(currentStatus == "Ready"){
+		return;
+	} 
+	request("orderItem", orderItem.OrderItemId, RequestType.READ, userInfo, "Status="+newStatus, orderQueueScreen);
 }
 
 //function drawMenuItemInfo(response){
