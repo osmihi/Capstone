@@ -112,11 +112,12 @@ div#page {
 
 .order {
 	border: 2px solid black;
+	padding: 1em;
 }
 
 .orderHeadingInfo {
 	display: inline;
-	margin-right: 5em;
+	margin-right: 10em;
 }
 
 .orderItemInfo {
@@ -124,9 +125,24 @@ div#page {
 	margin-right: 5em;
 }
 
-.orderItem {
+.orderItemNew {
 	margin-left: 2em;
+	border: 1px solid black;
+	background-color:#FFFFFF
 }
+
+.orderItemInPrep {
+	margin-left: 2em;
+	border: 1px solid black;
+	background-color:#FFFF00
+}
+
+.orderItemReady {
+	margin-left: 2em;
+	border: 1px solid black;
+	background-color:#808080
+}
+
 
 .menuItemInfoSnippet{
 	display: inline;

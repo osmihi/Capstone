@@ -71,9 +71,9 @@ function drawOrderItems(response){
 	for (i = 0; i < orderItems.length; i++) {
 		var orderItemStatus = orderItems[i].Status;
 		var orderItemString =
-			'<div id="orderItem'+ orderItems[i].OrderID + '" class="orderItem">' +
-				'<div class="orderItemInfo menuItemID'+ orderItems[i].MenuItemID +'"></div>' +
-				'<div class="orderItemInfo orderItemStatus">Status: ';
+			'<div id="orderItem'+ orderItems[i].OrderID + '" class="orderItem'+orderItems[i].Status+'">' +
+				'<div class="menuItemID'+ orderItems[i].MenuItemID +'"></div>' +
+				'<div class="statusDiv">Status: ';
 		if(orderItemStatus == "Ready") orderItemString += 'Ready';
 		else if(orderItemStatus == "InPrep") orderItemString += 'In Prep';
 		else orderItemString += 'New';
@@ -99,15 +99,15 @@ function drawMenuItemInfo(response){
 		if($(menuItemDivClass).length > 0){
 			var menuItemInfo = 
 				'<div class="menuItemInfo">' +
-				'<div class="menuItemInfoSnippet">' +
-				menuItems[i].Name +
-				'</div>' +
-				'<div class="menuItemInfoSnippet">' +
-				menuItems[i].Category +
-				'</div>' +
-				'<div class="menuItemInfoSnippet">' +
-				menuItems[i].PrepTime +
-				'</div>' +
+					'<div class="menuItemInfoSnippet">' +
+					menuItems[i].Name +
+					'</div>' +
+					'<div class="menuItemInfoSnippet">' +
+					menuItems[i].Category +
+					'</div>' +
+					'<div class="menuItemInfoSnippet">' +
+					'Prep time: ' + menuItems[i].PrepTime + ' min' +
+					'</div>' +
 				'</div>'; 
 			alert("menuItemInfo = " + menuItemInfo);
 			
