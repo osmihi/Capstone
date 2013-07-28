@@ -17,6 +17,8 @@
 		<script src="scripts/bill.js" type="text/javascript"></script>
 		<script src="scripts/discounts.js" type="text/javascript"></script>
 		<script src="scripts/orderQueue.js" type="text/javascript"></script>
+		<script src="scripts/menu.js" type="text/javascript"></script>
+		<script src="scripts/menuItem.js" type="text/javascript"></script>
 
 		<script>
 
