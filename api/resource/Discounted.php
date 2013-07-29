@@ -15,12 +15,12 @@ class Discounted extends Resource {
 		$this->fieldMap = array(
 			"discountedid" => "DiscountedID",
 			"discountid" => "DiscountID",
-			"billid" => "BillID"
+			"tableid" => "TableID"
 		);
 		
 		// Required fields for each operation
-		$this->createFields = array("DiscountID", "BillID");
- 		$this->readFields = array("BillID");
+		$this->createFields = array("DiscountID", "TableID");
+ 		$this->readFields = array("TableID");
  		$this->updateFields = array("DiscountedID");
  		$this->deleteFields = array("DiscountedID");
 

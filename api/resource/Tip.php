@@ -17,13 +17,13 @@ class Tip extends Resource {
 		$this->fieldMap = array(
 			"tipid" => "TipID",
 			"userid" => "UserID",
-			"billid" => "BillID",
+			"tableid" => "TableID",
 			"amount" => "Amount",
 			"paid" => "Paid"
 		);
 		
 		// Required fields for each operation
- 		$this->createFields = array("UserID", "BillID", "Amount");
+ 		$this->createFields = array("UserID", "TableID", "Amount");
  		$this->readFields = array();
  		$this->updateFields = array("TipID");
  		$this->deleteFields = array("TipID");

@@ -1,10 +1,9 @@
-﻿-- Delete existing data
+-- Delete existing data
 DELETE FROM `Discounted`;
 DELETE FROM `Discount`;
 DELETE FROM `Tip`;
 DELETE FROM `OrderItem`;
 DELETE FROM `Order`;
-DELETE FROM `Bill`;
 DELETE FROM `MenuItem`;
 DELETE FROM `WaitList`;
 DELETE FROM `Table`;
@@ -230,108 +229,94 @@ SELECT `RestaurantID`, 'Sopapillas', '10', 'Dessert', '2.99'
 FROM `Restaurant` WHERE `Restaurant`.`Name` = 'TacoTown';
 
 -- Order - BurgerJoint
-INSERT INTO `Bill` (`Paid`) SELECT 1;
-
-INSERT INTO `Order` (`TableID`, `Timestamp`, `BillID`)
-SELECT `Table`.`TableID`, '2013-07-08 12:01:01', LAST_INSERT_ID()
+INSERT INTO `Order` (`TableID`, `Timestamp`)
+SELECT `Table`.`TableID`, '2013-07-08 12:01:01'
 FROM `Table`, `Restaurant` WHERE `Table`.`Number` = '1' 
 AND `Restaurant`.`RestaurantID` = `Table`.`RestaurantID` AND `Restaurant`.`Name` = 'BurgerJoint';
 
-INSERT INTO `Order` (`TableID`, `Timestamp`, `BillID`)
-SELECT `Table`.`TableID`, '2013-07-08 13:01:01', `Order`.`BillID`
-FROM `Table`, `Restaurant`, `Order` WHERE `Table`.`Number` = '1' 
-AND `Restaurant`.`RestaurantID` = `Table`.`RestaurantID` AND `Restaurant`.`Name` = 'BurgerJoint'
+INSERT INTO `Order` (`TableID`, `Timestamp`)
+SELECT `Table`.`TableID`, '2013-07-08 13:01:01'
+FROM `Table`, `Restaurant` WHERE `Table`.`Number` = '1' 
+AND `Restaurant`.`RestaurantID` = `Table`.`RestaurantID` AND `Restaurant`.`Name` = 'BurgerJoint';
+
+INSERT INTO `Tip` (`UserID`, `TableID`, `Amount`, `Paid`)
+SELECT `User`.`UserID`, `Order`.`TableID`, 7.75, 0
+FROM `User`, `Order` WHERE `User`.`Username` = 'bootsy.collins'
 AND `Order`.`OrderID` = LAST_INSERT_ID();
 
-INSERT INTO `Tip` (`UserID`, `BillID`, `Amount`, `Paid`)
-SELECT `User`.`UserID`, `Order`.`BillID`, 7.75, 0
-FROM `User`, `Order` WHERE `Order`.`BillID` AND `User`.`Username` = 'bootsy.collins'
-AND `Order`.`OrderID` = LAST_INSERT_ID();
-
-INSERT INTO `Discounted` (`DiscountID`, `BillID`)
-SELECT `Discount`.`DiscountID`, `Tip`.`BillID`
+INSERT INTO `Discounted` (`DiscountID`, `TableID`)
+SELECT `Discount`.`DiscountID`, `Tip`.`TableID`
 FROM `Discount`, `Tip` WHERE `Discount`.`DiscountCode` = '5BUCKS'
 AND `Tip`.`TipID` = LAST_INSERT_ID();
 
-INSERT INTO `Bill` (`Paid`) SELECT 0;
-
-INSERT INTO `Order` (`TableID`, `Timestamp`, `BillID`)
-SELECT `Table`.`TableID`, '2013-07-08 12:31:01', LAST_INSERT_ID()
+INSERT INTO `Order` (`TableID`, `Timestamp`)
+SELECT `Table`.`TableID`, '2013-07-08 12:31:01'
 FROM `Table`, `Restaurant` WHERE `Table`.`Number` = '4' 
 AND `Restaurant`.`RestaurantID` = `Table`.`RestaurantID` AND `Restaurant`.`Name` = 'BurgerJoint';
 
-INSERT INTO `Order` (`TableID`, `Timestamp`, `BillID`)
-SELECT `Table`.`TableID`, '2013-07-08 13:01:01', `Order`.`BillID`
+INSERT INTO `Order` (`TableID`, `Timestamp`)
+SELECT `Table`.`TableID`, '2013-07-08 13:01:01'
 FROM `Table`, `Restaurant`, `Order` WHERE `Table`.`Number` = '4' 
-AND `Restaurant`.`RestaurantID` = `Table`.`RestaurantID` AND `Restaurant`.`Name` = 'BurgerJoint'
-AND `Order`.`OrderID` = LAST_INSERT_ID();
+AND `Restaurant`.`RestaurantID` = `Table`.`RestaurantID` AND `Restaurant`.`Name` = 'BurgerJoint';
 
-INSERT INTO `Order` (`TableID`, `Timestamp`, `BillID`)
-SELECT `Table`.`TableID`, '2013-07-08 14:01:01', `Order`.`BillID`
+INSERT INTO `Order` (`TableID`, `Timestamp`)
+SELECT `Table`.`TableID`, '2013-07-08 14:01:01'
 FROM `Table`, `Restaurant`, `Order` WHERE `Table`.`Number` = '4' 
-AND `Restaurant`.`RestaurantID` = `Table`.`RestaurantID` AND `Restaurant`.`Name` = 'BurgerJoint'
+AND `Restaurant`.`RestaurantID` = `Table`.`RestaurantID` AND `Restaurant`.`Name` = 'BurgerJoint';
+
+INSERT INTO `Tip` (`UserID`, `TableID`, `Amount`, `Paid`)
+SELECT `User`.`UserID`, `Order`.`TableID`, 3.75, 1
+FROM `User`, `Order` WHERE `Order`.`TableID` AND `User`.`Username` = 'rick.james'
 AND `Order`.`OrderID` = LAST_INSERT_ID();
 
-INSERT INTO `Tip` (`UserID`, `BillID`, `Amount`, `Paid`)
-SELECT `User`.`UserID`, `Order`.`BillID`, 3.75, 1
-FROM `User`, `Order` WHERE `Order`.`BillID` AND `User`.`Username` = 'rick.james'
-AND `Order`.`OrderID` = LAST_INSERT_ID();
-
-INSERT INTO `Discounted` (`DiscountID`, `BillID`)
-SELECT `Discount`.`DiscountID`, `Tip`.`BillID`
+INSERT INTO `Discounted` (`DiscountID`, `TableID`)
+SELECT `Discount`.`DiscountID`, `Tip`.`TableID`
 FROM `Discount`, `Tip` WHERE `Discount`.`DiscountCode` = '5BUCKS'
 AND `Tip`.`TipID` = LAST_INSERT_ID();
 
 -- Order - TacoTown
-INSERT INTO `Bill` (`Paid`) SELECT 0;
-
-INSERT INTO `Order` (`TableID`, `Timestamp`, `BillID`)
-SELECT `Table`.`TableID`, '2013-07-08 16:01:01', LAST_INSERT_ID()
+INSERT INTO `Order` (`TableID`, `Timestamp`)
+SELECT `Table`.`TableID`, '2013-07-08 16:01:01'
 FROM `Table`, `Restaurant` WHERE `Table`.`Number` = '1' 
 AND `Restaurant`.`RestaurantID` = `Table`.`RestaurantID` AND `Restaurant`.`Name` = 'TacoTown';
 
-INSERT INTO `Order` (`TableID`, `Timestamp`, `BillID`)
-SELECT `Table`.`TableID`, '2013-07-08 16:21:01', `Order`.`BillID`
+INSERT INTO `Order` (`TableID`, `Timestamp`)
+SELECT `Table`.`TableID`, '2013-07-08 16:21:01'
 FROM `Table`, `Restaurant`, `Order` WHERE `Table`.`Number` = '1' 
-AND `Restaurant`.`RestaurantID` = `Table`.`RestaurantID` AND `Restaurant`.`Name` = 'TacoTown'
-AND `Order`.`OrderID` = LAST_INSERT_ID();
+AND `Restaurant`.`RestaurantID` = `Table`.`RestaurantID` AND `Restaurant`.`Name` = 'TacoTown';
 
-INSERT INTO `Order` (`TableID`, `Timestamp`, `BillID`)
-SELECT `Table`.`TableID`, '2013-07-08 16:51:01', `Order`.`BillID`
+INSERT INTO `Order` (`TableID`, `Timestamp`)
+SELECT `Table`.`TableID`, '2013-07-08 16:51:01'
 FROM `Table`, `Restaurant`, `Order` WHERE `Table`.`Number` = '1' 
-AND `Restaurant`.`RestaurantID` = `Table`.`RestaurantID` AND `Restaurant`.`Name` = 'TacoTown'
+AND `Restaurant`.`RestaurantID` = `Table`.`RestaurantID` AND `Restaurant`.`Name` = 'TacoTown';
+
+INSERT INTO `Tip` (`UserID`, `TableID`, `Amount`, `Paid`)
+SELECT `User`.`UserID`, `Order`.`TableID`, 2.50, 1
+FROM `User`, `Order` WHERE `Order`.`TableID` AND `User`.`Username` = 'dr.dre'
 AND `Order`.`OrderID` = LAST_INSERT_ID();
 
-INSERT INTO `Tip` (`UserID`, `BillID`, `Amount`, `Paid`)
-SELECT `User`.`UserID`, `Order`.`BillID`, 2.50, 1
-FROM `User`, `Order` WHERE `Order`.`BillID` AND `User`.`Username` = 'dr.dre'
-AND `Order`.`OrderID` = LAST_INSERT_ID();
-
-INSERT INTO `Discounted` (`DiscountID`, `BillID`)
-SELECT `Discount`.`DiscountID`, `Tip`.`BillID`
+INSERT INTO `Discounted` (`DiscountID`, `TableID`)
+SELECT `Discount`.`DiscountID`, `Tip`.`TableID`
 FROM `Discount`, `Tip` WHERE `Discount`.`DiscountCode` = 'TACOTUESDAY'
 AND `Tip`.`TipID` = LAST_INSERT_ID();
 
-INSERT INTO `Bill` (`Paid`) SELECT 1;
-
-INSERT INTO `Order` (`TableID`, `Timestamp`, `BillID`)
-SELECT `Table`.`TableID`, '2013-07-08 17:01:01', LAST_INSERT_ID()
+INSERT INTO `Order` (`TableID`, `Timestamp`)
+SELECT `Table`.`TableID`, '2013-07-08 17:01:01'
 FROM `Table`, `Restaurant` WHERE `Table`.`Number` = '4' 
 AND `Restaurant`.`RestaurantID` = `Table`.`RestaurantID` AND `Restaurant`.`Name` = 'TacoTown';
 
-INSERT INTO `Order` (`TableID`, `Timestamp`, `BillID`)
-SELECT `Table`.`TableID`, '2013-07-08 17:01:01', `Order`.`BillID`
+INSERT INTO `Order` (`TableID`, `Timestamp`)
+SELECT `Table`.`TableID`, '2013-07-08 17:01:01'
 FROM `Table`, `Restaurant`, `Order` WHERE `Table`.`Number` = '4' 
-AND `Restaurant`.`RestaurantID` = `Table`.`RestaurantID` AND `Restaurant`.`Name` = 'TacoTown'
+AND `Restaurant`.`RestaurantID` = `Table`.`RestaurantID` AND `Restaurant`.`Name` = 'TacoTown';
+
+INSERT INTO `Tip` (`UserID`, `TableID`, `Amount`, `Paid`)
+SELECT `User`.`UserID`, `Order`.`TableID`, 4.50, 0
+FROM `User`, `Order` WHERE `Order`.`TableID` AND `User`.`Username` = 'tupac.shakur'
 AND `Order`.`OrderID` = LAST_INSERT_ID();
 
-INSERT INTO `Tip` (`UserID`, `BillID`, `Amount`, `Paid`)
-SELECT `User`.`UserID`, `Order`.`BillID`, 4.50, 0
-FROM `User`, `Order` WHERE `Order`.`BillID` AND `User`.`Username` = 'tupac.shakur'
-AND `Order`.`OrderID` = LAST_INSERT_ID();
-
-INSERT INTO `Discounted` (`DiscountID`, `BillID`)
-SELECT `Discount`.`DiscountID`, `Tip`.`BillID`
+INSERT INTO `Discounted` (`DiscountID`, `TableID`)
+SELECT `Discount`.`DiscountID`, `Tip`.`TableID`
 FROM `Discount`, `Tip` WHERE `Discount`.`DiscountCode` = 'MINUS10'
 AND `Tip`.`TipID` = LAST_INSERT_ID();
 

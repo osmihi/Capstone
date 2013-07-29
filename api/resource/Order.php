@@ -18,7 +18,6 @@ class Order extends Resource {
 		$this->fieldMap = array(
 			"orderid" => "OrderID",
 			"tableid" => "TableID",
-			"billid" => "BillID",
 			"timestamp" => "Timestamp"
 		);
 		

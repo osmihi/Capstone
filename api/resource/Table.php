@@ -9,6 +9,7 @@ class Table extends Resource {
 	protected $Number;
 	protected $Capacity;
 	protected $Status;
+	protected $Paid;
 
 	function __construct(DbConnection $dbc, array $params) {
 		parent::__construct($dbc);
@@ -21,7 +22,8 @@ class Table extends Resource {
 			"userid" => "UserID",
 			"number" => "Number",
 			"capacity" => "Capacity",
-			"status" => "Status"
+			"status" => "Status",
+			"paid" => "Paid"
 		);
 
 		// Required fields for each operation
