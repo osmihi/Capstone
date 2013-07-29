@@ -3,7 +3,7 @@
 // each button will display a screen
 
 var NavButtons = new Array();
-NavButtons['Manager'] = ["waitListScreen", "seatingScreen", "orderQueueScreen", "usersScreen", "tablesScreen", "discountsScreen", "menuScreen"];
+NavButtons['Manager'] = ["waitListScreen", "seatingScreen", "orderQueueScreen", "usersScreen", "tablesScreen", "discountsScreen", "menuScreen","menuItemScreen"];
 NavButtons['Host'] = ["waitListScreen", "seatingScreen"];
 NavButtons['Wait Staff'] = ["tablesScreen"];
 NavButtons['Kitchen Staff'] = ["orderQueueScreen"];
@@ -16,6 +16,7 @@ ScreenNames["usersScreen"] = 'Employees';
 ScreenNames["tablesScreen"] = 'Tables';
 ScreenNames["discountsScreen"] = 'Discounts';
 ScreenNames["menuScreen"] = 'Menu';
+ScreenNames["menuItemScreen"] = 'Menu Item';
 
 function navBar() {
 	// get the info necessary to make the nav bar and call build function
