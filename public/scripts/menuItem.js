@@ -55,13 +55,14 @@ function drawItems(menuItem) {
 			'</div>');
 	// Add click function to buttons
 	$('#submitItemChanges').click(function() {
-		SubmitMenuItemChanges();
+		SubmitMenuItemChanges()
+	
+	});
 		
 	$('#backToMenuList').click(function() {
-		menuScreen(menuItems);
+		menuScreen();
 	});
-}
-	
+}	
 
 function SubmitMenuItemChanges(){
 		var itemName = $('#menuItemName').val();
