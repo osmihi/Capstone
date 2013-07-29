@@ -179,7 +179,7 @@ abstract class Resource {
 		}
 
 		$res = $this->db->execute($stmt);
-
+		
 		if ( !$res or count($res) < 1 ) return false;
 
 		$resources = array();

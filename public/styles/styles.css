@@ -155,3 +155,19 @@ div#page {
 	background-color:blue;
 	display:inline;
 }
+
+.bill {
+	
+}
+
+.billHeader {
+	font: 18px Arial, Helvetica, sans-serif;
+}
+
+.billPrint {
+	cursor:pointer;
+	border: 2px inset gray;
+	display:inline;
+	float:right;
+	background-color:yellow;
+}

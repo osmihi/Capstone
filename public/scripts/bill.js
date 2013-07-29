@@ -10,7 +10,7 @@
 function billScreen() {
 	request("bill", "", RequestType.READ, userInfo, "", function(response) {
 		billScreen.billData = response.data;
-		request("order", "", RequestType.READ, userInfo, "tableID=" + selectedTable.TableID, function(response) {
+		request("order", "", RequestType.READ, userInfo, "&tableID=" + selectedTable.TableID, function(response) {
 			billScreen.orderData = response.data;
 			request("orderItem", "", RequestType.READ, userInfo, "", function(response) {
 				billScreen.orderItemData = response.data;
@@ -19,6 +19,8 @@ function billScreen() {
 					buildBillScreen();
 				});
 			});
+		}, function(response) {
+			alert("No orders have been placed at this table yet.");
 		});
 	});
 }
@@ -33,16 +35,6 @@ function buildBillScreen() {
 			for (var j = 0; j < billScreen.orderItemData.length; j++) {
 				if (billScreen.orderItemData[j].OrderID == billScreen.orderData[i].OrderID) {
 					billScreen.orderData[i].orderItems.push(billScreen.orderItemData[j]);
-					for (var k = 0; k < billScreen.menuItemData.length; k++) {
-						if (billScreen.menuItemData[k].MenuItemID == billScreen.orderItemData[j].MenuItemID) {
-							billScreen.orderItemData[j].menuItem = billScreen.menuItemData[k];
-						}
-					}
-				}
-			}
-			for (var j = 0; j < billScreen.billData.length; j++) {
-				if (billScreen.billData[j].BillID == billScreen.orderData[i].BillID) {
-					billScreen.orderData[i].bill = billScreen.billData[j]; 
 				}
 			}
 		} else {
@@ -50,96 +42,73 @@ function buildBillScreen() {
 			billScreen.orderData.splice(i, 1);
 		}
 	}
+	for (var i = 0; i < billScreen.orderData.length; i++) {
+		for (var j = 0; j < billScreen.orderData[i].orderItems.length; j++) {
+			for (var k = 0; k < billScreen.menuItemData.length; k++) {
+				if (billScreen.menuItemData[k].MenuItemID == billScreen.orderData[i].orderItems[j].MenuItemID) {
+					billScreen.orderData[i].orderItems[j].menuItem = billScreen.menuItemData[k]; 
+				}
+			}
+		}
+	}
 
+	delete billScreen.billData;
+	delete billScreen.menuItemData;
+	delete billScreen.orderItemData;
+
+	// Sort by Timestamp. Not really necessary, but hey
 	billScreen.orderData.sort(function(a, b) {
 		if (a.Timestamp < b.Timestamp) return -1;
 		else return 1;
 	});
-	
+
 	console.log(billScreen.orderData);
-/*
-	// grab whichever bills apply to the orders at this table
-	var billList = new Array();
+	console.log(billScreen.calculateTotal());
+
+	// One bill per table right now
+	drawBill();
+
+}
+
+// sets a decimal, returns a string
+billScreen.calculateTotal = function() {
+	billScreen.billTotal = 0;
 	for (var i = 0; i < billScreen.orderData.length; i++) {
-		billList.push(billScreen.orderData[i].BillID);
-	}
-	billList = billList.getUnique();
-
-	for (var i = 0; i < billList.length; i++) {
-		var thisBill;
-		for (var j = 0; j < billScreen.billData.length; j++) {
-			if (billList[i] == billScreen.billData[j].BillID) {
-				thisBill = billScreen.billData[j];
-			}
+		for (var j = 0; j < billScreen.orderData[i].orderItems.length; j++) {
+			billScreen.billTotal += money(billScreen.orderData[i].orderItems[j].PurchasePrice);
 		}
-		drawBill(thisBill);
 	}
-*/	
+	return parseFloat(billScreen.billTotal).toFixed(2);
 }
 
-function drawBill(thisBill) {
-	var billTotal = 0;
-	var theseOrders = new Array();
-	for (var k = 0; k < billScreen.orderData.length; k++) {
-		if (billScreen.orderData[k].BillID == thisBill.BillID) {
-			theseOrders.push(billScreen.orderData[k]);
-		} 
-	}
-	
+function drawBill() {	
 	$('#page').append(
-		'<div id="bill' + thisBill.BillID + 'Bill" ' + 'class="bill">' +
-			'<span class="billTableNumber">Table ' + selectedTable.Number + '</span>' +
+		'<div id="table' + selectedTable.TableID + 'Bill" ' + 'class="bill">' +
+			'<div class="billHeader">Table ' + selectedTable.Number + ' Bill' + 
+				'<div id="table' + selectedTable.TableID + 'Print" class="billPrint">' + 'Print' + '</div>' +
+			'</div>' +
+			'<table id="table' + selectedTable.TableID + 'BillTable" class="billTable">' + 
+			'</table>' + 
 		'</div>'
 	);
 
-	for (var i = 0; i < theseOrders.length; i++) {
-		drawOrderBill(theseOrders[i]);
-		$('.order' + theseOrders[i].OrderID + 'Charge').each(function() {
-			billTotal += money($(this).html());
-		});
-	}
-
-	$('#bill' + thisBill.BillID + 'Bill').append(
-		'<div id="bill' + thisBill.BillID + 'Total" ' + 'class="bill">' +
-			'<div class="billTotal">' + parseFloat(billTotal).toFixed(2) + '</div>' +
-		'</div>'
-	);
-
-}
-
-function drawOrderBill(thisOrder) {
-	var theseOrderItems = new Array();
-	for (var i = 0; i < billScreen.orderItemData.length; i++) {
-		if (billScreen.orderItemData[i].OrderID == thisOrder.OrderID) {
-			theseOrderItems.push(billScreen.orderItemData[i]);
+	for (var i = 0; i < billScreen.orderData.length; i++) {
+		for (var j = 0; j < billScreen.orderData[i].orderItems.length; j++) {
+			$('#table' + selectedTable.TableID + 'BillTable').append(
+				'<tr>' +
+					'<td>' + billScreen.orderData[i].orderItems[j].menuItem.Name + '</td>' +
+					'<td>' + billScreen.orderData[i].orderItems[j].PurchasePrice + '</td>' +
+				'</tr>'
+			);
 		}
-	}
 
-	$('#bill' + thisOrder.BillID + 'Bill').append(
-		'<div id="order' + thisOrder.OrderID + 'Bill" class="order">' +
-			'<span class="orderTimestamp">' + thisOrder.Timestamp + '</span>' +
-		'</div>'
-	);
-
-	for (var i = 0; i < theseOrderItems.length; i++) {
-		drawOrderItemBill(theseOrderItems[i]);
-	}
-}
-
-function drawOrderItemBill(thisOrderItem) {
-	var thisItemName = "";
-	for (var i = 0; i < billScreen.menuItemData.length; i++) {
-		if (billScreen.menuItemData[i].MenuItemID == thisOrderItem.MenuItemID) {
-			thisItemName = billScreen.menuItemData[i].Name;
-		}
+		$('#table' + selectedTable.TableID + 'BillTable').append(
+			'<tr>' + '<td></td>' + '<td></td>' + '</tr>'
+		);
 	}
 	
-	$('#order' + thisOrderItem.OrderID + 'Bill').append(
-		'<div id="orderItem' + thisOrderItem.orderItemID + 'Bill" class="orderItem"/>' +
-			'<table><tr>' + 
-			'<td class="orderItemName">' + thisItemName + '</td>' +
-			'<td class="order' + thisOrderItem.OrderID + 'Charge orderCharge">' + thisOrderItem.PurchasePrice + '</td>' +
-			'</tr></table>' +
-		'</div>'
-	);
+	$('#table' + selectedTable.TableID + 'BillTable').append(
+			'<tr>' + '<td></td>' + '<td></td>' + '</tr>' +
+			'<tr class="billTotal">' + '<td>Total</td>' + '<td>' + billScreen.calculateTotal() + '</td>' + '</tr>'
+		);
 }
