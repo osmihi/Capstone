@@ -171,3 +171,12 @@ div#page {
 	float:right;
 	background-color:yellow;
 }
+.menu {
+	border: 2px solid red;
+	padding: 5px;
+	margin: 5px;
+	background-color: grey;
+	width: 220px;
+	font-size: 90%;
+	line-height: 1.2em;
+}
