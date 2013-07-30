@@ -3,7 +3,8 @@ var orderQueueOrders;
 var orderQueueOrderItems;
 var orderQueueMenuItems;
 
-//request(resource, key, rqType, userInfoString, dataString, successFunc, errorFunc)
+// request(resource, key, rqType, userInfoString, dataString, successFunc,
+// errorFunc)
 
 // request for all orders
 function orderQueueScreen() {
@@ -39,27 +40,25 @@ function buildOrderQueueScreen() {
 	addOrderItemsToOrders();
 	sortOrders();
 	sortOrderItems();
-	
+
 	// Clear page
 	$('#page').html("");
-	
+
 	// Draw orderQueue
-	for(var i=0; i < orderQueueOrders.length; i++){
+	for ( var i = 0; i < orderQueueOrders.length; i++) {
 		drawOrder(orderQueueOrders[i]);
 	}
 	addClickEvents();
-	
+
 }
-
-
 
 // 1
 function addMenuInfoToOrderItems() {
 	for ( var i = 0; i < orderQueueOrderItems.length; i++) {
-// alert("i=" + i);
+		// alert("i=" + i);
 		for ( var j = 0; j < orderQueueMenuItems.length; j++) {
 			if (orderQueueOrderItems[i].MenuItemID == orderQueueMenuItems[j].MenuItemID) {
-// alert(orderQueueMenuItems[j].Name);
+				// alert(orderQueueMenuItems[j].Name);
 				orderQueueOrderItems[i].Name = orderQueueMenuItems[j].Name;
 				orderQueueOrderItems[i].PrepTime = orderQueueMenuItems[j].PrepTime;
 				orderQueueOrderItems[i].Category = orderQueueMenuItems[j].Category;
@@ -71,7 +70,7 @@ function addMenuInfoToOrderItems() {
 // 2
 function addOrderItemsToOrders() {
 	for ( var i = 0; i < orderQueueOrders.length; i++) {
-// alert("i=" + i);
+		// alert("i=" + i);
 		var count = 0;
 		var orderItemsArray = [];
 		for ( var j = 0; j < orderQueueOrderItems.length; j++) {
@@ -83,13 +82,13 @@ function addOrderItemsToOrders() {
 		}
 		orderQueueOrders[i].orderItems = orderItemsArray;
 		for ( var k = 0; k < orderQueueOrders[i].orderItems.length; k++) {
-// alert(orderQueueOrders[i].orderItems[k].Name);
+			// alert(orderQueueOrders[i].orderItems[k].Name);
 		}
 	}
 }
 
 // 3
-function sortOrders(){
+function sortOrders() {
 	// Sort orders
 	orderQueueOrders.sort(function(objA, objB) {
 		if (objA.Timestamp < objB.Timestamp)
@@ -99,24 +98,25 @@ function sortOrders(){
 	});
 }
 
-function sortOrderItems(){
+function sortOrderItems() {
 	// Sort orderItems
-	for(var i=0; i < orderQueueOrders.length; i++){
+	for ( var i = 0; i < orderQueueOrders.length; i++) {
 		orderQueueOrders[i].orderItems.sort(function(objA, objB) {
 			if (objA.PrepTime > objB.PrepTime)
 				return -1;
 			else
 				return 1;
 		});
-	// Test
-//		for(var j=0; j<orderQueueOrders[i].orderItems.length; j++){
-//		alert(i + ": " + orderQueueOrders[i].orderItems[j].Name + ", Prep = " + orderQueueOrders[i].orderItems[j].PrepTime);
-//		}
+		// Test
+		// for(var j=0; j<orderQueueOrders[i].orderItems.length; j++){
+		// alert(i + ": " + orderQueueOrders[i].orderItems[j].Name + ", Prep = "
+		// + orderQueueOrders[i].orderItems[j].PrepTime);
+		// }
 	}
 }
 
-//4
-function drawOrder(order){
+// 4
+function drawOrder(order) {
 	drawOrderDiv(order);
 	drawOrderItems(order)
 }
@@ -135,32 +135,31 @@ function drawOrderDiv(order) {
 }
 
 
-//6
-function drawOrderItems(order) {
-	var orderItems = order.orderItems;
-// ITERATE THROUGH ORDER ITEMS
-for (i = 0; i < orderItems.length; i++) {
-// ORDER ITEM DIV
-	var orderItemString = 
-			'<div id="orderItem' + orderItems[i].OrderItemID + '" class="orderItem orderItemStatus' + orderItems[i].Status + '">'
-// HIDDEN INPUT FOR ORDER ITEM ID
-				+ '<input type="hidden" class="orderItemIdHolder" value="'+ orderItems[i].OrderItemID +'"/>' 
-				+ '<div class="orderItemInfo">Status: ';
-			if (orderItems[i].Status == "Ready"){
-				orderItemString += 'Ready';				
-			}else if (orderItems[i].Status == "InPrep"){
-				orderItemString += 'In Prep';				
-			}else{
-				orderItemString += 'New';				
-			}
-		orderItemString += '</div>';
-		orderItemString += '<div class="orderItemInfo">' + orderItems[i].Name + '</div>';
-		orderItemString += '<div class="orderItemInfo">' + orderItems[i].Category + '</div>';
-		orderItemString += '<div class="orderItemInfo">Prep time: ' + orderItems[i].PrepTime + '</div>';
-		var orderDivId = '#order' + orderItems[i].OrderID;
-		$(orderDivId).append(orderItemString);
+
+ // 6
+ function drawOrderItems(order) {
+	 var orderItems = order.orderItems;
+	 // ITERATE THROUGH ORDER ITEMS
+	 for (i = 0; i < orderItems.length; i++) {
+		 // ORDER ITEM DIV
+		 var orderItemString =
+			 '<div id="orderItem' + orderItems[i].OrderItemID + '" class="orderItem orderItemStatus' + orderItems[i].Status + '">'
+			 + '<input type="hidden" class="orderItemIdHolder" value="'+orderItems[i].OrderItemID +'"/>'
+			 + '<div class="orderItemInfo"><a>Status: ';
+		 if (orderItems[i].Status == "Ready"){ orderItemString += 'Ready'; }
+		 else if (orderItems[i].Status == "InPrep"){ orderItemString += 'In Prep'; }
+		 else{ orderItemString += 'New'; }
+		 orderItemString += '</a></div>';
+		 orderItemString += '<div class="orderItemInfo">' + orderItems[i].Name +'</div>';
+		 orderItemString += '<div class="orderItemInfo">' + orderItems[i].Category +'</div>';
+		 orderItemString += '<div class="orderItemInfo">Prep time: ' +
+		 orderItems[i].PrepTime + '</div></div>';
+		 var orderDivId = '#order' + orderItems[i].OrderID;
+		 $(orderDivId).append(orderItemString);
 	}
 }
+
+ 
 
 function fillInTableNumbers(response) {
 	// alert("fillInTableNumbers");
@@ -173,24 +172,24 @@ function fillInTableNumbers(response) {
 	});
 }
 
-function drawMenuItemInfo(response) {
-	// alert("drawMenuItemInfo");
-	var menuItems = response.data;
-	for (i = 0; i < menuItems.length; i++) {
-		var menuItemDivClass = '.menuItemID' + menuItems[i].MenuItemID;
-		if ($(menuItemDivClass).length > 0) {
-			var menuItemInfo = '<div class="menuItemInfo">'
-					+ '<div class="menuItemInfoSnippet">' + menuItems[i].Name
-					+ '</div>' + '<div class="menuItemInfoSnippet">'
-					+ menuItems[i].Category + '</div>'
-					+ '<div class="menuItemInfoSnippet">' + 'Prep time: '
-					+ menuItems[i].PrepTime + ' min' + '</div>' + '</div>';
-			// alert("menuItemInfo = " + menuItemInfo);
-
-			$(menuItemDivClass).append(menuItemInfo);
-		}
-	}
-}
+// function drawMenuItemInfo(response) {
+// // alert("drawMenuItemInfo");
+// var menuItems = response.data;
+// for (i = 0; i < menuItems.length; i++) {
+// var menuItemDivClass = '.menuItemID' + menuItems[i].MenuItemID;
+// if ($(menuItemDivClass).length > 0) {
+// var menuItemInfo = '<div class="menuItemInfo">'
+// + '<div class="menuItemInfoSnippet">' + menuItems[i].Name
+// + '</div>' + '<div class="menuItemInfoSnippet">'
+// + menuItems[i].Category + '</div>'
+// + '<div class="menuItemInfoSnippet">' + 'Prep time: '
+// + menuItems[i].PrepTime + ' min' + '</div>' + '</div>';
+// // alert("menuItemInfo = " + menuItemInfo);
+//
+// $(menuItemDivClass).append(menuItemInfo);
+// }
+// }
+// }
 
 function addClickEvents() {
 	$('.orderItem').click(function() {
@@ -237,3 +236,34 @@ function setOrderItemStatus(response) {
 
 // maybe color-code orders or alternate?
 
+//==============================================================================================
+
+////6
+//function drawOrderItems(order) {
+//	var orderItems = order.orderItems;
+//	var orderItemString = '<table id="order' + order.OrderID + 'OrderItems">';
+//	// ITERATE THROUGH ORDER ITEMS
+//	for (i = 0; i < orderItems.length; i++) {
+//		orderItemString += 
+//			'<tr id="orderItem' + orderItems[i].OrderItemID	+ '" class="orderItem orderItemStatus' + orderItems[i].Status + '">'
+//				//+ '<input type="hidden" class="orderItemIdHolder" value="'+ orderItems[i].OrderItemID + '"/>'
+//				+ '<td>Status: ';
+//		if (orderItems[i].Status == "Ready") {
+//			orderItemString += 'Ready';
+//		} else if (orderItems[i].Status == "InPrep") {
+//			orderItemString += 'In Prep';
+//		} else {
+//			orderItemString += 'New';
+//		}
+//		orderItemString += '</td>';
+//		orderItemString += '<td>' + orderItems[i].Name + '</td>';
+//		orderItemString += '<td>'+ orderItems[i].Category + '</td>';
+//		orderItemString += '<td>Prep time: '+ orderItems[i].PrepTime + '</td></tr>';
+//	}
+//	orderItemString += '</table>';
+//	alert(orderItemString);
+//	alert("1");
+//	var orderDivId = '#order' + order.OrderID;
+//	alert("2");
+//	$(orderDivId).append(orderItemString);
+//}

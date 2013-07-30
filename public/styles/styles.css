@@ -121,14 +121,14 @@ div#page {
 }
 
 .orderItem {
-	width: 100%;
+	width: 80%;
 	cursor: hand;
 }
 
 .orderItemInfo {
 	cursor: hand;
 	display: inline;
-	width: 25%;
+	width: 20%;
 	margin-right: 5em;
 }
 
