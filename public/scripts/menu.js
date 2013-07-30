@@ -1,6 +1,6 @@
 //Called to render MenuItem screen
 function menuScreen() {
-  // API call: request(resource, key, rqType, userInfoString, dataString,
+	// API call: request(resource, key, rqType, userInfoString, dataString,
 	// successFunc, errorFunc)
 	request("menuItem", "", RequestType.READ, userInfo, "", buildMenuScreen);
 }
@@ -40,8 +40,9 @@ function drawMenuItems(menuItem) {
 					+'<input type=button id="editMenuItem" value="Edit Menu Item"/><br />'
 			);
 	// Add click function to button
-		$('#editMenuItem' + menuItem.MenuItemtID).click(function() {
-			menuItemScreen(menuItem);
+	$('#editMenuItem').click(function() {
+		menuItemScreen();
 	});
-
+	
+	
 }
