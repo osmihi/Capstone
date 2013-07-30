@@ -1,6 +1,6 @@
 //Called to render Menu Item screen
 function menuItemScreen() {
-  // API call: request(resource, key, rqType, userInfoString, dataString,
+	// API call: request(resource, key, rqType, userInfoString, dataString,
 	// successFunc, errorFunc)
 	request("menuItem", "", RequestType.READ, userInfo, "", buildMenuItemScreen);
 }
@@ -53,16 +53,21 @@ function drawItems(menuItem) {
 					+
 							
 			'</div>');
-	// Add click function to buttons
-	$('#submitItemChanges').click(function() {
-		SubmitMenuItemChanges()
 	
+	
+	
+	
+	
+	// Add click function to buttons
+	$('#submitItemChanges'+ menuItem.MenuItemtID ).click(function() {
+		SubmitMenuItemChanges(menuItem);
 	});
 		
 	$('#backToMenuList').click(function() {
 		menuScreen();
 	});
-}	
+}
+	
 
 function SubmitMenuItemChanges(){
 		var itemName = $('#menuItemName').val();
@@ -70,7 +75,6 @@ function SubmitMenuItemChanges(){
 		var itemPrepTime = $('#menuItemPrepTime').val();
 		var itemPrice = $('#menuItemPrice').val();
 		
-		
-		request("menuItem", "", RequestType.PUT, userInfo, "Name="+itemName+"&Category="+itemCategory+"&PrepTime="+itemPrepTime+"&Price="+itemPrice, menuScreen);
+		request("menuItem", "", RequestType.UPDATE, userInfo, "Name="+itemName+"&Category="+itemCategory+"&PrepTime="+itemPrepTime+"&Price="+itemPrice, menuScreen);
 }
 
