@@ -120,9 +120,13 @@ div#page {
 	margin-right: 10em;
 }
 
+.orderItem {
+	cursor:hand;
+}
 
 .orderItemInfo {
 	display: inline;
+	width: 100px;
 	margin-right: 5em;
 }
 
