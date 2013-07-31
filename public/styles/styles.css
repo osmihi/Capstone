@@ -150,6 +150,10 @@ div#page {
 	background-color:#008000;
 }
 
+.orderQueueRefreshButton{
+	border: 2px solid black;
+	background-color:#0000FF;
+}
 
 .menuItemInfoSnippet{
 	display: inline;
