@@ -151,8 +151,10 @@ div#page {
 }
 
 .orderQueueRefreshButton{
+	width: 20%;
 	border: 2px solid black;
-	background-color:#0000FF;
+	background-color:#8888FF;
+	cursor: pointer; cursor: hand;
 }
 
 .menuItemInfoSnippet{
