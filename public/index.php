@@ -19,6 +19,7 @@
 		<script src="scripts/orderQueue.js" type="text/javascript"></script>
 		<script src="scripts/menu.js" type="text/javascript"></script>
 		<script src="scripts/menuItem.js" type="text/javascript"></script>
+		<script src="scripts/users.js" type="text/javascript"></script>
 
 		<script>
 
