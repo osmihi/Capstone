@@ -13,7 +13,9 @@ function buildMenuItemScreen(response) {
 
 	// Wipe page clean (remove previous existing content)
 	$('#page').html("");
-
+	
+	drawAddMenuItem()
+	
 	
 	
 	// Iterate through menuItems, call menu items
@@ -21,6 +23,50 @@ function buildMenuItemScreen(response) {
 		drawItems(items[i]);
 	}
 }
+
+function drawAddMenuItem() {
+	//Add a div with inputs to enter a new MENU ITEM
+	$('#page').append(
+			'<div id="addMenuItem" class="addMenuItem">'
+			+'<table>'
+				+'<tr>' 
+					+'<td>Item Name: </td>'
+					+'<td><input type="text" id="itemName" value=""/></td>'
+				+'</tr>'
+				+'<tr>'
+					+'<td>Item Category: </td>'
+					+'<td><input type="text" id="itemCategory" value=""/></td>'
+				+'</tr>'
+				+'<tr>'
+					+'<td>Item Prep Time: </td>'
+					+'<td><input type="text" id="itemPrepTime" value=""/></td>'
+				+'</tr>'
+				+'<tr>'
+					+'<td>Item Price: </td>'
+					+'<td><input type="text" id="itemPrice" value=""/></td>'
+				+'</tr>'
+			+'</table>'
+			
+			+'<input type=button id="addMenuItem" value="Add"/><br />'
+			+
+						
+		'</div>');
+	//Add click function to button
+	$('#addMenuItem').click(function() {
+		addItemToMenu();
+	});
+}
+
+function addItemToMenu(){
+	var name = $('#itemName').val();
+	var category = $('#itemCategory').val();
+	var prepTime = $('#itemPrepTime').val();
+	var price = $('#itemPrice').val();
+	
+	request("menuItem", "", RequestType.CREATE, userInfo, "Name="+name+"&Category="+category+"&PrepTime="+prepTime+"&Price="+price, menuItemScreen);
+}
+
+
 
 
 
