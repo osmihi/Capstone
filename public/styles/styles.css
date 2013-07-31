@@ -120,8 +120,14 @@ div#page {
 	margin-right: 10em;
 }
 
+.orderItem {
+	cursor: pointer; cursor: hand;
+}
 
 .orderItemInfo {
+	display:table-cell;
+    vertical-align:left;
+	cursor: pointer; cursor: hand;
 	display: inline;
 	margin-right: 5em;
 }
@@ -170,4 +176,13 @@ div#page {
 	display:inline;
 	float:right;
 	background-color:yellow;
+}
+.menu {
+	border: 2px solid red;
+	padding: 5px;
+	margin: 5px;
+	background-color: grey;
+	width: 220px;
+	font-size: 90%;
+	line-height: 1.2em;
 }
