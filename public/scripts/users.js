@@ -13,31 +13,16 @@
 //when form is submitted, if there is no password in the password field, 
 //then the old password is retained
 
-// request all users
-// foreach user in users:
-//  create user div
-//		First name, last name, role
-//  click function on user div -> employeeScreen(user)
+//Called to render users screen
 
-//Employee screen:
-//  inputs for each user field 
-//  text inputs for name, username, password, 
-//	select list for role (hardcoded roles), 
-//	checkbox for locked  
-//	submit -> click -> put request, usersScreen()
-//when form is submitted, if there is no password in the password field, 
-//then the old password is retained
-
-//Called to render Menu Item screen
-
-function employeeScreen() {
+function usersScreen() {
 	// API call: request(resource, key, rqType, userInfoString, dataString,
 	// successFunc, errorFunc)
-	request("user", "", RequestType.READ, userInfo, "", buildEmployeeScreen);
+	request("user", "", RequestType.READ, userInfo, "", buildUsersScreen);
 }
 
 // response is result of API request call
-function buildEmployeeScreen(response) {
+function buildUsersScreen(response) {
 	
 	var employees = response.data;
 
@@ -56,6 +41,11 @@ function buildEmployeeScreen(response) {
 }
 
 function drawAddEmployees() {
+	
+	
+	
+	
+	
 	//Add a div with inputs to enter a new MENU ITEM
 	$('#page').append(
 			'<div id="addEmployee" class="addEmployee">'
@@ -74,12 +64,12 @@ function drawAddEmployees() {
 				+'</tr>'
 				+'<tr>'
 					+'<td>Role: </td>'
-					+'<td><input type="text" id="role" value="<select><option>Appetizer</option><option>Main Dish</option><option>Dessert</option></select>/></td>'"
+					+'<td><select id="role"><value="<option></option><option>Host</option><option>Kitchen Staff</option><option>Wait Staff</option><option>Manager</option>"</select></td>'
 				+'</tr>'
 				+'<tr>'
 					+'<td>User Name: </td>'
 					+'<td><input type="text" id="userName" value=""/></td>'
-			+'</tr>
+			+'</tr>'
 			+'</table>'
 			
 			+'<input type=button id="addEmployee" value="Add Employee"/><br />'
@@ -99,7 +89,7 @@ function addNewEmployee(){
 	var role = $('#role').val();
 	var users = $('#userName').val();
 
-	request("user", "", RequestType.CREATE, userInfo, "FName="+first+"&LName="+last+"&PasswordHash="+pass+"&Role="+role+"&Username="+users, employeeScreen);
+	request("user", "", RequestType.CREATE, userInfo, "FName="+first+"&LName="+last+"&PasswordHash="+pass+"&Role="+role+"&Username="+users, usersScreen);
 }
 
 
@@ -132,7 +122,7 @@ function drawEmployees(user) {
 				+'<tr>'
 					+'<td>User Name: </td>'
 					+'<td><input type="text" id="userName" value="' + user.Username + '"/></td>'
-			+'</tr>
+			+'</tr>'
 			+'</table>'
 					+'<input type=button id="submitChanges" value="Submit"/><br />'
 					+
@@ -157,6 +147,5 @@ function SubmitEmployeeChanges(){
 
 	request("user", "", RequestType.UPDATE, userInfo, "FName="+first+"&LName="+last+"&PasswordHash="+pass+"&Role="+role+"&Username="+users, employeeScreen);
 }
-
 
 
