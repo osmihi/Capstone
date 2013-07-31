@@ -256,12 +256,12 @@ AND `Restaurant`.`RestaurantID` = `Table`.`RestaurantID` AND `Restaurant`.`Name`
 
 INSERT INTO `Order` (`TableID`, `Timestamp`)
 SELECT `Table`.`TableID`, '2013-07-08 13:01:01'
-FROM `Table`, `Restaurant`, `Order` WHERE `Table`.`Number` = '4' 
+FROM `Table`, `Restaurant` WHERE `Table`.`Number` = '4' 
 AND `Restaurant`.`RestaurantID` = `Table`.`RestaurantID` AND `Restaurant`.`Name` = 'BurgerJoint';
 
 INSERT INTO `Order` (`TableID`, `Timestamp`)
 SELECT `Table`.`TableID`, '2013-07-08 14:01:01'
-FROM `Table`, `Restaurant`, `Order` WHERE `Table`.`Number` = '4' 
+FROM `Table`, `Restaurant` WHERE `Table`.`Number` = '4' 
 AND `Restaurant`.`RestaurantID` = `Table`.`RestaurantID` AND `Restaurant`.`Name` = 'BurgerJoint';
 
 INSERT INTO `Tip` (`UserID`, `TableID`, `Amount`, `Paid`)
@@ -282,12 +282,12 @@ AND `Restaurant`.`RestaurantID` = `Table`.`RestaurantID` AND `Restaurant`.`Name`
 
 INSERT INTO `Order` (`TableID`, `Timestamp`)
 SELECT `Table`.`TableID`, '2013-07-08 16:21:01'
-FROM `Table`, `Restaurant`, `Order` WHERE `Table`.`Number` = '1' 
+FROM `Table`, `Restaurant` WHERE `Table`.`Number` = '1' 
 AND `Restaurant`.`RestaurantID` = `Table`.`RestaurantID` AND `Restaurant`.`Name` = 'TacoTown';
 
 INSERT INTO `Order` (`TableID`, `Timestamp`)
 SELECT `Table`.`TableID`, '2013-07-08 16:51:01'
-FROM `Table`, `Restaurant`, `Order` WHERE `Table`.`Number` = '1' 
+FROM `Table`, `Restaurant` WHERE `Table`.`Number` = '1' 
 AND `Restaurant`.`RestaurantID` = `Table`.`RestaurantID` AND `Restaurant`.`Name` = 'TacoTown';
 
 INSERT INTO `Tip` (`UserID`, `TableID`, `Amount`, `Paid`)
@@ -307,7 +307,7 @@ AND `Restaurant`.`RestaurantID` = `Table`.`RestaurantID` AND `Restaurant`.`Name`
 
 INSERT INTO `Order` (`TableID`, `Timestamp`)
 SELECT `Table`.`TableID`, '2013-07-08 17:01:01'
-FROM `Table`, `Restaurant`, `Order` WHERE `Table`.`Number` = '4' 
+FROM `Table`, `Restaurant` WHERE `Table`.`Number` = '4' 
 AND `Restaurant`.`RestaurantID` = `Table`.`RestaurantID` AND `Restaurant`.`Name` = 'TacoTown';
 
 INSERT INTO `Tip` (`UserID`, `TableID`, `Amount`, `Paid`)
