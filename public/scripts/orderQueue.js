@@ -210,13 +210,11 @@ function addClickEvents() {
 }
 
 function getOrderItemForStatusUpdate(orderItemId) {
-	alert("1");
 	request("orderItem", orderItemId, RequestType.READ, userInfo, "",
 			setOrderItemStatus);
 }
 
 function setOrderItemStatus(response) {
-	alert("2");
 	var orderItem = response.data[0];
 	var currentStatus = orderItem.Status;
 	var newStatus = "InPrep";
@@ -230,7 +228,9 @@ function setOrderItemStatus(response) {
 }
 
 function updateStatusDisplay(repsonse){
+	alert(response.data[0].Status);
 	var orderItem = response.data[0];
+	alert("2");
 	var orderItemDivId = '#orderItem' + orderItem.OrderItemID;
 	alert(orderItemDivId);
 	var orderItemDivClass = 'orderItem orderItemStatus' + orderItem.Status;

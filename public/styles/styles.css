@@ -154,6 +154,7 @@ div#page {
 	border: 1px solid black;
 	background-color:#9999FF;
 	text-align:center;
+	cursor: pointer; cursor: hand;
 }
 
 
