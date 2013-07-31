@@ -2,6 +2,7 @@
 var orderQueueOrders;
 var orderQueueOrderItems;
 var orderQueueMenuItems;
+var orderQueueTables;
 
 // request(resource, key, rqType, userInfoString, dataString, successFunc,
 // errorFunc)
@@ -14,51 +15,64 @@ function orderQueueScreen() {
 
 function populateOrderQueueOrders(response) {
 	orderQueueOrders = response.data;
-	// for(var i=0; i < orderQueueOrders.length; i++){
-	// alert(orderQueueOrders[i].OrderID);
-	// }
 	request("orderItem", "", RequestType.READ, userInfo, "",
 			populateOrderQueueOrderItems);
 }
 
+
 function populateOrderQueueOrderItems(response) {
 	orderQueueOrderItems = response.data;
-	// for(var i=0; i < orderQueueOrderItems.length; i++){
-	// alert(orderQueueOrderItems[i].OrderItemID);
-	// }
 	request("menuItem", "", RequestType.READ, userInfo, "",
 			populateOrderQueueMenuItems);
 }
 
+
 function populateOrderQueueMenuItems(response) {
 	orderQueueMenuItems = response.data;
+	request("table", "", RequestType.READ, userInfo, "",
+			populateOrderQueueTables);
+}
+
+
+function populateOrderQueueTables(response){
+	orderQueueTables = response.data;
 	buildOrderQueueScreen();
 }
 
-function buildOrderQueueScreen() {
-	addMenuInfoToOrderItems();
-	addOrderItemsToOrders();
-	sortOrders();
-	sortOrderItems();
 
+function buildOrderQueueScreen() {
 	// Clear page
 	$('#page').html("");
-
-	// Draw orderQueue
-	for ( var i = 0; i < orderQueueOrders.length; i++) {
-		drawOrder(orderQueueOrders[i]);
+	
+	addMenuInfoToOrderItems();
+	addOrderItemsToOrders();
+	addTablesToOrders();
+	drawRefreshButton();
+	
+	if(allOrdersAreComplete()){
+		drawNoOrdersMessage();
 	}
-	addClickEvents();
+	else{
+		sortOrders();
+		sortOrderItems();
+				
+		// Draw orderQueue
+		for ( var i = 0; i < orderQueueOrders.length; i++) {
+			if(!orderQueueOrders[i].allOrderItemsComplete){
+				drawOrder(orderQueueOrders[i]);				
+			}
+		}
+		addClickEvents();
+	}
 
 }
 
-// 1
+
+
 function addMenuInfoToOrderItems() {
 	for ( var i = 0; i < orderQueueOrderItems.length; i++) {
-		// alert("i=" + i);
 		for ( var j = 0; j < orderQueueMenuItems.length; j++) {
 			if (orderQueueOrderItems[i].MenuItemID == orderQueueMenuItems[j].MenuItemID) {
-				// alert(orderQueueMenuItems[j].Name);
 				orderQueueOrderItems[i].Name = orderQueueMenuItems[j].Name;
 				orderQueueOrderItems[i].PrepTime = orderQueueMenuItems[j].PrepTime;
 				orderQueueOrderItems[i].Category = orderQueueMenuItems[j].Category;
@@ -67,27 +81,59 @@ function addMenuInfoToOrderItems() {
 	}
 }
 
-// 2
+
 function addOrderItemsToOrders() {
 	for ( var i = 0; i < orderQueueOrders.length; i++) {
-		// alert("i=" + i);
+		var allOrderItemsComplete = true;
 		var count = 0;
 		var orderItemsArray = [];
 		for ( var j = 0; j < orderQueueOrderItems.length; j++) {
 			if (orderQueueOrderItems[j].OrderID == orderQueueOrders[i].OrderID) {
-				// alert(orderQueueOrderItems[j].OrderID + " == "
-				// + orderQueueOrders[i].OrderID);
 				orderItemsArray[count++] = orderQueueOrderItems[j];
+				if(orderQueueOrderItems[j].Status != "Ready"){
+					allOrderItemsComplete = false;
+				}
 			}
 		}
 		orderQueueOrders[i].orderItems = orderItemsArray;
-		for ( var k = 0; k < orderQueueOrders[i].orderItems.length; k++) {
-			// alert(orderQueueOrders[i].orderItems[k].Name);
-		}
+		orderQueueOrders[i].allOrderItemsComplete = allOrderItemsComplete;
 	}
 }
 
-// 3
+
+function addTablesToOrders(){
+	for ( var i = 0; i < orderQueueOrders.length; i++) {
+		for ( var j = 0; j < orderQueueTables.length; j++) {
+			if (orderQueueTables[j].TableID == orderQueueOrders[i].TableID) {
+				orderQueueOrders[i].tableNumber = orderQueueTables[j].Number;	
+			}
+		}	
+	}
+}
+
+function drawRefreshButton(){
+	var refreshButton = '<div class="orderQueueRefreshButton"><h2>Refresh Page</h2></div>';
+	$('#page').append(refreshButton);
+}
+
+
+function allOrdersAreComplete(){
+	for(var i=0; i<orderQueueOrders.length; i++ ){
+		if(!orderQueueOrders[i].allOrderItemsComplete){
+			return false;
+		}
+	} 
+	return true;
+}
+
+
+function drawNoOrdersMessage(){
+	var noOrdersMessage = '<div class="noOrders"><h1>There are currently no orders in the queue.</h1></div>';
+	$('#page').append(noOrdersMessage);		
+}
+
+
+
 function sortOrders() {
 	// Sort orders
 	orderQueueOrders.sort(function(objA, objB) {
@@ -107,24 +153,18 @@ function sortOrderItems() {
 			else
 				return 1;
 		});
-		// Test
-		// for(var j=0; j<orderQueueOrders[i].orderItems.length; j++){
-		// alert(i + ": " + orderQueueOrders[i].orderItems[j].Name + ", Prep = "
-		// + orderQueueOrders[i].orderItems[j].PrepTime);
-		// }
 	}
 }
 
-// 4
+
 function drawOrder(order) {
 	drawOrderDiv(order);
 	drawOrderItems(order)
 }
 
-// 5
+
 function drawOrderDiv(order) {
-	// alert("drawOrderHeading");
-	var tableString = $.isNumeric(order.TableID) ? order.TableID : "None";
+	var tableString = $.isNumeric(order.tableNumber) ? order.tableNumber : "None";
 	var orderHeadingString = '<div id="order' + order.OrderID
 			+ '" class="order">' + '<div class="orderHeading">'
 			+ '<div class="orderHeadingInfo">'
@@ -135,13 +175,9 @@ function drawOrderDiv(order) {
 }
 
 
-
- // 6
  function drawOrderItems(order) {
 	 var orderItems = order.orderItems;
-	 // ITERATE THROUGH ORDER ITEMS
 	 for (i = 0; i < orderItems.length; i++) {
-		 // ORDER ITEM DIV
 		 var orderItemString =
 			 '<div id="orderItem' + orderItems[i].OrderItemID + '" class="orderItem orderItemStatus' + orderItems[i].Status + '">'
 			 + '<input type="hidden" class="orderItemIdHolder" value="'+orderItems[i].OrderItemID +'"/>'
@@ -155,52 +191,25 @@ function drawOrderDiv(order) {
 		 orderItemString += '<div class="orderItemInfo">Prep time: ' +
 		 orderItems[i].PrepTime + '</div></div>';
 		 var orderDivId = '#order' + orderItems[i].OrderID;
-		 $(orderDivId).append(orderItemString);
+		 $(orderDivId).append(orderItemString);	
+		 if(order.allOrderItemsComplete){
+			 $(orderDivId).hide('slow');
+		 }
 	}
 }
-
- 
-
-function fillInTableNumbers(response) {
-	// alert("fillInTableNumbers");
-	$('.orderTableID').each(function() {
-		for (i = 0; i < response.data.length; i++) {
-			if (this.innerHTML == response.data[i].TableID) {
-				this.innerHTML = response.data[i].Number;
-			}
-		}
-	});
-}
-
-// function drawMenuItemInfo(response) {
-// // alert("drawMenuItemInfo");
-// var menuItems = response.data;
-// for (i = 0; i < menuItems.length; i++) {
-// var menuItemDivClass = '.menuItemID' + menuItems[i].MenuItemID;
-// if ($(menuItemDivClass).length > 0) {
-// var menuItemInfo = '<div class="menuItemInfo">'
-// + '<div class="menuItemInfoSnippet">' + menuItems[i].Name
-// + '</div>' + '<div class="menuItemInfoSnippet">'
-// + menuItems[i].Category + '</div>'
-// + '<div class="menuItemInfoSnippet">' + 'Prep time: '
-// + menuItems[i].PrepTime + ' min' + '</div>' + '</div>';
-// // alert("menuItemInfo = " + menuItemInfo);
-//
-// $(menuItemDivClass).append(menuItemInfo);
-// }
-// }
-// }
 
 function addClickEvents() {
 	$('.orderItem').click(function() {
 		var orderItemId = $(this).find(".orderItemIdHolder").val();
-		// alert("orderItemId = " + orderItemId);
 		getOrderItemForStatusUpdate(orderItemId);
+	});
+	
+	$('.orderQueueRefreshButton').click(function() {
+		orderQueueScreen();
 	});
 }
 
 function getOrderItemForStatusUpdate(orderItemId) {
-	// alert("getOrderItemForStatusUpdate");
 	request("orderItem", orderItemId, RequestType.READ, userInfo, "",
 			setOrderItemStatus);
 }
@@ -216,54 +225,5 @@ function setOrderItemStatus(response) {
 	}
 	request("orderItem", orderItem.OrderItemID, RequestType.UPDATE, userInfo,
 			"Status=" + newStatus, orderQueueScreen);
-
 }
 
-// for each order, get the orderItems for each
-// sort the order items by longest prep time first
-
-// create a listing of the order items inside each order
-// (draw a div for each order, and inside of it put
-// a div for each orderItem)
-
-// set a click handler to change the orderItem's status to:
-// prep, if it's waiting
-// ready, if it's in prep
-
-// if all the orderItems in an order are ready, then remove the order from the
-// screen
-// but if only some are, display the "ready" ones a different color or something
-
-// maybe color-code orders or alternate?
-
-//==============================================================================================
-
-////6
-//function drawOrderItems(order) {
-//	var orderItems = order.orderItems;
-//	var orderItemString = '<table id="order' + order.OrderID + 'OrderItems">';
-//	// ITERATE THROUGH ORDER ITEMS
-//	for (i = 0; i < orderItems.length; i++) {
-//		orderItemString += 
-//			'<tr id="orderItem' + orderItems[i].OrderItemID	+ '" class="orderItem orderItemStatus' + orderItems[i].Status + '">'
-//				//+ '<input type="hidden" class="orderItemIdHolder" value="'+ orderItems[i].OrderItemID + '"/>'
-//				+ '<td>Status: ';
-//		if (orderItems[i].Status == "Ready") {
-//			orderItemString += 'Ready';
-//		} else if (orderItems[i].Status == "InPrep") {
-//			orderItemString += 'In Prep';
-//		} else {
-//			orderItemString += 'New';
-//		}
-//		orderItemString += '</td>';
-//		orderItemString += '<td>' + orderItems[i].Name + '</td>';
-//		orderItemString += '<td>'+ orderItems[i].Category + '</td>';
-//		orderItemString += '<td>Prep time: '+ orderItems[i].PrepTime + '</td></tr>';
-//	}
-//	orderItemString += '</table>';
-//	alert(orderItemString);
-//	alert("1");
-//	var orderDivId = '#order' + order.OrderID;
-//	alert("2");
-//	$(orderDivId).append(orderItemString);
-//}
