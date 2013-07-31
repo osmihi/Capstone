@@ -112,7 +112,7 @@ function addTablesToOrders(){
 }
 
 function drawRefreshButton(){
-	var refreshButton = '<div class="orderQueueRefreshButton"><h2>Refresh Page</h2></div>';
+	var refreshButton = '<div class="orderQueueRefreshButton"><h3>Refresh Page</h3></div>';
 	$('#page').append(refreshButton);
 }
 
