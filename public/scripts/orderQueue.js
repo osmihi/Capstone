@@ -3,6 +3,7 @@ var orderQueueOrders;
 var orderQueueOrderItems;
 var orderQueueMenuItems;
 var orderQueueTables;
+var tempOrderItemID;
 
 // request(resource, key, rqType, userInfoString, dataString, successFunc,
 // errorFunc)
@@ -101,6 +102,8 @@ function addOrderItemsToOrders() {
 }
 
 
+
+
 function addTablesToOrders(){
 	for ( var i = 0; i < orderQueueOrders.length; i++) {
 		for ( var j = 0; j < orderQueueTables.length; j++) {
@@ -179,15 +182,14 @@ function drawOrderDiv(order) {
 	 var orderItems = order.orderItems;
 	 for (i = 0; i < orderItems.length; i++) {
 		 var orderItemString =
-			 '<div id="orderItem' + orderItems[i].OrderItemID + '" class="orderItem orderItemStatus' + orderItems[i].Status + '">'
-			 + '<input type="hidden" class="orderItemIdHolder" value="'+orderItems[i].OrderItemID +'"/>'
-			 + '<div class="orderItemInfo"><a>Status: ';
-		 if (orderItems[i].Status == "Ready"){ orderItemString += 'Ready'; }
-		 else if (orderItems[i].Status == "InPrep"){ orderItemString += 'In Prep'; }
-		 else{ orderItemString += 'New'; }
-		 orderItemString += '</a></div>';
-		 orderItemString += '<div class="orderItemInfo">' + orderItems[i].Name +'</div>';
-		 orderItemString += '<div class="orderItemInfo">' + orderItems[i].Category +'</div>';
+			 '<div id="orderItem' + orderItems[i].OrderItemID + '" class="orderItem orderItemStatus' + orderItems[i].Status + '">';
+		 orderItemString += '<input type="hidden" class="orderItemIdHolder" value="'+orderItems[i].OrderItemID +'"/>';
+		 orderItemString += '<div class="orderItemInfo orderItemStatus">Status: ' + orderItemStatusString(orderItems[i]) + '</div>';
+		 orderItemString += '<div class="orderItemInfo orderItemName">' + orderItems[i].Name +'</div>';
+		 orderItemString += '<div class="orderItemInfo orderItemCategory">' + orderItems[i].Category +'</div>';
+		 if(orderItems[i].Notes){
+			 orderItemString += '<div class="orderItemInfo" orderItemNotes>' + orderItems[i].Notes +'</div>';
+		 }
 		 orderItemString += '<div class="orderItemInfo">Prep time: ' +
 		 orderItems[i].PrepTime + '</div></div>';
 		 var orderDivId = '#order' + orderItems[i].OrderID;
@@ -198,9 +200,17 @@ function drawOrderDiv(order) {
 	}
 }
 
+function orderItemStatusString(orderItem){
+	 if (orderItem.Status == "Ready"){ return 'Ready'; }
+	 else if (orderItem.Status == "InPrep"){ return 'In Prep'; }
+	 return 'New'; 
+}
+ 
+ 
 function addClickEvents() {
 	$('.orderItem').click(function() {
-		var orderItemId = $(this).find(".orderItemIdHolder").val();
+		var orderItemId = $(this).find('.orderItemIdHolder').val();
+		tempOrderItemID = orderItemId;
 		getOrderItemForStatusUpdate(orderItemId);
 	});
 	
@@ -227,15 +237,35 @@ function setOrderItemStatus(response) {
 			"Status=" + newStatus, updateStatusDisplay);
 }
 
-function updateStatusDisplay(repsonse){
-	alert(response.data[0].Status);
+function updateStatusDisplay(response){
+	if(response.data[0] == null){
+		alert("null");
+	}
 	var orderItem = response.data[0];
-	alert("2");
 	var orderItemDivId = '#orderItem' + orderItem.OrderItemID;
-	alert(orderItemDivId);
 	var orderItemDivClass = 'orderItem orderItemStatus' + orderItem.Status;
-	alert(orderItemDivClass);
-	$(orderItemDivId).attr('class', orderItemDivClass);	
-	alert($(orderItemDivId).attr('class'));
+	$(orderItemDivId).attr('class', orderItemDivClass);
+	$(orderItemDivId).find('.orderItemStatus').html('Status: ' + orderItemStatusString(orderItem)); 
+	var orderDivID = '#order' + orderItem.OrderID;
+	var newOrderItems = $(orderDivID).find('.orderItemStatusNew');
+	var inPrepOrderItems = $(orderDivID).find('.orderItemStatusInPrep');
+	
+	if(newOrderItems.length + inPrepOrderItems.length < 1){
+		$(orderDivID).hide('slow');
+		$(orderDivID).attr('class', 'completedOrder');
+		if($('#page').find('.order').length < 1){
+			drawNoOrdersMessage();
+		}
+	}
 }
+
+function getOrder(orderID){
+	for(var i = 0; i < orderQueueOrders.length; i++){
+		if(orderQueueOrders[i].OrderID == orderID){
+			return orderQueueOrders[i];
+		}
+	}
+	return null;
+}
+
 
