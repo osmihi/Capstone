@@ -66,11 +66,21 @@ function buildNavBar(response) {
 	var lName = response.data[0].LName;
 	var role = response.data[0].Role;
 
+	$('#header').append(
+		'<div id="logo">' +
+			'<a href="http://www.ordrupapp.com/">' +
+				'<img src="/res/logo.png" width="276" height="123"/>' + 
+			'</a>' + 
+		'</div>'
+	);
+
 	drawUserInfo(fName, lName, role);
-	
+
+	$('#header').append('<div id="navBar"></div>');
+
 	// make a button/link for each page they have access to
 	for (i = 0; i < NavButtons[role].length; i++) {
-		$('#header').append(
+		$('#navBar').append(
 			makeNavButton(NavButtons[role][i])
 		);
 	}

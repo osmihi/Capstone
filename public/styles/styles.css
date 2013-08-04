@@ -2,7 +2,7 @@
 
 body, html {
 	margin: 0;
-	padding: 0;
+	padding: 0.5em 0;
 	color: Black;
 }
 
@@ -12,17 +12,72 @@ body {
 	color: Black;
 	background-repeat:repeat;
 	background-attachment:fixed;
-	background-image:url('../res/vinyl02.png');
+	background-image:url('../res/vinyl02.jpg');
 }
 
 div#page {
 	max-width: 960px;
 	z-index:50;
 	margin: 0 auto;
-	padding:71px 2px 2px 2px;
+	padding:0.25em 0;
+	clear:both;
 /*	background: rgb(255, 245, 245);*/ /* fallback color */
 /*	background: rgba(140, 190, 190, 0.15); */
 }
+
+div#header {
+	width: 100%;
+	margin: 0 auto;
+	max-width: 960px;
+	min-height:128px;
+	padding: 0.25em;
+	margin-bottom:1em;
+	border-bottom: 2px inset white;
+}
+
+#logo {
+	float:left;
+}
+#userInfo {
+	float:right;
+	text-align:right;
+	margin-bottom:40px;
+}
+
+.userFullName {
+	display:inline;
+	font-size: 12pt;
+}
+
+.userRole {
+	display:inline;
+	margin:0 1em;
+	font-style:italic;
+	font-size: 10pt;
+}
+
+#navBar {
+	float:right;
+	clear:right;
+	padding: 0.25em;
+	text-align:right;
+}
+
+.navButton {
+	cursor:pointer;
+	display:inline;
+	margin:0.3em;
+	padding:0.3em;
+	font-size: 12pt;
+	max-width: 8em;
+	border: 2px outset white;
+}
+
+.navButton:hover {
+	background-color: #dcdcdc;
+}
+
+/* ====================================================================================================================================================== */
 
 .waitList {
 	border: 2px solid purple;
@@ -53,28 +108,6 @@ div#page {
 
 .tableSeating.Occupied {
 	background-color:#303030;
-}
-
-.userInfoBox {
-	border: 2px double green;
-	text-align:right;
-}
-
-.userFullName {
-	font-size: 24pt;
-}
-
-.userRole {
-	font-size: 18pt;
-}
-
-.navButton {
-	margin:1em;
-	padding:1em;
-	border: 2px outset gray;
-	font-size: 16pt;
-	cursor:pointer;
-	display:inline;
 }
 
 .discount {
@@ -185,6 +218,7 @@ div#page {
 	float:right;
 	background-color:yellow;
 }
+
 .drawMenu {
 	border: 2px solid red;
 	padding: 5px;
@@ -195,6 +229,7 @@ div#page {
 	font-size: 90%;
 	line-height: 1.2em;
 }
+
 .items {
 	border: 2px solid red;
 	padding: 5px;
