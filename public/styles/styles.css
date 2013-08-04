@@ -11,7 +11,8 @@ body {
 	font: 15px/1.6 Arial, Helvetica, sans-serif; 
 	color: Black;
 	background-repeat:repeat;
-	/*background-attachment:fixed;*/
+	background-attachment:fixed;
+	background-image:url('../res/vinyl02.png');
 }
 
 div#page {
