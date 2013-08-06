@@ -242,6 +242,12 @@ div#header {
 }
 
 .user {
- 	border: 2px solid black;
-	padding: 1em;
+ 	border:2px solid black;
+	padding: 5px;
+	margin: 5px;
+	background-color: #CCCCCC;
+	width: 300px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 90%;
+	line-height: 1.2em;
 }

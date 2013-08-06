@@ -18,8 +18,6 @@
 function usersScreen() {
 	// API call: request(resource, key, rqType, userInfoString, dataString,
 	// successFunc, errorFunc)
-	
-	alert("usersScreen()");
 	request("user", "", RequestType.READ, userInfo, "", buildUsersScreen);
 }
 
@@ -54,7 +52,7 @@ function drawNewUserForm() {
 
 	//Add a div with inputs to enter a new user
 	$('#page').append(
-			'<div id="newUserForm" class="newUserForm">'
+			'<div id="newUserForm" class="user">'
 			+'<table>'
 				+'<tr>'
 					+'<td>Last Name: </td>'
