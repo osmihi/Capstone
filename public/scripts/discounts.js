@@ -1,11 +1,4 @@
-/**
- * 
- * 
- * like users get all discounts foreach discount, make a div that contains:
- * unique id (use discount id on end)
- * 
- * 
- */
+
 // Called to render discounts screen
 function discountsScreen() {
 	// API call: request(resource, key, rqType, userInfoString, dataString,
@@ -28,9 +21,6 @@ function buildDiscountScreen(response) {
 		discountCode = $(this).parents(".discount:first").find(".discountCode").val();
 		discountValue = $(this).parents(".discount:first").find(".discountValue").val();
 		discountType = $(this).parents(".discount:first").find(".discountType").val();
-//		alert(discountCode);
-//		alert(discountValue);
-//		alert(discountType);
 		addDiscount(discountCode, discountValue, discountType);
 	});
 	
@@ -42,14 +32,10 @@ function buildDiscountScreen(response) {
 	
 	//Add click function to discountUpdateButton
 	$('.discountUpdateButton').click(function() {
-//		alert($(this).parents(".discount:first").attr("id"))
 		discountCode = $(this).parents(".discount:first").find(".discountCode").val();
 		discountValue = $(this).parents(".discount:first").find(".discountValue").val();
 		discountID = $(this).parents(".discount:first").find(".discountIdHolder").val();
 		discountType = $(this).parents(".discount:first").find(".discountType").val();
-//		alert(discountCode);
-//		alert(discountValue);
-//		alert(discountID);
 		updateDiscount(discountID, discountCode, discountValue, discountType);
 	});
 	
@@ -96,11 +82,6 @@ function drawDiscount(discount) {
 					'<input type="button" class="discountDeleteButton" value="Delete"/>' +
 			'</div>');
 }
-//"DiscountID":"79",
-//"RestaurantID":"27",
-//"DiscountCode":"100OFF",
-//"Type":"Percent",
-//"Value":"100.00"
 
 
 function addDiscount(discountCode, discountValue, discountType){
@@ -109,7 +90,7 @@ function addDiscount(discountCode, discountValue, discountType){
 			"&Value=" + discountValue +
 			"&Type=" + discountType, 
 			discountsScreen, 
-			alert("addDiscount Error Function Called"));
+			discountErrorFunction);
 }
 
 // API call: request(resource, key, rqType, userInfoString, dataString,
@@ -122,12 +103,16 @@ function updateDiscount(discountID, discountCode, discountValue, discountType){
 			"&Value=" + discountValue +
 			"&Type=" + discountType, 
 			discountsScreen, 
-			alert("updateDiscount Error Function Called"));
+			discountErrorFunction);
 }
 
 function deleteDiscount(discountID){
 	request("discount", discountID, RequestType.DELETE, userInfo, 
 			"DiscountID=" + discountID, 
 			discountsScreen, 
-			alert("deleteDiscount Error Function Called"));
+			discountErrorFunction);
+}
+
+function discountErrorFunction(){
+	alert("Error Function Called");
 }
