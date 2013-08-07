@@ -48,7 +48,13 @@ class User extends Resource {
 		$this->passwordHash = SHA1($this->passwordHash);
 		return parent::create($params);
 	}
-	
+
+	public function update(array $params = array()) {
+		$params = $this->hashPassword($params);
+		$this->passwordHash = SHA1($this->passwordHash);
+		return parent::update($params);
+	}
+
 	private function hashPassword(array $params) {
 		foreach($params as $pKey => $pVal) {
 			if ($this->getFieldName($pKey) == 'PasswordHash') {
@@ -68,7 +74,7 @@ class User extends Resource {
 			$authID = substr($authArr[0],10);
 
 			if ( strval( intval($authID) ) != $authID ) return false;
-					
+
 			$stmt = $this->db->prepare("SELECT `UserID`, `Username`, `PasswordHash`, `RestaurantID`, `Role`, `FName`, `LName` FROM `User` WHERE `UserID` = :uid LIMIT 0,1");
 			$stmt->bindValue(':uid', $authID, PDO::PARAM_STR);
 
@@ -78,7 +84,8 @@ class User extends Resource {
 
 			$prefix = substr( md5(date("Y-m-d")), 0, 10 );
 
-			if ( $this->authCode != $prefix . $authID . ":" . SHA1($res[0]['Username'] . $res[0]['PasswordHash']) ) return false;
+			//if ( $this->authCode != $prefix . $authID . ":" . SHA1($res[0]['Username'] . $res[0]['PasswordHash']) ) return false;
+			if ( $authArr[1] != SHA1($res[0]['Username'] . $res[0]['PasswordHash']) ) return false;
 
 		} else {
 		

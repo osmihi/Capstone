@@ -102,6 +102,10 @@ div#header {
 	line-height: 1.2em;
 }
 
+.tableSeatingStatusAvailable {
+	cursor:pointer;
+}
+
 .tableSeating.Available {
 	background-color: green;
 }

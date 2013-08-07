@@ -1,4 +1,6 @@
-<?php session_start();?>
+<?php 
+	session_start();
+?>
 
 <!DOCTYPE html>
 
@@ -17,13 +19,12 @@
 		<script src="scripts/bill.js" type="text/javascript"></script>
 		<script src="scripts/discounts.js" type="text/javascript"></script>
 		<script src="scripts/orderQueue.js" type="text/javascript"></script>
-		<script src="scripts/menu.js" type="text/javascript"></script>
 		<script src="scripts/menuItem.js" type="text/javascript"></script>
 		<script src="scripts/users.js" type="text/javascript"></script>
 
 		<script>
 
-			userInfo = "<?php if (isset($_SESSION['authCode'])) echo 'authCode=' . $_SESSION['authCode']?>";
+			userInfo = "<?php if (isset($_COOKIE['authCode'])) {echo 'authCode=' . $_COOKIE['authCode'];} elseif (isset($_SESSION['authCode'])) {echo 'authCode=' . $_SESSION['authCode'];} ?>";
 			userID = "<?php if (isset($_SESSION['authCode'])) echo $_SESSION['UserID']?>";
 			userRole = "<?php if (isset($_SESSION['authCode'])) echo $_SESSION['userRole']?>";
 
@@ -37,7 +38,9 @@
 
 				navBar();
 
-				if (userRole != '')	{window[NavInitial[userRole]]();}
+				if (userRole != '')	{
+					window[NavInitial[userRole]]();
+				}
 
 			});
 

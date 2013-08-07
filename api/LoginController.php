@@ -16,7 +16,7 @@ class LoginController {
 		try {
 			$this->response = new APIResponse();
 
-			$this->response->setHeaders(); // for debugging
+//			$this->response->setHeaders(); // for debugging
 
 			$this->dbc = new DbConnection();
 			
@@ -40,7 +40,10 @@ class LoginController {
 
 			$prefix = substr( md5(date("Y-m-d")), 0, 10 );
 
-			$_SESSION['authCode'] = $prefix . $this->user->getField('UserID') . ":" . SHA1($this->user->getField('Username') . $this->user->getField('PasswordHash'));
+			$ac = $prefix . $this->user->getField('UserID') . ":" . SHA1($this->user->getField('Username') . $this->user->getField('PasswordHash'));
+			
+			setcookie('authCode', $ac, time()+60*60*24*30);
+			$_SESSION['authCode'] = $ac;
 			$_SESSION['userRole'] = $this->user->getField('Role');
 			$_SESSION['UserID'] = $this->user->getField('UserID');
 

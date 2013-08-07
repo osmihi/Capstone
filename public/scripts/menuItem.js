@@ -1,5 +1,8 @@
 //Called to render Menu Item screen
-function menuItemScreen() {
+function menuScreen() {
+	
+	refreshFunc = function() {};
+	
 	// API call: request(resource, key, rqType, userInfoString, dataString,
 	// successFunc, errorFunc)
 	request("menuItem", "", RequestType.READ, userInfo, "", buildMenuItemScreen);
@@ -14,10 +17,8 @@ function buildMenuItemScreen(response) {
 	// Wipe page clean (remove previous existing content)
 	$('#page').html("");
 	
-	drawAddMenuItem()
-	
-	
-	
+	drawAddMenuItem();
+
 	// Iterate through menuItems, call menu items
 	for (i = 0; i < items.length; i++) {
 		drawItems(items[i]);
@@ -35,7 +36,13 @@ function drawAddMenuItem() {
 				+'</tr>'
 				+'<tr>'
 					+'<td>Item Category: </td>'
-					+'<td><input type="text" id="itemCategory" value=""/></td>'
+					+ '<td>'
+					+ '<select id="itemCategory" class="menuItemCategory">'
+						+ '<option value="Appetizer">Appetizer</option>'
+						+ '<option value="Main Course">Main Course</option>'
+						+ '<option value="Dessert">Dessert</option>'
+					+ '</select>'
+					+ '</td>'
 				+'</tr>'
 				+'<tr>'
 					+'<td>Item Prep Time: </td>'
@@ -47,12 +54,12 @@ function drawAddMenuItem() {
 				+'</tr>'
 			+'</table>'
 			
-			+'<input type=button id="addMenuItem" value="Add"/><br />'
+			+'<input type="button" id="addMenuItemSubmit" value="Add"/><br />'
 			+
 						
 		'</div>');
 	//Add click function to button
-	$('#addMenuItem').click(function() {
+	$('#addMenuItemSubmit').click(function() {
 		addItemToMenu();
 	});
 }
@@ -63,7 +70,7 @@ function addItemToMenu(){
 	var prepTime = $('#itemPrepTime').val();
 	var price = $('#itemPrice').val();
 	
-	request("menuItem", "", RequestType.CREATE, userInfo, "Name="+name+"&Category="+category+"&PrepTime="+prepTime+"&Price="+price, menuItemScreen);
+	request("menuItem", "", RequestType.CREATE, userInfo, "Name="+name+"&Category="+category+"&PrepTime="+prepTime+"&Price="+price, menuScreen);
 }
 
 
@@ -75,52 +82,56 @@ function addItemToMenu(){
 function drawItems(menuItem) {
 	// Add div with menu items page div
 	$('#page').append(
-			'<div id="menu' + menuItem.MenuItemtID + '" class="menuItem">'
+			'<div id="menu' + menuItem.MenuItemID + '" class="menuItem">'
 				+'<table>'
 					+'<tr>' 
 						+'<td>Item Name: </td>'
-						+'<td><input type="text" id="menuItemName" value="'+ menuItem.Name +'"/></td>'
+						+'<td><input type="text" id="menuItem' + menuItem.MenuItemID + 'Name" class="menuItemName" value="'+ menuItem.Name +'"/></td>'
 					+'</tr>'
 					+'<tr>'
 						+'<td>Item Category: </td>'
-						+'<td><input type="text" id="menuItemCategory" value="'+ menuItem.Category +'"/></td>'
+						+ '<td>'
+							+ '<select id="menuItem' + menuItem.MenuItemID + 'Category" class="menuItemCategory">'
+								+ '<option value="Appetizer">Appetizer</option>'
+								+ '<option value="Main Course">Main Course</option>'
+								+ '<option value="Dessert">Dessert</option>'
+							+ '</select>'
+						+ '</td>'
 					+'</tr>'
 					+'<tr>'
 						+'<td>Item Prep Time: </td>'
-						+'<td><input type="text" id="menuItemPrepTime" value="'+ menuItem.PrepTime +'"/></td>'
+						+'<td><input type="text" id="menuItem' + menuItem.MenuItemID + 'PrepTime" class="menuItemPrepTime" value="'+ menuItem.PrepTime +'"/></td>'
 					+'</tr>'
 					+'<tr>'
 						+'<td>Item Price: </td>'
-						+'<td><input type="text" id="menuItemPrice" value="'+ menuItem.Price +'"/></td>'
+						+'<td><input type="text" id="menuItem' + menuItem.MenuItemID + 'Price" class="menuItemPrice" value="'+ menuItem.Price +'"/></td>'
 					+'</tr>'
 					+'</table>'
-					+'<input type=button id="submitItemChanges" value="Submit"/><br />'
-					+'<input type=button id="backToMenuList" value="Back"/><br />'
+					+'<input type=button id="submitItemChanges' + menuItem.MenuItemID + '" value="Submit"/><br />'
+					+'<input type=button id="deleteMenuItem' + menuItem.MenuItemID + '" value="Delete"/><br />'
 					+
 							
 			'</div>');
-	
-	
-	
-	
-	
+
+	$('#menuItem' + menuItem.MenuItemID + 'Category').val(menuItem.Category);
+
 	// Add click function to buttons
-	$('#submitItemChanges'+ menuItem.MenuItemtID ).click(function() {
-		SubmitMenuItemChanges(menuItem);
+	$('#submitItemChanges'+ menuItem.MenuItemID ).click(function() {
+		SubmitMenuItemChanges(menuItem.MenuItemID);
 	});
 		
-	$('#backToMenuList').click(function() {
-		menuScreen();
+	$('#deleteMenuItem' + menuItem.MenuItemID).click(function() {
+		request("menuItem", menuItem.MenuItemID, RequestType.DELETE, userInfo, "", menuScreen);
 	});
 }
 	
 
-function SubmitMenuItemChanges(){
-		var itemName = $('#menuItemName').val();
-		var itemCategory = $('#menuItemCategory').val();
-		var itemPrepTime = $('#menuItemPrepTime').val();
-		var itemPrice = $('#menuItemPrice').val();
+function SubmitMenuItemChanges(menuItemID) {
+		var itemName = $('#menuItem' + menuItemID + 'Name').val();
+		var itemCategory = $('#menuItem' + menuItemID + 'Category').val();
+		var itemPrepTime = $('#menuItem' + menuItemID + 'PrepTime').val();
+		var itemPrice = $('#menuItem' + menuItemID + 'Price').val();
 		
-		request("menuItem", "", RequestType.UPDATE, userInfo, "Name="+itemName+"&Category="+itemCategory+"&PrepTime="+itemPrepTime+"&Price="+itemPrice, menuScreen);
+		request("menuItem", menuItemID, RequestType.UPDATE, userInfo, "Name="+itemName+"&Category="+itemCategory+"&PrepTime="+itemPrepTime+"&Price="+itemPrice, menuScreen);
 }
 

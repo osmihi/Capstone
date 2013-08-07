@@ -16,6 +16,9 @@
 //Called to render users screen
 
 function usersScreen() {
+	
+	refreshFunc = function() {};
+	
 	// API call: request(resource, key, rqType, userInfoString, dataString,
 	// successFunc, errorFunc)
 	request("user", "", RequestType.READ, userInfo, "", buildUsersScreen);
@@ -64,7 +67,7 @@ function drawNewUserForm() {
 				+'</tr>'
 				+'<tr>'
 					+'<td>Password: </td>'
-					+'<td><input type="text" id="newUserPassword" value=""/></td>'
+					+'<td><input type="password" id="newUserPassword" value=""/></td>'
 				+'</tr>'
 				+'<tr>'
 					+'<td>Role: </td>'
@@ -100,7 +103,7 @@ function drawEmployees(user) {
 					+'</tr>'
 					+'<tr>'
 						+'<td>Password: </td>'
-						+'<td><input type="text" id="password' + user.UserID  + '" value="' + user.PasswordHash + '"/></td>'
+						+'<td><input type="password" id="password' + user.UserID  + '" value="' + user.PasswordHash + '"/></td>'
 					+'</tr>'
 					+'<tr>'
 						+'<td>Role: </td>'
@@ -115,17 +118,14 @@ function drawEmployees(user) {
 		+'</div>');
 			
 }
-	
 
 function submitEmployeeChanges(userID){
-	alert(userID);
 	var fName = $('#fName'+userID).val();
 	var lName = $('#lName'+userID).val();
 	var pass = $('#password'+userID).val();
 	var role = $('#role'+userID).val();
 	var userName = $('#userName'+userID).val();
 	var queryString = "FName="+fName+"&LName="+lName+"&PasswordHash="+pass+"&Role="+role+"&Username="+userName;
-	alert(queryString);
 	request("user", userID, RequestType.UPDATE, userInfo, queryString, usersScreen, userErrorFunction);
 }
 
@@ -139,8 +139,7 @@ function addNewEmployee(){
 	request("user", "", RequestType.CREATE, userInfo, "FName="+first+"&LName="+last+"&PasswordHash="+pass+"&Role="+role+"&Username="+userName, usersScreen);
 }
 
-function addClickEvents(){
-	
+function addClickEvents() {
 	// Add click function to buttons
 	$('.submitUserChanges').click(function() {
 		var userID = $(this).closest('.user').find('.userID').val();
@@ -149,9 +148,7 @@ function addClickEvents(){
 	
 	// Add click function to buttons
 	$('.deleteUser').click(function() {
-		alert(".deleteUser");
 		var userID = $(this).closest('.user').find('.userID').val();
-		alert(userID);
 		request("user", userID, RequestType.DELETE, userInfo, "UserID="+userID, usersScreen, userErrorFunction);		
 	});
 	
@@ -161,8 +158,6 @@ function addClickEvents(){
 	});
 }
 
-
 function userErrorFunction(){
-	alert("Users error function called");
 }
 

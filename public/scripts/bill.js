@@ -7,7 +7,37 @@
 // can add discounts to the bill too I suppose
 // and need tips too
 
+var Bill = function (tableID) {
+	this.tableID = tableID;
+};
+
+Bill.prototype.setOrderData = function(data) {
+	this.orderData = data;
+};
+
+Bill.prototype.setOrderItemData = function(data) {
+	this.orderItemData = data;
+};
+
+Bill.prototype.setMenuItemData = function(data) {
+	this.menuItemData = data;
+};
+
+Bill.prototype.setTipData = function(data) {
+	this.tipData = data;
+}
+
+Bill.prototype.setDiscountedData = function(data) {
+	this.discountedData = data;
+}
+
+Bill.prototype.setDiscountData = function(data) {
+	this.discountData = data;
+}
+
 function billScreen() {
+	refreshFunc = function() {};
+
 	request("order", "", RequestType.READ, userInfo, "&tableID=" + selectedTable.TableID, function(response) {
 		billScreen.orderData = response.data;
 		request("orderItem", "", RequestType.READ, userInfo, "", function(response) {

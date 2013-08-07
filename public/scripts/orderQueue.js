@@ -9,8 +9,18 @@ var tempOrderItemID;
 
 // request for all orders
 function orderQueueScreen() {
+	$('.navButton').css("font-weight", "normal");
+	$('.orderQueueScreen').css("font-weight", "bold");
+	
+	refreshFunc = function() {};
+	
 	request("order", "", RequestType.READ, userInfo, "",
 			populateOrderQueueOrders);
+	
+	refreshFunc = function() {
+		request("order", "", RequestType.READ, userInfo, "",
+			populateOrderQueueOrders);
+	};
 }
 
 //orderQueueOrders will hold the order data locally

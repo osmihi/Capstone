@@ -7,12 +7,23 @@
 // go to bill page
 
 function tablesScreen() {
+	refreshFunc = function() {};
+	
 	request("user", "", RequestType.READ, userInfo, "role=Wait Staff", 
 		function(response) {
 			buildTablesScreen.users = response.data;
 			request("table", "", RequestType.READ, userInfo, "", buildTablesScreen);
 		}
 	);
+	
+	refreshFunc = function() {
+		request("user", "", RequestType.READ, userInfo, "role=Wait Staff", 
+			function(response) {
+				buildTablesScreen.users = response.data;
+				request("table", "", RequestType.READ, userInfo, "", buildTablesScreen);
+			}
+		);
+	};
 }
 
 function buildTablesScreen(tablesResponse) {

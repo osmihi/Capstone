@@ -1,6 +1,7 @@
 
 // Called to render discounts screen
 function discountsScreen() {
+	refreshFunc = function() {};
 	// API call: request(resource, key, rqType, userInfoString, dataString,
 	// successFunc, errorFunc)
 	request("discount", "", RequestType.READ, userInfo, "", buildDiscountScreen);

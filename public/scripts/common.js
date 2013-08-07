@@ -2,8 +2,10 @@ var userInfo;
 var userID;
 var userRole;
 
-var selectedParty;
+var selectedParty = null;
 var selectedTable;
+
+var refreshFunc = function() {};
 
 var RequestType = {
 	CREATE : "POST",
@@ -14,6 +16,10 @@ var RequestType = {
 	GET  : "GET",
 	PUT : "PUT"
 }
+
+setInterval(function(){
+    refreshFunc();
+},20000);
 
 function request(resource, key, rqType, userInfoString, dataString, successFunc, errorFunc) {
 	if (key == null)

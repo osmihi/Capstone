@@ -1,21 +1,27 @@
 //Called to render waitList screen
 function waitListScreen() {
+	refreshFunc = function() {};
+	
 	//API call: request(resource, key, rqType, userInfoString, dataString, successFunc, errorFunc)
-	request("waitlist", "", RequestType.READ, userInfo, "", buildWaitListScreen);
+	request("waitlist", "", RequestType.READ, userInfo, "", buildWaitListScreen, buildWaitListScreen);
 }
 
 //response is result of API request call
 function buildWaitListScreen(response) {
-	var waitLists = response.data;
+	var waitLists = new Array();
 
-//Sort waitLists in descending order by timestamp (oldest time stamp first) 
-	waitLists.sort(function(objA, objB) {
-		if (objA.Timestamp < objB.Timestamp)
-			return -1;
-		else
-			return 1;
-	});
-
+	if (response.statusCode == "200") {
+		waitLists = response.data;
+	
+	//Sort waitLists in descending order by timestamp (oldest time stamp first) 
+		waitLists.sort(function(objA, objB) {
+			if (objA.Timestamp < objB.Timestamp)
+				return -1;
+			else
+				return 1;
+		});
+	}
+	
 	//Wipe page clean (remove previous existing content)
 	$('#page').html("");
 

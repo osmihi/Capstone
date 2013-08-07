@@ -40,7 +40,7 @@ class APIController {
 		try {
 			$this->response = new APIResponse();
 
-			$this->response->setHeaders(); // for debugging
+//			$this->response->setHeaders(); // for debugging
 
 			// Connect to the database
 			$this->dbc = new DbConnection();

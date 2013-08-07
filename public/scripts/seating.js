@@ -1,6 +1,15 @@
 function seatingScreen(waitList) {
 	selectedParty = waitList;
+
+	refreshFunc = function() {};
+
+	screen = "seating";
 	request("table", "", RequestType.READ, userInfo, "", buildSeatingScreen);
+
+	refreshFunc = function() {
+		request("table", "", RequestType.READ, userInfo, "", buildSeatingScreen);
+	};
+	
 }
 
 function buildSeatingScreen(response) {
@@ -37,16 +46,22 @@ function drawTableSeating(table) {
 		'<div id="tableSeating' + table.TableID + '" class="tableSeating ' + table.Status + '">' + 
 			'Number: ' + table.Number + '<br />' + 
 			'Capacity: ' + table.Capacity + '<br />' + 
-			'Status: ' + table.Status + '<br />' +
+			'<span class="tableSeatingStatus' + table.Status + '">Status: ' + table.Status + '</span><br />' +
 			'Assignee: <span class="assigneeUserID">' + userString + '</span><br />' + 
 		'</div>'
 	);
 
 	$('#tableSeating' + table.TableID + ".Available").click(function() {
 		request("table", table.TableID, RequestType.UPDATE, userInfo, "status=Occupied", function() {
-			request("waitlist", selectedParty.WaitListID, RequestType.DELETE, userInfo, "", waitListScreen, function() {
-				request("table", table.TableID, RequestType.UPDATE, userInfo, "status=Available", waitListScreen);
-			});
+			// TODO THIS CHECK DOESN'T WORK
+			if (selectedParty != null && selectedParty !== undefined) {
+				request("waitlist", selectedParty.WaitListID, RequestType.DELETE, userInfo, "", waitListScreen, function() {
+					request("table", table.TableID, RequestType.UPDATE, userInfo, "status=Available", waitListScreen);
+				});
+				selectedParty = null;
+			} else {
+				waitListScreen();
+			}
 		});
 	});
 }
