@@ -52,12 +52,11 @@ function populateOrderQueueTables(response){
 
 //Render the orderQueue screen
 function buildOrderQueueScreen() {
-	// Clear page
+	
 	$('#page').html("");
 	addMenuInfoToOrderItems();
 	addOrderItemsToOrders();
 	addTablesToOrders();
-	drawRefreshButton();
 	
 	if(allOrdersAreComplete()){
 		drawNoOrdersMessage();
@@ -74,16 +73,14 @@ function buildOrderQueueScreen() {
 			}
 		}
 	}
-	addClickFunctions();
-
+	addOrderQueueClickFunctions();
 }
 
-function addClickFunctions(){
+//Add click functions to clickable objects
+function addOrderQueueClickFunctions(){
 	$('.orderItem').click(function() {
-		alert("1");
 		var orderItemId = $(this).find('.orderItemIdHolder').val();
 		var orderItemStatusId = '#orderItemStatus' + orderItemId;
-		alert("2");
 		var orderItemStatus = $(orderItemStatusId).val();
 		if(orderItemStatus == 'New'){
 			$(this).attr('class', 'orderItem orderItemStatusInPrep');
@@ -95,17 +92,10 @@ function addClickFunctions(){
 				$(orderItemStatusId).val('Ready');
 				$(this).find('.orderItemStatusDisplay').html('Status: Ready')
 		}
-		alert("3");
 		updateOrderItemStatus(orderItemId, orderItemStatus);
 	});
 	
-	// orderQueueScreen() refreshes the whole screen
-	$('.orderQueueRefreshButton').click(function() {
-		orderQueueScreen();
-	});
 }
-
-
 
 
 // Adds Name, PrepTime, and Category properties to each orderItem
@@ -152,11 +142,6 @@ function addTablesToOrders(){
 	}
 }
 
-// Renders refresh button that is used to synch orderQueue screen data with database
-function drawRefreshButton(){
-	var refreshButton = '<div class="orderQueueRefreshButton"><h3>Refresh Page</h3></div>';
-	$('#page').append(refreshButton);
-}
 
 //Returns true if all orderItems in all orders are complete
 function allOrdersAreComplete(){
@@ -188,7 +173,7 @@ function sortOrders() {
 function sortOrderItems() {
 	for ( var i = 0; i < orderQueueOrders.length; i++) {
 		orderQueueOrders[i].orderItems.sort(function(objA, objB) {
-			if (objA.PrepTime > objB.PrepTime)
+			if (parseInt(objA.PrepTime) > parseInt(objB.PrepTime))
 				return -1;
 			else
 				return 1;
