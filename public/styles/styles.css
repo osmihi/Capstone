@@ -88,6 +88,7 @@ div#header {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 90%;
 	line-height: 1.2em;
+	cursor: pointer;
 }
 
 
@@ -260,6 +261,7 @@ div#header {
 img {
 	border:hidden
 }
+
 
 
 
