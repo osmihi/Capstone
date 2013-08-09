@@ -5,52 +5,42 @@ var orderQueueMenuItems;
 var orderQueueTables;
 var tempOrderItemID;
 
-// request(resource, key, rqType, userInfoString, dataString, successFunc, errorFunc)
+// request(resource, key, rqType, userInfoString, dataString, successFunc,
+// errorFunc)
 
 // request for all orders
 function orderQueueScreen() {
-	$('.navButton').css("font-weight", "normal");
-	$('.orderQueueScreen').css("font-weight", "bold");
-	
-	refreshFunc = function() {};
-	
 	request("order", "", RequestType.READ, userInfo, "",
 			populateOrderQueueOrders);
-	
-	refreshFunc = function() {
-		request("order", "", RequestType.READ, userInfo, "",
-			populateOrderQueueOrders);
-	};
 }
 
-//orderQueueOrders will hold the order data locally
 function populateOrderQueueOrders(response) {
 	orderQueueOrders = response.data;
 	request("orderItem", "", RequestType.READ, userInfo, "",
 			populateOrderQueueOrderItems);
 }
 
-//orderQueueOrderItems will hold orderItem data locally
+
 function populateOrderQueueOrderItems(response) {
 	orderQueueOrderItems = response.data;
 	request("menuItem", "", RequestType.READ, userInfo, "",
 			populateOrderQueueMenuItems);
 }
 
-// orderQueueMenuItems will hold menuItem data locally
+
 function populateOrderQueueMenuItems(response) {
 	orderQueueMenuItems = response.data;
 	request("table", "", RequestType.READ, userInfo, "",
 			populateOrderQueueTables);
 }
 
-// orderQueueTables will hold tables locally
+
 function populateOrderQueueTables(response){
 	orderQueueTables = response.data;
 	buildOrderQueueScreen();
 }
 
-//Render the orderQueue screen
+
 function buildOrderQueueScreen() {
 	// Clear page
 	$('#page').html("");
@@ -70,8 +60,7 @@ function buildOrderQueueScreen() {
 		// Draw orderQueue
 		for ( var i = 0; i < orderQueueOrders.length; i++) {
 			if(!orderQueueOrders[i].allOrderItemsComplete){
-				drawOrderDiv(orderQueueOrders[i]);
-				drawOrderItems(orderQueueOrders[i]);			
+				drawOrder(orderQueueOrders[i]);				
 			}
 		}
 		addClickEvents();
@@ -80,7 +69,7 @@ function buildOrderQueueScreen() {
 }
 
 
-// Adds Name, PrepTime, and Category properties to each orderItem
+
 function addMenuInfoToOrderItems() {
 	for ( var i = 0; i < orderQueueOrderItems.length; i++) {
 		for ( var j = 0; j < orderQueueMenuItems.length; j++) {
@@ -93,7 +82,7 @@ function addMenuInfoToOrderItems() {
 	}
 }
 
-// Adds orderItems to their parent order
+
 function addOrderItemsToOrders() {
 	for ( var i = 0; i < orderQueueOrders.length; i++) {
 		var allOrderItemsComplete = true;
@@ -113,7 +102,8 @@ function addOrderItemsToOrders() {
 }
 
 
-// Adds table number to each order
+
+
 function addTablesToOrders(){
 	for ( var i = 0; i < orderQueueOrders.length; i++) {
 		for ( var j = 0; j < orderQueueTables.length; j++) {
@@ -124,13 +114,12 @@ function addTablesToOrders(){
 	}
 }
 
-// Renders refresh button that is used to synch orderQueue screen data with database
 function drawRefreshButton(){
 	var refreshButton = '<div class="orderQueueRefreshButton"><h3>Refresh Page</h3></div>';
 	$('#page').append(refreshButton);
 }
 
-//Returns true if all orderItems in all orders are complete
+
 function allOrdersAreComplete(){
 	for(var i=0; i<orderQueueOrders.length; i++ ){
 		if(!orderQueueOrders[i].allOrderItemsComplete){
@@ -140,14 +129,16 @@ function allOrdersAreComplete(){
 	return true;
 }
 
-// Indicates that all orders have been completed
+
 function drawNoOrdersMessage(){
 	var noOrdersMessage = '<div class="noOrders"><h1>There are currently no orders in the queue.</h1></div>';
 	$('#page').append(noOrdersMessage);		
 }
 
-// Sorts orders FIFO
+
+
 function sortOrders() {
+	// Sort orders
 	orderQueueOrders.sort(function(objA, objB) {
 		if (objA.Timestamp < objB.Timestamp)
 			return -1;
@@ -156,8 +147,8 @@ function sortOrders() {
 	});
 }
 
-// Sorts orderItems for each order in order of longest prep time first
 function sortOrderItems() {
+	// Sort orderItems
 	for ( var i = 0; i < orderQueueOrders.length; i++) {
 		orderQueueOrders[i].orderItems.sort(function(objA, objB) {
 			if (objA.PrepTime > objB.PrepTime)
@@ -169,7 +160,12 @@ function sortOrderItems() {
 }
 
 
-//Renders the order div 
+function drawOrder(order) {
+	drawOrderDiv(order);
+	drawOrderItems(order)
+}
+
+
 function drawOrderDiv(order) {
 	var tableString = $.isNumeric(order.tableNumber) ? order.tableNumber : "None";
 	var orderHeadingString = '<div id="order' + order.OrderID
@@ -181,15 +177,14 @@ function drawOrderDiv(order) {
 	$('#page').append(orderHeadingString)
 }
 
-// Renders the order item divs inside of their parent order div
+
  function drawOrderItems(order) {
 	 var orderItems = order.orderItems;
 	 for (i = 0; i < orderItems.length; i++) {
 		 var orderItemString =
 			 '<div id="orderItem' + orderItems[i].OrderItemID + '" class="orderItem orderItemStatus' + orderItems[i].Status + '">';
 		 orderItemString += '<input type="hidden" class="orderItemIdHolder" value="'+orderItems[i].OrderItemID +'"/>';
-		 orderItemString += '<input type="hidden" class="orderItemStatusHolder" id="orderItemStatus'+ orderItems[i].OrderItemID +'" value="'+orderItems[i].Status +'"/>';
-		 orderItemString += '<div class="orderItemInfo orderItemStatusDisplay">Status: ' + orderItemStatusString(orderItems[i]) + '</div>';
+		 orderItemString += '<div class="orderItemInfo orderItemStatus">Status: ' + orderItemStatusString(orderItems[i]) + '</div>';
 		 orderItemString += '<div class="orderItemInfo orderItemName">' + orderItems[i].Name +'</div>';
 		 orderItemString += '<div class="orderItemInfo orderItemCategory">' + orderItems[i].Category +'</div>';
 		 if(orderItems[i].Notes){
@@ -205,57 +200,52 @@ function drawOrderDiv(order) {
 	}
 }
 
-// Returns the status string to be displayed on screen for an order item
 function orderItemStatusString(orderItem){
 	 if (orderItem.Status == "Ready"){ return 'Ready'; }
 	 else if (orderItem.Status == "InPrep"){ return 'In Prep'; }
 	 return 'New'; 
 }
  
-// Add click events to order item divs and the refresh button
+ 
 function addClickEvents() {
-	//Status update
 	$('.orderItem').click(function() {
 		var orderItemId = $(this).find('.orderItemIdHolder').val();
-		var orderItemStatusId = '#orderItemStatus' + orderItemId;
-		var orderItemStatus = $(orderItemStatusId).val();
-		if(orderItemStatus == 'New'){
-			$(this).attr('class', 'orderItem orderItemStatusInPrep');
-			$(orderItemStatusId).val('InPrep');
-			$(this).find('.orderItemStatusDisplay').html('Status: In Prep');
-		}
-		else{			
-				$(this).attr('class', 'orderItem orderItemStatusReady');
-				$(orderItemStatusId).val('Ready');
-				$(this).find('.orderItemStatusDisplay').html('Status: Ready')
-		}
-		updateOrderItemStatus(orderItemId, orderItemStatus);
+		tempOrderItemID = orderItemId;
+		getOrderItemForStatusUpdate(orderItemId);
 	});
 	
-	// orderQueueScreen() refreshes the whole screen
 	$('.orderQueueRefreshButton').click(function() {
 		orderQueueScreen();
 	});
 }
 
-//Update orderItem status on database
-function updateOrderItemStatus(orderItemId, orderItemStatus) {
-	var currentStatus = orderItemStatus;
+function getOrderItemForStatusUpdate(orderItemId) {
+	request("orderItem", orderItemId, RequestType.READ, userInfo, "",
+			setOrderItemStatus);
+}
+
+function setOrderItemStatus(response) {
+	var orderItem = response.data[0];
+	var currentStatus = orderItem.Status;
 	var newStatus = "InPrep";
 	if (currentStatus == "InPrep") {
 		newStatus = "Ready";
 	} else if (currentStatus == "Ready") {
 		return;
 	}
-	request("orderItem", orderItemId, RequestType.UPDATE, userInfo,
+	request("orderItem", orderItem.OrderItemID, RequestType.UPDATE, userInfo,
 			"Status=" + newStatus, updateStatusDisplay);
 }
 
-//Hide completed orders
 function updateStatusDisplay(response){
+	if(response.data[0] == null){
+		alert("null");
+	}
 	var orderItem = response.data[0];
 	var orderItemDivId = '#orderItem' + orderItem.OrderItemID;
 	var orderItemDivClass = 'orderItem orderItemStatus' + orderItem.Status;
+	$(orderItemDivId).attr('class', orderItemDivClass);
+	$(orderItemDivId).find('.orderItemStatus').html('Status: ' + orderItemStatusString(orderItem)); 
 	var orderDivID = '#order' + orderItem.OrderID;
 	var newOrderItems = $(orderDivID).find('.orderItemStatusNew');
 	var inPrepOrderItems = $(orderDivID).find('.orderItemStatusInPrep');
@@ -269,5 +259,12 @@ function updateStatusDisplay(response){
 	}
 }
 
-
+function getOrder(orderID){
+	for(var i = 0; i < orderQueueOrders.length; i++){
+		if(orderQueueOrders[i].OrderID == orderID){
+			return orderQueueOrders[i];
+		}
+	}
+	return null;
+}
 
