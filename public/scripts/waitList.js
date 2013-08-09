@@ -1,5 +1,6 @@
 //Called to render waitList screen
 function waitListScreen() {
+	partyIsSelected = false;
 	refreshFunc = function() {};
 	
 	//API call: request(resource, key, rqType, userInfoString, dataString, successFunc, errorFunc)
@@ -76,6 +77,7 @@ function drawWaitlist(waitList) {
 
 	//Add click function to waitlist div - show seating screen
 	$('#waitList' + waitList.WaitListID).click(function() {
+		partyIsSelected = true;
 		seatingScreen(waitList);
 	});
 }

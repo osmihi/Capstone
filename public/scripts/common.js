@@ -3,6 +3,7 @@ var userID;
 var userRole;
 
 var selectedParty = null;
+var partyIsSelected = false;
 var selectedTable;
 
 var refreshFunc = function() {};

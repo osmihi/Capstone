@@ -1,5 +1,8 @@
+
 function seatingScreen(waitList) {
+	if(partyIsSelected){
 	selectedParty = waitList;
+	}
 
 	refreshFunc = function() {};
 
@@ -9,8 +12,9 @@ function seatingScreen(waitList) {
 	refreshFunc = function() {
 		request("table", "", RequestType.READ, userInfo, "", buildSeatingScreen);
 	};
-	
 }
+
+
 
 function buildSeatingScreen(response) {
 	$('#page').html("");
@@ -51,17 +55,18 @@ function drawTableSeating(table) {
 		'</div>'
 	);
 
-	$('#tableSeating' + table.TableID + ".Available").click(function() {
-		request("table", table.TableID, RequestType.UPDATE, userInfo, "status=Occupied", function() {
-			// TODO THIS CHECK DOESN'T WORK
-			if (selectedParty != null && selectedParty !== undefined) {
-				request("waitlist", selectedParty.WaitListID, RequestType.DELETE, userInfo, "", waitListScreen, function() {
-					request("table", table.TableID, RequestType.UPDATE, userInfo, "status=Available", waitListScreen);
-				});
-				selectedParty = null;
-			} else {
-				waitListScreen();
-			}
+	if (partyIsSelected) {
+		$('#tableSeating' + table.TableID + ".Available").click(function() {
+			request("table", table.TableID, RequestType.UPDATE, userInfo, "status=Occupied", function() {
+					request("waitlist", selectedParty.WaitListID, RequestType.DELETE, userInfo, "", waitListScreen, function() {
+						request("table", table.TableID, RequestType.UPDATE, userInfo, "status=Available", waitListScreen);
+					});
+					selectedParty = null;
+			});
 		});
-	});
+	}else{
+		$('#tableSeating' + table.TableID + ".Available").click(function() {
+			waitListScreen();
+		});
+	}
 }
