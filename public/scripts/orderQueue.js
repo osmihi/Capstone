@@ -60,7 +60,6 @@ function buildOrderQueueScreen() {
 	drawRefreshButton();
 	
 	if(allOrdersAreComplete()){
-		alert("allOrdersAreComplete()");
 		drawNoOrdersMessage();
 	}
 	else{
@@ -75,10 +74,38 @@ function buildOrderQueueScreen() {
 			}
 		}
 	}
-	addClickEvents();
-	alert("after add click");
+	addClickFunctions();
 
 }
+
+function addClickFunctions(){
+	$('.orderItem').click(function() {
+		alert("1");
+		var orderItemId = $(this).find('.orderItemIdHolder').val();
+		var orderItemStatusId = '#orderItemStatus' + orderItemId;
+		alert("2");
+		var orderItemStatus = $(orderItemStatusId).val();
+		if(orderItemStatus == 'New'){
+			$(this).attr('class', 'orderItem orderItemStatusInPrep');
+			$(orderItemStatusId).val('InPrep');
+			$(this).find('.orderItemStatusDisplay').html('Status: In Prep');
+		}
+		else{			
+				$(this).attr('class', 'orderItem orderItemStatusReady');
+				$(orderItemStatusId).val('Ready');
+				$(this).find('.orderItemStatusDisplay').html('Status: Ready')
+		}
+		alert("3");
+		updateOrderItemStatus(orderItemId, orderItemStatus);
+	});
+	
+	// orderQueueScreen() refreshes the whole screen
+	$('.orderQueueRefreshButton').click(function() {
+		orderQueueScreen();
+	});
+}
+
+
 
 
 // Adds Name, PrepTime, and Category properties to each orderItem
@@ -213,35 +240,7 @@ function orderItemStatusString(orderItem){
 	 return 'New'; 
 }
  
-// Add click events to order item divs and the refresh button
-function addClickEvents() {
-	alert("hi");
-	//Status update
-	$('.orderItem').click(function() {
-		alert("1");
-		var orderItemId = $(this).find('.orderItemIdHolder').val();
-		var orderItemStatusId = '#orderItemStatus' + orderItemId;
-		alert("2");
-		var orderItemStatus = $(orderItemStatusId).val();
-		if(orderItemStatus == 'New'){
-			$(this).attr('class', 'orderItem orderItemStatusInPrep');
-			$(orderItemStatusId).val('InPrep');
-			$(this).find('.orderItemStatusDisplay').html('Status: In Prep');
-		}
-		else{			
-				$(this).attr('class', 'orderItem orderItemStatusReady');
-				$(orderItemStatusId).val('Ready');
-				$(this).find('.orderItemStatusDisplay').html('Status: Ready')
-		}
-		alert("3");
-		updateOrderItemStatus(orderItemId, orderItemStatus);
-	});
-	
-	// orderQueueScreen() refreshes the whole screen
-	$('.orderQueueRefreshButton').click(function() {
-		orderQueueScreen();
-	});
-}
+
 
 //Update orderItem status on database
 function updateOrderItemStatus(orderItemId, orderItemStatus) {
