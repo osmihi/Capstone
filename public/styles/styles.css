@@ -224,6 +224,15 @@ div#header {
 	background-color:yellow;
 }
 
+.billPay {
+	cursor:pointer;
+	border: 2px inset gray;
+	display:inline;
+	float:right;
+	background-color:orange;
+}
+
+
 .drawMenu {
 	border: 2px solid red;
 	padding: 5px;

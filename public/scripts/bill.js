@@ -7,50 +7,32 @@
 // can add discounts to the bill too I suppose
 // and need tips too
 
-var Bill = function (tableID) {
-	this.tableID = tableID;
-};
-
-Bill.prototype.setOrderData = function(data) {
-	this.orderData = data;
-};
-
-Bill.prototype.setOrderItemData = function(data) {
-	this.orderItemData = data;
-};
-
-Bill.prototype.setMenuItemData = function(data) {
-	this.menuItemData = data;
-};
-
-Bill.prototype.setTipData = function(data) {
-	this.tipData = data;
-}
-
-Bill.prototype.setDiscountedData = function(data) {
-	this.discountedData = data;
-}
-
-Bill.prototype.setDiscountData = function(data) {
-	this.discountData = data;
-}
-
 function billScreen() {
 	refreshFunc = function() {};
+	
+	selectedBill = new Bill(selectedTable.TableID);
+}
 
-	request("order", "", RequestType.READ, userInfo, "&tableID=" + selectedTable.TableID, function(response) {
-		billScreen.orderData = response.data;
+// Define the Bill "class"
+var Bill = function (tableID) {
+	var _this = this; // _this is used so that we can reference the object scope in nested functions
+	this.tableID = tableID;
+	
+	request("order", "", RequestType.READ, userInfo, "&tableID=" + tableID, function(response) {
+		_this.orderData = response.data;
 		request("orderItem", "", RequestType.READ, userInfo, "", function(response) {
-			billScreen.orderItemData = response.data;
+			_this.orderItemData = response.data;
 			request("menuItem", "", RequestType.READ, userInfo, "", function(response) {
-				billScreen.menuItemData = response.data;
-				request("tip", "", RequestType.READ, userInfo, "&tableID=" + selectedTable.TableID, function(response) {
-					billScreen.tipData = response.data;
-					request("discounted", "", RequestType.READ, userInfo, "&tableID=" + selectedTable.TableID, function(response) {
-						billScreen.discountedData = response.data;
+				_this.menuItemData = response.data;
+				request("tip", "", RequestType.READ, userInfo, "&tableID=" + tableID, function(response) {
+					_this.tipData = response.data;
+					request("discounted", "", RequestType.READ, userInfo, "&tableID=" + tableID, function(response) {
+						_this.discountedData = response.data;
 						request("discount", "", RequestType.READ, userInfo, "", function(response) {
-							billScreen.discountData = response.data;
-							buildBillScreen();
+							_this.discountData = response.data;
+							_this.assembleData();
+							_this.recalculate();
+							_this.draw();
 						});
 					});
 				});
@@ -59,88 +41,223 @@ function billScreen() {
 	}, function(response) {
 		alert("No orders have been placed at this table yet.");
 	});
-}
+};
 
-function buildBillScreen() {
-	$('#page').html("");
-	
+Bill.prototype.assembleData = function() {
 	// assemble nested data structures
-	for (var i = 0; i < billScreen.orderData.length; i++) {
-		if (billScreen.orderData[i].TableID == selectedTable.TableID) {
-			billScreen.orderData[i].orderItems = new Array();
-			for (var j = 0; j < billScreen.orderItemData.length; j++) {
-				if (billScreen.orderItemData[j].OrderID == billScreen.orderData[i].OrderID) {
-					billScreen.orderData[i].orderItems.push(billScreen.orderItemData[j]);
+	for (var i = 0; i < this.orderData.length; i++) {
+		if (this.orderData[i].TableID == this.tableID) {
+			this.orderData[i].orderItems = new Array();
+			for (var j = 0; j < this.orderItemData.length; j++) {
+				if (this.orderItemData[j].OrderID == this.orderData[i].OrderID) {
+					this.orderData[i].orderItems.push(this.orderItemData[j]);
 				}
 			}
 		} else {
 			// remove order from the array if it's not for this table
-			billScreen.orderData.splice(i, 1);
+			this.orderData.splice(i, 1);
 		}
 	}
 
-	for (var i = 0; i < billScreen.orderData.length; i++) {
-		for (var j = 0; j < billScreen.orderData[i].orderItems.length; j++) {
-			for (var k = 0; k < billScreen.menuItemData.length; k++) {
-				if (billScreen.menuItemData[k].MenuItemID == billScreen.orderData[i].orderItems[j].MenuItemID) {
-					billScreen.orderData[i].orderItems[j].menuItem = billScreen.menuItemData[k]; 
+	for (var i = 0; i < this.orderData.length; i++) {
+		for (var j = 0; j < this.orderData[i].orderItems.length; j++) {
+			for (var k = 0; k < this.menuItemData.length; k++) {
+				if (this.menuItemData[k].MenuItemID == this.orderData[i].orderItems[j].MenuItemID) {
+					this.orderData[i].orderItems[j].menuItem = this.menuItemData[k]; 
 				}
 			}
 		}
 	}
 
-	for (var i = 0; i < billScreen.discountedData.length; i++) {
-		for (var j = 0; j < billScreen.discountData.length; j++) {
-			if (billScreen.discountedData[i].DiscountID == billScreen.discountData[j].DiscountID) {
-				billScreen.discountedData[i].discount = billScreen.discountData[j];
+	for (var i = 0; i < this.discountedData.length; i++) {
+		for (var j = 0; j < this.discountData.length; j++) {
+			if (this.discountedData[i].DiscountID == this.discountData[j].DiscountID) {
+				this.discountedData[i].discount = this.discountData[j];
 			}
 		}
 	}
 
-	delete billScreen.menuItemData;
-	delete billScreen.orderItemData;
-	delete billScreen.discountData;
+	delete this.menuItemData;
+	delete this.orderItemData;
+	delete this.discountData;
 
 	// Sort by Timestamp. Not really necessary, but hey
-	billScreen.orderData.sort(function(a, b) {
+	this.orderData.sort(function(a, b) {
 		if (a.Timestamp < b.Timestamp) return -1;
 		else return 1;
+	});	
+};
+
+Bill.prototype.recalculate = function() {
+	this.billTotal = 0;
+	
+	this.billItems = new Array();
+
+	// Order Items
+	for (var i = 0; i < this.orderData.length; i++) {
+		for (var j = 0; j < this.orderData[i].orderItems.length; j++) {
+			var thisPrice = Number(this.orderData[i].orderItems[j].PurchasePrice); 
+			
+			this.billItems.push(new Array(
+				'orderItem',
+				this.orderData[i].orderItems[j].OrderItemID,
+				this.orderData[i].orderItems[j].menuItem.Name, 
+				thisPrice
+			));
+			
+			this.billTotal += thisPrice;
+		}
+	}
+
+	// Discounts
+	for (var i = 0; i < this.discountedData.length; i++) {		
+		var thisDiscount;
+		
+		if (this.discountedData[i].discount.Type == "Percent") {
+			thisDiscount = Number(this.discountedData[i].discount.Value) / 100 * this.billTotal * -1;
+		} else {
+			thisDiscount = Number(this.discountedData[i].discount.Value) * -1;
+		}
+
+		this.billItems.push(new Array(
+			'discount',
+			this.discountedData[i].discount.DiscountID,
+			this.discountedData[i].discount.DiscountCode,
+			thisDiscount
+		));
+		
+		this.billTotal += thisDiscount;
+	}
+
+	// Tip(s)
+	for (var i = 0; i < this.tipData.length; i++) {
+		var thisTip = Number(this.tipData[i].Amount); 
+		
+		this.billItems.push(new Array(
+			'tip',
+			this.tipData[i].TipID,
+			'Gratuity',
+			thisTip
+		));
+		
+		this.billTotal += thisTip;
+	}
+
+	// Total
+	this.billTotal = Math.round(this.billTotal * 100) / 100;
+	
+	this.billItems.push(new Array(
+		'total',
+		'',
+		'Total',
+		this.billTotal
+	));
+}
+
+Bill.prototype.draw = function() {
+	var _this = this;
+
+	$('#page').html("");
+	
+	console.log(this);
+
+	// print button
+	var printButton = $('<div id="billPrint" class="billPrint">' + 'Print' + '</div>');
+	$(printButton).click(function() {
+		_this.printBill();
+	});
+	
+	// pay button
+	var payButton = $('<div id="billPay" class="billPay">' + 'Pay Bill' + '</div>');
+	$(payButton).click(function() {
+		_this.payBill();
 	});
 
-	// Write the bill data to the screen
-	drawBill();
+	// list of bill items
+		// 'x' by each
+		// if manager, order item prices are editable
+	
+	// add tip 
+	// add discount 
+	
+	$('#page').append(printButton);
+	$('#page').append(payButton);
+};
 
+Bill.prototype.drawBill = function() {
+	
 }
 
-// sets a decimal, returns a string
-billScreen.calculateTotal = function() {
-	billScreen.billTotal = 0;
-	for (var i = 0; i < billScreen.orderData.length; i++) {
-		for (var j = 0; j < billScreen.orderData[i].orderItems.length; j++) {
-			billScreen.billTotal += money(billScreen.orderData[i].orderItems[j].PurchasePrice);
-		}
-	}
+Bill.prototype.payBill = function() {
+	console.log('Here\'s where the bill would be paid.');
+}
 
-	billScreen.discountAmounts = new Array();
+Bill.prototype.printBill = function() {
+	this.recalculate();
+	var printWin = window.open('', 'PrintWindow', 'width=480,height=640,top=50,left=50,toolbars=no,scrollbars=yes,status=no,resizable=yes');
+	printWin.document.writeln('<html><body><pre><div id="billPrintout"></div></pre></body></html>');
+		
+	var billTitle = $('<span>' + 'Thank you for dining at ' + restaurant.Name + '!' + '</span><br /><br />');
+	
+	var curDateTime = new Date();
+	
+	var billDate = $('<span>' + curDateTime.toLocaleDateString() + ' ' + curDateTime.toLocaleTimeString() + '</span><br /><br />');
 
-	for (var i = 0; i < billScreen.discountedData.length; i++) {
-		if (billScreen.discountedData[i].discount.Type == "Percent") {
-			billScreen.discountAmounts[i] = money( (Number(billScreen.discountedData) / 100) * billScreen.billTotal);
+	var printTable = $(
+		'<table id="printTable">' +
+		'</table>'
+	);
+
+	for (var i = 0; i < this.billItems.length; i++) {
+		var itemName;
+
+		if (this.billItems[i][0] == 'discount') {
+			itemName = "Discount: " + this.billItems[i][2]; 
 		} else {
-			billScreen.discountAmounts[i] = money(billScreen.discountedData[i].discount.Value);
+			itemName = this.billItems[i][2];
+		}
+
+		var thisRow = $(
+			'<tr>' +
+				'<td>' +
+					itemName + 
+				'</td>' +
+				'<td>' +
+					'            ' + 
+				'</td>' +
+				'<td style="text-align:right;">' +
+					Number(this.billItems[i][3]).toFixed(2) + 
+				'</td>' +
+			'</tr>'
+		);
+
+		if (this.billItems[i][0] == 'total') {
+			if (this.tipData.length < 1) {
+				printTable.append('<tr><td>Gratuity</td><td></td><td></td>__________</tr>');
+				printTable.append('<tr><td></td><td></td><td></td></tr>');
+			}
+			
+			printTable.append('<tr><td></td><td></td><td></td></tr>');
 		}
 		
-		billScreen.billTotal -= billScreen.discountAmounts[i];
+		printTable.append(thisRow);
+	};
+
+	var signatureLine = $('<br/><br /><br /><span>Signature: </span> <span>_______________________________</span>');
+
+	$('#billPrintout', printWin.document).append(billTitle);
+	$('#billPrintout', printWin.document).append(billDate);
+	$('#billPrintout', printWin.document).append(printTable);
+	$('#billPrintout', printWin.document).append(signatureLine);
 		
-	}
+	printWin.document.close();
+	//printWin.window.location.reload();
+	printWin.focus();
+	printWin.print();
+	printWin.close();
+};
 
-	for (var i = 0; i < billScreen.tipData.length; i++) {
-		billScreen.billTotal += money(billScreen.tipData[i].Amount);
-	}
-
-	return parseFloat(billScreen.billTotal).toFixed(2);
-}
-
+// leftover functions, to be deleted.
 function drawBill() {
 
 	var totalBill = billScreen.calculateTotal();

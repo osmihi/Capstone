@@ -2,9 +2,13 @@ var userInfo;
 var userID;
 var userRole;
 
+var restaurant;
+
 var selectedParty = null;
 var partyIsSelected = false;
 var selectedTable;
+
+var selectedBill = null;
 
 var refreshFunc = function() {};
 
