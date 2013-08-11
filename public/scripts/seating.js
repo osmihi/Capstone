@@ -1,10 +1,14 @@
 
 function seatingScreen(waitList) {
-	if(partyIsSelected){
-	selectedParty = waitList;
-	}
 
 	refreshFunc = function() {};
+	
+	if(partyIsSelected){
+		selectedParty = waitList;
+		}
+	
+	$('.navButton').css("font-weight", "normal");
+	$('.seatingScreen').css("font-weight", "bold");
 
 	screen = "seating";
 	request("table", "", RequestType.READ, userInfo, "", buildSeatingScreen);
