@@ -1,13 +1,9 @@
-// tables screen will show all the tables at the restaurant
-// each has a status-- different color
-// user can:
-// clear status (change occupied to available)
-// set the assignee
-// create a new table, if manager
-// go to bill page
 
 function tablesScreen() {
 	refreshFunc = function() {};
+	
+	$('.navButton').css("font-weight", "normal");
+	$('.tablesScreen').css("font-weight", "bold");
 	
 	request("user", "", RequestType.READ, userInfo, "role=Wait Staff", 
 		function(response) {

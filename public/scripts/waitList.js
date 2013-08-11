@@ -3,6 +3,9 @@ function waitListScreen() {
 	partyIsSelected = false;
 	refreshFunc = function() {};
 	
+	$('.navButton').css("font-weight", "normal");
+	$('.waitListScreen').css("font-weight", "bold");
+	
 	//API call: request(resource, key, rqType, userInfoString, dataString, successFunc, errorFunc)
 	request("waitlist", "", RequestType.READ, userInfo, "", buildWaitListScreen, buildWaitListScreen);
 }

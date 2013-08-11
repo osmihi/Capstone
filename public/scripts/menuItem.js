@@ -1,5 +1,7 @@
 //Called to render Menu Item screen
 function menuScreen() {
+	$('.navButton').css("font-weight", "normal");
+	$('.menuScreen').css("font-weight", "bold");
 	
 	refreshFunc = function() {};
 	

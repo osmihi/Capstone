@@ -4,6 +4,9 @@ function usersScreen() {
 	
 	refreshFunc = function() {};
 	
+	$('.navButton').css("font-weight", "normal");
+	$('.usersScreen').css("font-weight", "bold");
+	
 	// API call: request(resource, key, rqType, userInfoString, dataString,
 	// successFunc, errorFunc)
 	request("user", "", RequestType.READ, userInfo, "", buildUsersScreen);
