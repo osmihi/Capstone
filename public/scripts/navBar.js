@@ -28,6 +28,11 @@ function buildLogin() {
 	$('#header').html("");
 
 	$('#header').append(
+		'<div id="logo">' +
+			'<a href="http://www.ordrupapp.com/">' +
+				'<img src="/res/logo.png" width="276" height="123"/>' + 
+			'</a>' + 
+		'</div>' +
 		'<form id="loginForm" action="javascript:void(0);">' +
 			'<label for="username">Username </label>' +
 			'<input type="text" id="username" name="username">' + '</input>' + '<br />' +
