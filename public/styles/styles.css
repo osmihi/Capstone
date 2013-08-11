@@ -246,6 +246,7 @@ div#header {
 }
 
 .billItem {
+	cursor:default;
 	clear:both;
 	background-color:#9999FF;
 	border:2px solid black;
@@ -269,6 +270,7 @@ div#header {
 }
 
 .billItemName {
+	cursor:default;
 	display:inline-block;
 }
 
@@ -326,7 +328,3 @@ div#header {
 img {
 	border:hidden
 }
-
-
-
-

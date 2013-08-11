@@ -19,17 +19,17 @@ var Bill = function (tableID) {
 	this.tableID = tableID;
 
 	request("order", "", RequestType.READ, userInfo, "&tableID=" + tableID, function(response) {
-		_this.orderData = response.data;
+		_this.orderData = response.data !== undefined ? response.data : new Array();
 		request("orderItem", "", RequestType.READ, userInfo, "", function(response) {
-			_this.orderItemData = response.data;
+			_this.orderItemData = response.data !== undefined ? response.data : new Array();
 			request("menuItem", "", RequestType.READ, userInfo, "", function(response) {
-				_this.menuItemData = response.data;
+				_this.menuItemData = response.data !== undefined ? response.data : new Array();
 				request("tip", "", RequestType.READ, userInfo, "&tableID=" + tableID, function(response) {
-					_this.tipData = response.data;
+					_this.tipData = response.data !== undefined ? response.data : new Array();
 					request("discounted", "", RequestType.READ, userInfo, "&tableID=" + tableID, function(response) {
-						_this.discountedData = response.data;
+						_this.discountedData = response.data !== undefined ? response.data : new Array();
 						request("discount", "", RequestType.READ, userInfo, "", function(response) {
-							_this.discountData = response.data;
+							_this.discountData = response.data !== undefined ? response.data : new Array();
 							_this.assembleData();
 							_this.recalculate();
 							_this.draw();
@@ -315,7 +315,12 @@ Bill.prototype.drawBillItems = function() {
 }
 
 Bill.prototype.payBill = function() {
-	console.log('Here\'s where the bill would be paid.');
+	var ccNum = prompt('Swipe credit card.', '');
+	if (ccNum.length > 0) {
+		alert('Payment accepted.');
+	} else {
+		alert('Payment rejected.');
+	}
 }
 
 Bill.prototype.printBill = function() {
