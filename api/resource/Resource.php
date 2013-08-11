@@ -179,8 +179,8 @@ abstract class Resource {
 		}
 
 		$res = $this->db->execute($stmt);
-		
-		if ( !$res or count($res) < 1 ) return false;
+
+		if ( !$res ) return array();
 
 		$resources = array();
 

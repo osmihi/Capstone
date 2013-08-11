@@ -232,6 +232,49 @@ div#header {
 	background-color:orange;
 }
 
+.billItem {
+	clear:both;
+	background-color:#9999FF;
+	border:2px solid black;
+	margin:2px;
+	padding:2px;
+}
+
+.billItem.total {
+	font-weight:bold;
+}
+
+.billItemDelete {
+	cursor:pointer;
+	display:inline-block;
+	border:2px outset gray;
+}
+
+.billItemNoDelete {
+	cursor:pointer;
+	display:inline-block;
+}
+
+.billItemName {
+	display:inline-block;
+}
+
+.billItemPrice {
+	display:inline-block;
+	float:right;
+}
+
+.price {
+
+}
+
+.priceEdit {
+
+}
+
+.priceNoEdit {
+
+}
 
 .drawMenu {
 	border: 2px solid red;

@@ -94,7 +94,7 @@ class APIController {
 					break; 
 			}
 
-			if ( !$result ) throw new Exception("The request could not be carried out. The selected resource may not exist, or all required fields may not have been provided.", 206);
+			if ( !$result && !is_array($result) ) throw new Exception("The request could not be carried out. The selected resource may not exist, or all required fields may not have been provided.", 206);
 
 			foreach($result as $r) {
 				$this->response->addData($r->getJson());

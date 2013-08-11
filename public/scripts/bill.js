@@ -17,7 +17,7 @@ function billScreen() {
 var Bill = function (tableID) {
 	var _this = this; // _this is used so that we can reference the object scope in nested functions
 	this.tableID = tableID;
-	
+
 	request("order", "", RequestType.READ, userInfo, "&tableID=" + tableID, function(response) {
 		_this.orderData = response.data;
 		request("orderItem", "", RequestType.READ, userInfo, "", function(response) {
@@ -121,7 +121,7 @@ Bill.prototype.recalculate = function() {
 
 		this.billItems.push(new Array(
 			'discount',
-			this.discountedData[i].discount.DiscountID,
+			this.discountedData[i].DiscountedID,
 			this.discountedData[i].discount.DiscountCode,
 			thisDiscount
 		));
@@ -158,34 +158,101 @@ Bill.prototype.draw = function() {
 	var _this = this;
 
 	$('#page').html("");
-	
-	console.log(this);
+
+	var billHeader = $('<div class="billHeader">Table ' + selectedTable.Number + ' Bill</div>');
 
 	// print button
 	var printButton = $('<div id="billPrint" class="billPrint">' + 'Print' + '</div>');
 	$(printButton).click(function() {
 		_this.printBill();
 	});
-	
+
 	// pay button
 	var payButton = $('<div id="billPay" class="billPay">' + 'Pay Bill' + '</div>');
 	$(payButton).click(function() {
 		_this.payBill();
 	});
 
-	// list of bill items
-		// 'x' by each
-		// if manager, order item prices are editable
-	
-	// add tip 
-	// add discount 
-	
-	$('#page').append(printButton);
-	$('#page').append(payButton);
+	// list of bill items // 'x' by each // if manager, order item prices are editable
+	var billItems = this.drawBillItems();
+
+	// add tip
+	// add discount
+
+	$(billHeader).append(printButton);
+	$(billHeader).append(payButton);
+	$('#page').append(billHeader);
+	$('#page').append(billItems);
 };
 
-Bill.prototype.drawBill = function() {
+Bill.prototype.drawBillItems = function() {
+	var _this = this;
+
+	var billItems = $('<div id="billItems"></div>');
 	
+	for (var i = 0; i < this.billItems.length; i++) {
+		var name;
+
+		if (this.billItems[i][0] == 'discount') {
+			name = "Discount: " + this.billItems[i][2]; 
+		} else {
+			name = this.billItems[i][2];
+		}
+
+		var thisBillItem = $('<div id="billItem' + i + '" class="billItem ' + this.billItems[i][0] + '"></div>');
+
+		var rsc = this.billItems[i][0] == 'discount' ? 'discounted' : this.billItems[i][0];
+
+		$(thisBillItem).append('<input type="hidden" id="billItem' + i + 'ID" class="billItemID" value="' + this.billItems[i][1] + '"/>');
+		$(thisBillItem).append('<input type="hidden" id="billItem' + i + 'Rsc" class="billItemRsc" value="' + rsc + '"/>');
+		
+		var delBtn;
+
+		if (this.billItems[i][0] != 'total') {
+			delBtn = $(
+				'<div id="billItemDelete' + i + '" class="billItemDelete">' + 
+					'Delete' + 
+				'</div>'
+			);
+			
+			$(delBtn).click(function() {
+				var thisID = $('.billItemID', $(this).parent()).val();
+				var thisRsc = $('.billItemRsc', $(this).parent()).val();
+
+				request(thisRsc, thisID, RequestType.DELETE, userInfo, '', billScreen, billScreen);
+			});
+
+		} else {
+			delBtn = $('<div class="billItemNoDelete"></div>');
+		}
+
+		var itemName = $('<div class="billItemName">' + name + '</div>');
+
+		var itemPrice;
+		
+		if (userRole == 'Manager' && this.billItems[i][0] != 'total' && this.billItems[i][0] != 'discount' ) {
+			itemPrice = $('<div class="billItemPrice"><input id="billItem' + i + 'Price" class="price priceEdit" value="' + Number(this.billItems[i][3]).toFixed(2) + '"/></div>');
+
+			$('.priceEdit', itemPrice).change(function() {
+				var thisID = $('.billItemID', $(this).parents('.billItem')).val();
+				var thisRsc = $('.billItemRsc', $(this).parents('.billItem')).val();
+				var thisField = thisRsc == 'tip' ? 'Amount' : 'PurchasePrice';
+
+				request(thisRsc, thisID, RequestType.UPDATE, userInfo, thisField + '=' + this.value, billScreen, billScreen);
+			});
+
+		} else {
+			itemPrice = $('<div class="billItemPrice"><input id="billItem' + i + 'Price" readonly="true" class="price priceNoEdit" value="' + Number(this.billItems[i][3]).toFixed(2) + '"/></div>');
+		}
+
+		$(thisBillItem).append(delBtn);
+		$(thisBillItem).append(itemName);
+		$(thisBillItem).append(itemPrice);
+
+		$(billItems).append(thisBillItem);
+	}
+
+	return billItems;
 }
 
 Bill.prototype.payBill = function() {
@@ -256,83 +323,3 @@ Bill.prototype.printBill = function() {
 	printWin.print();
 	printWin.close();
 };
-
-// leftover functions, to be deleted.
-function drawBill() {
-
-	var totalBill = billScreen.calculateTotal();
-
-	// Bill table
-	$('#page').append(
-		'<div id="table' + selectedTable.TableID + 'Bill" ' + 'class="bill">' +
-			'<div class="billHeader">Table ' + selectedTable.Number + ' Bill' + 
-				'<div id="billPrint" class="billPrint">' + 'Print' + '</div>' +
-			'</div>' +
-			'<table id="table' + selectedTable.TableID + 'BillTable" class="billTable">' + 
-			'</table>' + 
-		'</div>'
-	);
-
-	$('#billPrint').click(function() {
-		var newWin = window.open('', 'thePopup', '');
-		newWin.document.write('<html><body>' + $('#table' + selectedTable.TableID + 'Bill').html() + '</body></html>');
-		newWin.window.location.reload();    // this is the secret ingredient
-		newWin.focus();                     // not sure if this line is necessary
-		newWin.print();
-	});
-
-	// Order Items
-	for (var i = 0; i < billScreen.orderData.length; i++) {
-		for (var j = 0; j < billScreen.orderData[i].orderItems.length; j++) {
-			addBillRow(billScreen.orderData[i].orderItems[j].menuItem.Name, billScreen.orderData[i].orderItems[j].PurchasePrice, true);
-		}
-		addBillRow('','', false);
-	}
-
-	// Discounts
-	for (var i = 0; i < billScreen.discountedData.length; i++) {		
-		addBillRow('Discount: ' + billScreen.discountedData[i].discount.DiscountCode, money(billScreen.discountAmounts[i]).toFixed(2), true);
-	}
-
-	// Tip(s)
-	for (var i = 0; i < billScreen.tipData.length; i++) {
-		addBillRow('Tip', billScreen.tipData[i].Amount, true, function() {
-			// problem here in that we need to pass the ID too because it doesn't have it when called from change context
-			//request("tip", billScreen.tipData[i].TipID, RequestType.UPDATE, userInfo, "amount=" + this.value, function() {});
-		});
-	}
-
-	// Total
-	addBillRow('','', false);
-	addBillRow('Total', totalBill, false, null, 'billTotal');
-}
-
-function addBillRow(itemName, itemValue, editable, changeFunc, rowClass) {
-	if (arguments.length == 5) {
-		rowClass = "billRow " + rowClass;
-	} else {
-		rowClass = "billRow ";
-	}
-
-	var row = $('<tr class="' + rowClass + '"></tr>');
-	row.append('<td class="billItemName">' + itemName + '</td>');
-
-	var priceCell = $('<td class="billPrice"></td>');
-
-	if ( editable ) {
-		var priceField = $('<input type="text" class="priceField"/>');
-		priceField.val(itemValue);
-
-		if (typeof(changeFunc) === 'function') priceField.change(changeFunc);
-
-		priceCell.append(priceField);
-
-	} else {
-		priceCell.append(itemValue);
-	}
-
-	row.append(priceCell);
-
-	$('#table' + selectedTable.TableID + 'BillTable').append(row);
-
-}
