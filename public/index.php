@@ -13,14 +13,14 @@
 		<script src="scripts/jquery-1.10.1.min.js" type="text/javascript"></script>
 		<script src="scripts/common.js" type="text/javascript"></script>
 		<script src="scripts/navBar.js" type="text/javascript"></script>
-		<script src="scripts/waitList.js" type="text/javascript"></script>
-		<script src="scripts/seating.js" type="text/javascript"></script>
 		<script src="scripts/tables.js" type="text/javascript"></script>
 		<script src="scripts/bill.js" type="text/javascript"></script>
 		<script src="scripts/discounts.js" type="text/javascript"></script>
 		<script src="scripts/orderQueue.js" type="text/javascript"></script>
 		<script src="scripts/menuItem.js" type="text/javascript"></script>
 		<script src="scripts/users.js" type="text/javascript"></script>
+		<script src="scripts/waitList.js" type="text/javascript"></script>
+		<script src="scripts/seating.js" type="text/javascript"></script>
 
 		<script>
 
