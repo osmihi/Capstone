@@ -62,3 +62,7 @@ function money(currency) {
 	currency = String(currency);
 	return Number(currency.replace(/[^0-9\.]+/g,""));
 }
+
+function isNumber(n) {
+	  return !isNaN(parseFloat(n)) && isFinite(n);
+	}
