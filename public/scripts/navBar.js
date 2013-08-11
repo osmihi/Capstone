@@ -19,28 +19,41 @@ ScreenNames["menuScreen"] = 'Menu';
 
 function navBar() {
 	// get the info necessary to make the nav bar and call build function
-	if (userID != '' && userInfo != '') request("user", userID, RequestType.READ, userInfo, "", buildNavBar);
+	if (userID != '' && userInfo != 'authCode=') request("user", userID, RequestType.READ, userInfo, "", buildNavBar, function() {
+		$.ajax({
+			url : "http://www.ordrupapp.com/logout",
+			error : function() {
+				//
+			},
+			success : function(response) {
+				window.location.href = "http://www.ordrupapp.com/";
+			}
+		});
+	});
 	else buildLogin();
 }
 
 function buildLogin() {
 	//Wipe page clean (remove previous existing content)
-	$('#header').html("");
+	$('#header').remove();
 
-	$('#header').append(
-		'<div id="logo">' +
-			'<a href="http://www.ordrupapp.com/">' +
-				'<img src="/res/logo.png" width="276" height="123"/>' + 
-			'</a>' + 
-		'</div>' +
-		'<form id="loginForm" action="javascript:void(0);">' +
-			'<label for="username">Username </label>' +
-			'<input type="text" id="username" name="username">' + '</input>' + '<br />' +
-			'<label for="password">Password </label>' +
-			'<input type="password" id="password" name="password">' + '</input>' + '<br />' +	
-			'<input id="loginSubmit" type="submit" value="Log In">' + '<br />' +
-			'<span id="loginMessage"></span>' +
-		'</form>');
+	$('#page').html(
+		'<div id="loginArea">' +
+			'<div id="logoLogin">' +
+				'<a href="http://www.ordrupapp.com/">' +
+					'<img src="/res/logo.png" width="276" height="123"/>' + 
+				'</a>' + 
+			'</div><br />' +
+			'<form id="loginForm" action="javascript:void(0);">' +
+				'<label for="username">Username </label>' +
+				'<input type="text" id="username" name="username">' + '</input>' + '<br />' +
+				'<label for="password">Password </label>' +
+				'<input type="password" id="password" name="password">' + '</input>' + '<br /><br />' +	
+				'<input id="loginSubmit" type="submit" value="Log In">' + '<br />' +
+				'<span id="loginMessage"></span>' +
+			'</form>' +
+		'</div>'
+	);
 	
 	$('#loginSubmit').click(function() {
 		var uName = $("#username").val();

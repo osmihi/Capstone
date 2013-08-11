@@ -63,9 +63,9 @@ function drawDiscountInput(){
 			'<div id="newDiscount" class="formButton discount addNewDiscount">'+
 				'<input type="button" class="formButton discountButton addDiscountButton" value="Add"/>' +		
 				'Create a new discount: <br/>' +
-				'<div class="inputLabel">Code </div><input type="text" class="inputField discountCode" value=""/><br />' + 
-				'<div class="inputLabel">Value </div><input type="text" class="inputField discountValue" value=""/><br />'+ 
-				'<div class="inputLabel">Type </div>' + discountTypeSelector("Percent") + '<br />' +	
+				'<div class="inputLabel">Code </div><input type="text" class="inputField discountCode" value=""/>' + '<br />' +
+				'<div class="inputLabel">Value </div><input type="text" class="inputField discountValue" value=""/>'+  '<br />' +
+				'<div class="inputLabel">Type </div>' + discountTypeSelector("Percent") +	
 			'</div>');
 }
 
@@ -89,8 +89,8 @@ function drawDiscount(discount) {
 					'<input type="hidden" class="discountIdHolder" value ="'+ discount.DiscountID + '"/>' +
 					'<input type="button" class="formButton discountButton discountUpdateButton" value="Update"/>' +
 					'<input type="button" class="formButton discountButton discountDeleteButton" value="Delete"/>' +
-					'<div class="inputLabel">Code </div><input type="text" class="inputField discountCode" value="' + discount.DiscountCode + '"/><br />' + 
-					'<div class="inputLabel">Value </div><input type="text" class="inputField discountValue" value="' + discount.Value + '"/><br />'+ 
+					'<div class="inputLabel">Code </div><input type="text" class="inputField discountCode" value="' + discount.DiscountCode + '"/>' + '<br />' + 
+					'<div class="inputLabel">Value </div><input type="text" class="inputField discountValue" value="' + discount.Value + '"/>' + '<br />' + 
 					'<div class="inputLabel">Type </div>' + discountTypeSelector(discount.Type) +
 			'</div>');
 }

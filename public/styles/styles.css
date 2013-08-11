@@ -38,6 +38,11 @@ div#header {
 #logo {
 	float:left;
 }
+#loginArea {
+	margin:120px auto;
+	text-align:center;
+}
+
 #userInfo {
 	float:right;
 	text-align:right;
@@ -120,15 +125,16 @@ div#header {
 	background: rgba(248, 248, 255, 0.85);
 	
 	padding: 2px 5px;
-	font-size: 18pt;
+	font-size: 16pt;
 	border: 0;
 	
 	width:120px;
 }
 
 .inputLabel {
-	display:inline;
-	width:80px;
+	display:inline-block;
+	width:60px;
+	font-size: 16pt;
 }
 
 .waitList {
@@ -169,7 +175,6 @@ div#header {
 
 .discount {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 90%;
 	line-height: 1.2em;
 	
 	background: rgb(246,230,180); /* Old browsers */
@@ -197,10 +202,19 @@ div#header {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#cccccc',GradientType=0 ); /* IE6-8 */
 }
 
+.discountType{
+	/*display:inline-block;*/
+}
+
+.discountValue {
+	/*display:inline-block;*/
+}
+
 .discountButton {
+	cursor:pointer;
 	float:right;
 	clear:both;
-	font-size:20px;
+	font-size:16px;
 	width:80px;
 	text-align:center;
 	margin-top:2px;
@@ -240,6 +254,7 @@ div#header {
 	width: 80px;
 	text-align:center;
 	vertical-align:middle;
+	font-size:14pt;
 }
 
 .tableStatus.Available {
@@ -326,7 +341,8 @@ div#header {
 	display:inline-block;
 	cursor:pointer;
 	width: 80px;
-	
+
+	font-size:14pt;
 	text-align:center;
 	vertical-align:middle;
 	
