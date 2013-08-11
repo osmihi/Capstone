@@ -13,7 +13,6 @@ function usersScreen() {
 function buildUsersScreen(response) {
 	usersCollection = response.data;
 	
-	console.log(usersCollection);
 	usersCollection.sort(function(objA, objB) {
 		var nameA=objA.LName.toLowerCase();
 		var nameB=objB.LName.toLowerCase();
@@ -23,7 +22,6 @@ function buildUsersScreen(response) {
 			return 1;
 		else return 0;
 	});
-	console.log(usersCollection);
 
 	// Wipe page clean (remove previous existing content)
 	$('#page').html("");
@@ -163,14 +161,14 @@ function submitEmployeeChanges(userID){
 	request("user", userID, RequestType.UPDATE, userInfo, queryString, usersScreen, userErrorFunction);
 }
 
+
 function addNewEmployee(){
 	var first = $('#newUserFirstName').val();
 	var last = $('#newUserLastName').val();
 	var pass = $('#newUserPassword').val();
 	var role = $('#newUserRole').val();
 	var userName = $('#newUserName').val();
-
-	request("user", "", RequestType.CREATE, userInfo, "FName="+first+"&LName="+last+"&PasswordHash="+pass+"&Role="+role+"&Username="+userName, usersScreen);
+	request("user", "", RequestType.CREATE, userInfo, "FName="+first+"&LName="+last+"&PasswordHash="+pass+"&Role="+role+"&Username="+userName, usersScreen, userErrorFunction);
 }
 
 function addUserClickEvents() {
@@ -195,19 +193,3 @@ function addUserClickEvents() {
 function userErrorFunction(){
 }
 
-//request all users
-//foreach user in users:
-//	create user div
-//		First name, last name, role
-//click function on user div -> employeeScreen(user)
-
-//Employee screen:
-//inputs for each user field 
-//text inputs for name, username, password, 
-//	select list for role (hardcoded roles), 
-//	checkbox for locked  
-//	submit -> click -> put request, usersScreen()
-//when form is submitted, if there is no password in the password field, 
-//then the old password is retained
-
-//Called to render users screen
