@@ -258,7 +258,7 @@ Bill.prototype.drawBillItems = function() {
 			name = this.billItems[i][2];
 		}
 
-		var thisBillItem = $('<div id="billItem' + i + '" class="billItem ' + this.billItems[i][0] + '"></div>');
+		var thisBillItem = $('<div id="billItem' + i + '" class="billItem ' + this.billItems[i][0] + 'Bill"></div>');
 
 		var rsc = this.billItems[i][0] == 'discount' ? 'discounted' : this.billItems[i][0];
 
