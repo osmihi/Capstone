@@ -25,7 +25,7 @@ class Order extends Resource {
 		$this->createFields = array("TableID");
  		$this->readFields = array("RestaurantID");
  		$this->updateFields = array("OrderID");
- 		$this->deleteFields = array("OrderID");
+ 		$this->deleteFields = array();
 
 		parent::loadFields($params);
 	}

@@ -50,7 +50,6 @@ function drawTableTable(table, userData) {
 
 	var billAction = userRole == 'Manager' || userRole == 'Administrator' ? 'Edit' : 'View';
 	
-	// TODO modify this to put in buttons for stuff	
 	$('#page').append(
 		'<div id="tableTables' + table.TableID + '" class="formButton tableTables">' +
 			'<div id="table' + table.TableID + 'Bill" class="formButton billButton">' + billAction + ' Bill' + '</div>' +
@@ -66,16 +65,11 @@ function drawTableTable(table, userData) {
 	$('#table' + table.TableID + 'Status').click(function() {
 		var newValue = $(this).html() == 'Available' ? 'Occupied' : 'Available';
 
-		request("table", table.TableID, RequestType.UPDATE, userInfo, "Status=" + newValue, function(response) {
-			$('#table' + table.TableID + 'Status').html(response.data[0].Status);
-			if ($('#tableTables' + table.TableID).hasClass('Available')) {
-				$('#tableTables' + table.TableID).removeClass('Available');
-				$('#tableTables' + table.TableID).addClass('Occupied');
-			} else {
-				$('#tableTables' + table.TableID).removeClass('Occupied');
-				$('#tableTables' + table.TableID).addClass('Available');
-			}
-		});
+		if (table.Status == 'Occupied' && table.Paid == '0') {
+			alert('Bill has not been paid yet.');
+		} else {
+			request("table", table.TableID, RequestType.UPDATE, userInfo, "Status=" + newValue, tablesScreen);
+		}
 	});
 	
 	$('#table' + table.TableID + 'Assignee').change(function() {
@@ -84,6 +78,11 @@ function drawTableTable(table, userData) {
 
 	$('#table' + table.TableID + 'Bill').click(function() {
 		selectedTable = table;
-		billScreen();
+		if (table.Status == 'Occupied') {
+			billScreen();
+		} else {
+			alert('No one is seated at this table.');
+		}
+		
 	});
 }

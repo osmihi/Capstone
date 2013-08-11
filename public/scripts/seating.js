@@ -51,8 +51,8 @@ function drawTableSeating(table) {
 	var userString = $.isNumeric(table.UserID) ? table.UserID : "None";
 
 	$('#page').append(
-		'<div id="tableSeating' + table.TableID + '" class="formButton tableSeating tableTables' + table.Status + '">' + 
-			'<div class="formButton ' + table.Status + ' tableSeatingStatus' + table.Status + '">' + table.Status + '</div>' +	
+		'<div id="tableSeating' + table.TableID + '" class="formButton tableSeating tableTables ' + table.Status + '">' + 
+			'<div class="formButton tableSeatingStatus' + table.Status + '">' + table.Status + '</div>' +	
 			'<div class="tableName">Table ' + table.Number + '</div>' + 
 			'<div class="tableCapacity">Capacity: ' + table.Capacity + '</div>' + 
 			'<div class="tableCapacity">Assignee: <span class="assigneeUserID">' + userString + '</span></div>' + 

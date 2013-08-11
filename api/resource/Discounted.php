@@ -22,7 +22,7 @@ class Discounted extends Resource {
 		$this->createFields = array("DiscountID", "TableID");
  		$this->readFields = array("TableID");
  		$this->updateFields = array("DiscountedID");
- 		$this->deleteFields = array("DiscountedID");
+ 		$this->deleteFields = array();
 
 		parent::loadFields($params);
 	}

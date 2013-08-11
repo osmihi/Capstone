@@ -10,23 +10,24 @@
 function billScreen() {
 	refreshFunc = function() {};
 	
-	selectedBill = new Bill(selectedTable.TableID);
+	selectedBill = new Bill(selectedTable);
 }
 
 // Define the Bill "class"
-var Bill = function (tableID) {
+var Bill = function (selTable) {
 	var _this = this; // _this is used so that we can reference the object scope in nested functions
-	this.tableID = tableID;
+	this.table = selTable;
+	this.tableID = selTable.TableID;
 
-	request("order", "", RequestType.READ, userInfo, "&tableID=" + tableID, function(response) {
+	request("order", "", RequestType.READ, userInfo, "&tableID=" + this.tableID, function(response) {
 		_this.orderData = response.data !== undefined ? response.data : new Array();
 		request("orderItem", "", RequestType.READ, userInfo, "", function(response) {
 			_this.orderItemData = response.data !== undefined ? response.data : new Array();
 			request("menuItem", "", RequestType.READ, userInfo, "", function(response) {
 				_this.menuItemData = response.data !== undefined ? response.data : new Array();
-				request("tip", "", RequestType.READ, userInfo, "&tableID=" + tableID, function(response) {
+				request("tip", "", RequestType.READ, userInfo, "&tableID=" + this.tableID, function(response) {
 					_this.tipData = response.data !== undefined ? response.data : new Array();
-					request("discounted", "", RequestType.READ, userInfo, "&tableID=" + tableID, function(response) {
+					request("discounted", "", RequestType.READ, userInfo, "&tableID=" + this.tableID, function(response) {
 						_this.discountedData = response.data !== undefined ? response.data : new Array();
 						request("discount", "", RequestType.READ, userInfo, "", function(response) {
 							_this.discountData = response.data !== undefined ? response.data : new Array();
@@ -315,9 +316,18 @@ Bill.prototype.drawBillItems = function() {
 }
 
 Bill.prototype.payBill = function() {
+	var _this = this;
 	var ccNum = prompt('Swipe credit card.', '');
 	if (ccNum.length > 0) {
-		alert('Payment accepted.');
+		request('table', '', RequestType.DELETE, userInfo, 'tableID=' + _this.tableID, function() {
+			request('table', '', RequestType.CREATE, userInfo, 'Number=' + _this.table.Number + '&Status=Occupied&Paid=1&Capacity=' + _this.table.Capacity + '&UserID=' + _this.table.UserID, function(response) {
+				selectedTable = response.data[0];
+				alert('Payment accepted.');
+				tablesScreen();
+			});
+		}, function() {
+			alert('Unable to process payment.');
+		});
 	} else {
 		alert('Payment rejected.');
 	}
