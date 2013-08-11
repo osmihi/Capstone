@@ -19,7 +19,7 @@ function orderQueueScreen() {
 	
 	refreshFunc = function() {
 		request("order", "", RequestType.READ, userInfo, "",
-			populateOrderQueueOrders, populateOrderQueueOrders);
+			populateOrderQueueOrders, populateOrderQueueOrders); 
 	};
 }
 

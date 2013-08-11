@@ -124,7 +124,7 @@ function drawAdministrator(user){
 					+'<td> &nbsp; '+user.LName + '</td>'
 				+'</tr>'
 				+'<tr>' 
-					+'<td>First Name: </td>'
+					+'<td>First Name: </td>' 
 					+'<td> &nbsp; ' + user.FName + '</td>'
 				+'</tr>'
 				+'<tr>'
