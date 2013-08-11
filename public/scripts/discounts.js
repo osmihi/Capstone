@@ -2,9 +2,8 @@
 // Called to render discounts screen
 function discountsScreen() {
 	refreshFunc = function() {};
-	// API call: request(resource, key, rqType, userInfoString, dataString,
-	// successFunc, errorFunc)
-	request("discount", "", RequestType.READ, userInfo, "", buildDiscountScreen);
+	// API call: request(resource, key, rqType, userInfoString, dataString, successFunc, errorFunc)
+	request("discount", "", RequestType.READ, userInfo, "", buildDiscountScreen, buildDiscountScreen);
 }
 
 function buildDiscountScreen(response) {
@@ -22,7 +21,13 @@ function buildDiscountScreen(response) {
 		discountCode = $(this).parents(".discount:first").find(".discountCode").val();
 		discountValue = $(this).parents(".discount:first").find(".discountValue").val();
 		discountType = $(this).parents(".discount:first").find(".discountType").val();
-		addDiscount(discountCode, discountValue, discountType);
+		if( validateDiscount(discountValue, discountValue) ){
+			addDiscount(discountCode, discountValue, discountType);	
+		}
+		else{
+			discountsScreen();
+		}
+		
 	});
 	
 
@@ -37,7 +42,12 @@ function buildDiscountScreen(response) {
 		discountValue = $(this).parents(".discount:first").find(".discountValue").val();
 		discountID = $(this).parents(".discount:first").find(".discountIdHolder").val();
 		discountType = $(this).parents(".discount:first").find(".discountType").val();
-		updateDiscount(discountID, discountCode, discountValue, discountType);
+		if( validateDiscount(discountValue, discountValue) ){
+			updateDiscount(discountID, discountCode, discountValue, discountType);			
+		}
+		else {
+			discountsScreen();
+		}
 	});
 	
 	$('.discountDeleteButton').click(function(){
@@ -114,6 +124,24 @@ function deleteDiscount(discountID){
 			discountErrorFunction);
 }
 
+function validateDiscount(discountValue, discountValue){
+	if(!isNumber(discountValue)){
+		alert("Invalid discount value - discount must be a numerical value");
+		return false;
+	}
+	else if(discountType == 'Percent' && (discountValue <= 0.009 || discountValue > 100) ){
+		alert("Invalid discount value.  Percentage must be a numerical value between 0.01 and 100.");
+		return false;
+	}
+	else if(discountType == 'Amount' && (discountValue <= 0 || discountValue > 999.99) ){
+		alert("Invalid discount value.  Amount must be a numerical value between 0.01 and 999.99");
+		return false;
+	}
+	else{
+		return true;
+	}
+}
+
 function discountErrorFunction(){
-	alert("Error Function Called");
+	discountsScreen();
 }
