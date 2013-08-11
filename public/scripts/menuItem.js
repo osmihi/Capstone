@@ -13,6 +13,15 @@ function buildMenuItemScreen(response) {
 	
 	var items = response.data;
 
+	items.sort(function(objA, objB) {
+		var nameA=objA.Name.toLowerCase();
+		var nameB=objB.Name.toLowerCase();
+		if (nameA < nameB)
+			return -1;
+		else if (nameA > nameB)
+			return 1;
+		else return 0;
+	});
 
 	// Wipe page clean (remove previous existing content)
 	$('#page').html("");
@@ -72,9 +81,6 @@ function addItemToMenu(){
 	
 	request("menuItem", "", RequestType.CREATE, userInfo, "Name="+name+"&Category="+category+"&PrepTime="+prepTime+"&Price="+price, menuScreen);
 }
-
-
-
 
 
 
