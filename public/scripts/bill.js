@@ -77,9 +77,14 @@ Bill.prototype.assembleData = function() {
 		}
 	}
 
+	// Sort discounts by type
+	this.discountedData.sort(function(a, b) {
+		if (a.discount.Type < b.discount.Type) return -1;
+		else return 1;
+	});
+
 	delete this.menuItemData;
 	delete this.orderItemData;
-	delete this.discountData;
 
 	// Sort by Timestamp. Not really necessary, but hey
 	this.orderData.sort(function(a, b) {
@@ -177,12 +182,66 @@ Bill.prototype.draw = function() {
 	var billItems = this.drawBillItems();
 
 	// add tip
+	var addTip = this.drawAddTip();
+
 	// add discount
+	var addDiscount = this.drawAddDiscount();
 
 	$(billHeader).append(printButton);
 	$(billHeader).append(payButton);
 	$('#page').append(billHeader);
+	$('#page').append(addTip);
+	$('#page').append(addDiscount);
 	$('#page').append(billItems);
+};
+
+Bill.prototype.drawAddTip = function() {
+	var addTip = $('<div id="addTip" class="billAdd"></div>');
+
+	$(addTip).append('<input type="text" id="addTipAmount"/>');
+	$(addTip).append('<input type="button" id="addTipSubmit" value="Add Tip"/>');
+
+	$('#addTipSubmit', addTip).click(function() {
+		var _this = this;
+		var amount = $('#addTipAmount', $(this).parent()).val();
+		request('tip', '', RequestType.CREATE, userInfo, 'TableID=' + selectedTable.TableID + '&UserID=' + selectedTable.UserID + '&Amount=' + amount, billScreen, function() {
+			$('#addTipAmount', $(_this).parent()).val('');
+			alert('Error creating tip.');
+		});
+	});
+
+	return addTip;
+};
+
+Bill.prototype.drawAddDiscount = function() {
+	var addDiscount = $('<div id="addDiscount" class="billAdd"></div>');
+	$(addDiscount).append('<select id="addDiscountSelect"></select>');
+	
+	for (var j = 0; j < this.discountData.length; j++) {
+		var optLabel;
+		
+		if (this.discountData[j].Type == 'Percent') {
+			 optLabel = this.discountData[j].DiscountCode + ' (' + this.discountData[j].Value + '%)';
+		} else {
+			 optLabel = this.discountData[j].DiscountCode + ' ($' + this.discountData[j].Value + ')';
+		}
+
+		$('#addDiscountSelect', addDiscount).append(
+			'<option value="' + this.discountData[j].DiscountID + '">' + optLabel + '</option>'
+		);
+	}
+
+	$(addDiscount).append('<input type="button" id="addDiscountSubmit" value="Add Discount"/>');
+	$('#addDiscountSubmit', addDiscount).click(function() {
+		var _this = this;
+		var discountID = $('#addDiscountSelect', $(this).parent()).val();
+
+		request('discounted', '', RequestType.CREATE, userInfo, 'TableID=' + selectedTable.TableID + '&DiscountID=' + discountID , billScreen, function() {
+			alert('Error adding discount.');
+		});
+	});
+	
+	return addDiscount;
 };
 
 Bill.prototype.drawBillItems = function() {

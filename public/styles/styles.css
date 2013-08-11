@@ -222,6 +222,8 @@ div#header {
 	display:inline;
 	float:right;
 	background-color:yellow;
+	margin:2px;
+	padding:2px;
 }
 
 .billPay {
@@ -230,6 +232,17 @@ div#header {
 	display:inline;
 	float:right;
 	background-color:orange;
+	margin:2px;
+	padding:2px;
+}
+
+.billAdd {
+	cursor:pointer;
+	border:2px outset gray;
+	display:inline-block;
+	background-color:#DCDCDC;
+	margin:2px;
+	padding:2px;
 }
 
 .billItem {
