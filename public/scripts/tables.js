@@ -43,11 +43,11 @@ function buildTablesScreen(tablesResponse) {
 }
 
 function drawTableTable(table, userData) {
-	var userOptions = '<select id="table' + table.TableID + 'Assignee" class="tableAssignee">'
+	var userOptions = '<select id="table' + table.TableID + 'Assignee" class="tableAssigneeSelect">'
 		+ '<option value="NULL"></option>';	
 	
 	for (var i = 0; i < userData.length; i++) {
-		userOptions += '<option value="' + userData[i].UserID + '">' + userData[i].Username + '</option>';
+		userOptions += '<option value="' + userData[i].UserID + '">' + userData[i].FName + ' ' + userData[i].LName + '</option>';
 	}
 	
 	userOptions += '</select>';
@@ -56,12 +56,12 @@ function drawTableTable(table, userData) {
 	
 	// TODO modify this to put in buttons for stuff	
 	$('#page').append(
-		'<div id="tableTables' + table.TableID + '" class="tableTables ' + table.Status + '">' + 
-			'Number: ' + table.Number + '<br />' + 
-			'Capacity: ' + table.Capacity + '<br />' + 
-			'Status: <span id="table' + table.TableID + 'Status" class="tableStatus">' + table.Status + '</span><br />' +
-			'Assignee:' + userOptions + '<br />' + 
-			'<div id="table' + table.TableID + 'Bill" class="billButton">' + billAction + ' Bill' + '</div>' +
+		'<div id="tableTables' + table.TableID + '" class="formButton tableTables">' +
+			'<div id="table' + table.TableID + 'Bill" class="formButton billButton">' + billAction + ' Bill' + '</div>' +
+			'<div id="table' + table.TableID + 'Status" class="formButton tableStatus ' + table.Status + '">' + table.Status + '</div>' +
+			'<div class="tableName">Table ' + table.Number + ' </div>' + 
+			'<div class="tableCapacity">Capacity: ' + table.Capacity + '</div>' + 
+			'<div class="tableAssignee">Assignee: ' + userOptions + '</div>' +
 		'</div>'
 	);
 
