@@ -15,13 +15,14 @@ function orderQueueScreen() {
 	refreshFunc = function() {};
 	
 	request("order", "", RequestType.READ, userInfo, "",
-			populateOrderQueueOrders);
+			populateOrderQueueOrders, populateOrderQueueOrders);
 	
 	refreshFunc = function() {
 		request("order", "", RequestType.READ, userInfo, "",
-			populateOrderQueueOrders);
+			populateOrderQueueOrders, populateOrderQueueOrders); 
 	};
 }
+
 
 //orderQueueOrders will hold the order data locally
 function populateOrderQueueOrders(response) {
@@ -37,6 +38,7 @@ function populateOrderQueueOrderItems(response) {
 			populateOrderQueueMenuItems);
 }
 
+
 // orderQueueMenuItems will hold menuItem data locally
 function populateOrderQueueMenuItems(response) {
 	orderQueueMenuItems = response.data;
@@ -44,11 +46,13 @@ function populateOrderQueueMenuItems(response) {
 			populateOrderQueueTables);
 }
 
+
 // orderQueueTables will hold tables locally
 function populateOrderQueueTables(response){
 	orderQueueTables = response.data;
 	buildOrderQueueScreen();
 }
+
 
 //Render the orderQueue screen
 function buildOrderQueueScreen() {
@@ -76,29 +80,8 @@ function buildOrderQueueScreen() {
 	addOrderQueueClickFunctions();
 }
 
-//Add click functions to clickable objects
-function addOrderQueueClickFunctions(){
-	$('.orderItem').click(function() {
-		var orderItemId = $(this).find('.orderItemIdHolder').val();
-		var orderItemStatusId = '#orderItemStatus' + orderItemId;
-		var orderItemStatus = $(orderItemStatusId).val();
-		if(orderItemStatus == 'New'){
-			$(this).attr('class', 'orderItem orderItemStatusInPrep');
-			$(orderItemStatusId).val('InPrep');
-			$(this).find('.orderItemStatusDisplay').html('Status: In Prep');
-		}
-		else{			
-				$(this).attr('class', 'orderItem orderItemStatusReady');
-				$(orderItemStatusId).val('Ready');
-				$(this).find('.orderItemStatusDisplay').html('Status: Ready')
-		}
-		updateOrderItemStatus(orderItemId, orderItemStatus);
-	});
-	
-}
 
-
-// Adds Name, PrepTime, and Category properties to each orderItem
+//Adds Name, PrepTime, and Category properties to each orderItem
 function addMenuInfoToOrderItems() {
 	for ( var i = 0; i < orderQueueOrderItems.length; i++) {
 		for ( var j = 0; j < orderQueueMenuItems.length; j++) {
@@ -110,6 +93,7 @@ function addMenuInfoToOrderItems() {
 		}
 	}
 }
+
 
 // Adds orderItems to their parent order
 function addOrderItemsToOrders() {
@@ -153,11 +137,13 @@ function allOrdersAreComplete(){
 	return true;
 }
 
+
 // Indicates that all orders have been completed
 function drawNoOrdersMessage(){
 	var noOrdersMessage = '<div class="noOrders"><h1>There are currently no orders in the queue.</h1></div>';
 	$('#page').append(noOrdersMessage);		
 }
+
 
 // Sorts orders FIFO
 function sortOrders() {
@@ -168,6 +154,7 @@ function sortOrders() {
 			return 1;
 	});
 }
+
 
 // Sorts orderItems for each order in order of longest prep time first
 function sortOrderItems() {
@@ -194,6 +181,7 @@ function drawOrderDiv(order) {
 	$('#page').append(orderHeadingString)
 }
 
+
 // Renders the order item divs inside of their parent order div
  function drawOrderItems(order) {
 	 var orderItems = order.orderItems;
@@ -218,6 +206,7 @@ function drawOrderDiv(order) {
 	}
 }
 
+ 
 // Returns the status string to be displayed on screen for an order item
 function orderItemStatusString(orderItem){
 	 if (orderItem.Status == "Ready"){ return 'Ready'; }
@@ -225,6 +214,28 @@ function orderItemStatusString(orderItem){
 	 return 'New'; 
 }
  
+
+
+//Add click functions to clickable objects
+function addOrderQueueClickFunctions(){
+	$('.orderItem').click(function() {
+		var orderItemId = $(this).find('.orderItemIdHolder').val();
+		var orderItemStatusId = '#orderItemStatus' + orderItemId;
+		var orderItemStatus = $(orderItemStatusId).val();
+		if(orderItemStatus == 'New'){
+			$(this).attr('class', 'orderItem orderItemStatusInPrep');
+			$(orderItemStatusId).val('InPrep');
+			$(this).find('.orderItemStatusDisplay').html('Status: In Prep');
+		}
+		else{			
+				$(this).attr('class', 'orderItem orderItemStatusReady');
+				$(orderItemStatusId).val('Ready');
+				$(this).find('.orderItemStatusDisplay').html('Status: Ready')
+		}
+		updateOrderItemStatus(orderItemId, orderItemStatus);
+	});
+	
+}
 
 
 //Update orderItem status on database
