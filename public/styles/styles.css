@@ -289,7 +289,7 @@ div#header {
 }
 
 .billHeader {
-	font: 18px Arial, Helvetica, sans-serif;
+	font: 24px Arial, Helvetica, sans-serif;
 }
 
 .billPrint {
@@ -314,11 +314,8 @@ div#header {
 
 .billAdd {
 	cursor:pointer;
-	border:2px outset gray;
+	border:2px outset LightGrey;
 	display:inline-block;
-	background-color:#DCDCDC;
-	margin:2px;
-	padding:2px;
 }
 
 .billBtn {
