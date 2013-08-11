@@ -29,7 +29,6 @@ function buildDiscountScreen(response) {
 		}
 		
 	});
-	
 
 	// Iterate through waitLists, call drawDiscount for each Discount
 	for (i = 0; i < discounts.length; i++) {
@@ -59,17 +58,17 @@ function buildDiscountScreen(response) {
 // Creates form to create new discount
 function drawDiscountInput(){
 	$('#page').append(
-			'<div id="newDiscount" class="discount">'+
-					'Create a new discount: <br/>' +
-					'Code: <input type="text" class="discountCode" value=""/><br />' + 
-					'Value: <input type="text" class="discountValue" value=""/><br />'+ 
-					'Type: ' + discountTypeSelector("Percent") + '<br />' +
-					'<input type="button" class="addDiscountButton" value="Add"/>' +
+			'<div id="newDiscount" class="formButton discount addNewDiscount">'+
+				'<input type="button" class="formButton discountButton addDiscountButton" value="Add"/>' +		
+				'Create a new discount: <br/>' +
+				'<div class="inputLabel">Code </div><input type="text" class="inputField discountCode" value=""/><br />' + 
+				'<div class="inputLabel">Value </div><input type="text" class="inputField discountValue" value=""/><br />'+ 
+				'<div class="inputLabel">Type </div>' + discountTypeSelector("Percent") + '<br />' +	
 			'</div>');
 }
 
 function discountTypeSelector(selectedDiscountType){
-	var selectCode = '<select class="discountType" >';
+	var selectCode = '<select class="inputField discountType" >';
 	if(selectedDiscountType == "Amount"){
 		selectCode += '<option value="Percent">Percent</option>' +
 		'<option value="Amount" selected="selected">Dollars</option>';	
@@ -84,13 +83,13 @@ function discountTypeSelector(selectedDiscountType){
 function drawDiscount(discount) {
 	// Add div with discount info to page div
 	$('#page').append(
-			'<div id="discount' + discount.DiscountID + '" class="discount">'+
-					'<input type="hidden" class="discountIdHolder" value ="'+ discount.DiscountID + '"/><br/>' +
-					'Code: <input type="text" class="discountCode" value="' + discount.DiscountCode + '"/><br />' + 
-					'Value: <input type="text" class="discountValue" value="' + discount.Value + '"/><br />'+ 
-					'Type: ' + discountTypeSelector(discount.Type) + '<br />' +
-					'<input type="button" class="discountUpdateButton" value="Update"/>' +
-					'<input type="button" class="discountDeleteButton" value="Delete"/>' +
+			'<div id="discount' + discount.DiscountID + '" class="formButton discount">'+
+					'<input type="hidden" class="discountIdHolder" value ="'+ discount.DiscountID + '"/>' +
+					'<input type="button" class="formButton discountButton discountUpdateButton" value="Update"/>' +
+					'<input type="button" class="formButton discountButton discountDeleteButton" value="Delete"/>' +
+					'<div class="inputLabel">Code </div><input type="text" class="inputField discountCode" value="' + discount.DiscountCode + '"/><br />' + 
+					'<div class="inputLabel">Value </div><input type="text" class="inputField discountValue" value="' + discount.Value + '"/><br />'+ 
+					'<div class="inputLabel">Type </div>' + discountTypeSelector(discount.Type) +
 			'</div>');
 }
 
