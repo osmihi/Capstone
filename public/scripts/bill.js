@@ -164,16 +164,16 @@ Bill.prototype.draw = function() {
 
 	$('#page').html("");
 
-	var billHeader = $('<div class="billHeader">Table ' + selectedTable.Number + ' Bill</div>');
+	var billHeader = $('<div class="billHeader pageHeader">Table ' + selectedTable.Number + ' Bill</div>');
 
 	// print button
-	var printButton = $('<div id="billPrint" class="billPrint">' + 'Print' + '</div>');
+	var printButton = $('<div id="billPrint" class="formButton billBtn billTopR">' + 'Print' + '</div>');
 	$(printButton).click(function() {
 		_this.printBill();
 	});
 
 	// pay button
-	var payButton = $('<div id="billPay" class="billPay">' + 'Pay Bill' + '</div>');
+	var payButton = $('<div id="billPay" class="formButton billBtn billTopR">' + 'Pay Bill' + '</div>');
 	$(payButton).click(function() {
 		_this.payBill();
 	});
@@ -187,16 +187,16 @@ Bill.prototype.draw = function() {
 	// add discount
 	var addDiscount = this.drawAddDiscount();
 
-	$(billHeader).append(printButton);
-	$(billHeader).append(payButton);
 	$('#page').append(billHeader);
 	$('#page').append(addTip);
 	$('#page').append(addDiscount);
+	$('#page').append(printButton);
+	$('#page').append(payButton);
 	$('#page').append(billItems);
 };
 
 Bill.prototype.drawAddTip = function() {
-	var addTip = $('<div id="addTip" class="billAdd"></div>');
+	var addTip = $('<div id="addTip" class="formButton billBtn billAdd billTopL"></div>');
 
 	$(addTip).append('<input type="text" id="addTipAmount"/>');
 	$(addTip).append('<input type="button" id="addTipSubmit" value="Add Tip"/>');
@@ -214,7 +214,7 @@ Bill.prototype.drawAddTip = function() {
 };
 
 Bill.prototype.drawAddDiscount = function() {
-	var addDiscount = $('<div id="addDiscount" class="billAdd"></div>');
+	var addDiscount = $('<div id="addDiscount" class="formButton billBtn billAdd billTopL"></div>');
 	$(addDiscount).append('<select id="addDiscountSelect"></select>');
 	
 	for (var j = 0; j < this.discountData.length; j++) {
