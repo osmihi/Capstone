@@ -1,19 +1,4 @@
-// request all users
-// foreach user in users:
-//	create user div
-//		First name, last name, role
-//  click function on user div -> employeeScreen(user)
-
-//Employee screen:
-//  inputs for each user field 
-//  text inputs for name, username, password, 
-//	select list for role (hardcoded roles), 
-//	checkbox for locked  
-//	submit -> click -> put request, usersScreen()
-//when form is submitted, if there is no password in the password field, 
-//then the old password is retained
-
-//Called to render users screen
+var usersCollection;
 
 function usersScreen() {
 	
@@ -26,17 +11,19 @@ function usersScreen() {
 
 // response is result of API request call
 function buildUsersScreen(response) {
+	usersCollection = response.data;
 	
-	var employees = response.data;
-	
-
-	employees.sort(function(objA, objB) {
-		if (objA.LName < objB.LName)
+	console.log(usersCollection);
+	usersCollection.sort(function(objA, objB) {
+		var nameA=objA.LName.toLowerCase();
+		var nameB=objB.LName.toLowerCase();
+		if (nameA < nameB)
 			return -1;
-		else
+		else if (nameA > nameB)
 			return 1;
+		else return 0;
 	});
-
+	console.log(usersCollection);
 
 	// Wipe page clean (remove previous existing content)
 	$('#page').html("");
@@ -44,11 +31,13 @@ function buildUsersScreen(response) {
 	drawNewUserForm()
 	
 	// Iterate through USERS, call EMPLOYEES
-	for (i = 0; i < employees.length; i++) {
-		drawEmployees(employees[i]);
+	for (i = 0; i < usersCollection.length; i++) {
+		drawEmployees(usersCollection[i]);
 	}
 	
-	addClickEvents();
+	setUserRoleDisplays();
+	
+	addUserClickEvents();
 }
 
 function drawNewUserForm() {
@@ -86,10 +75,10 @@ function drawNewUserForm() {
 }
 
 
-// Creates box containing menu items
+//Add div to page containing employee information
 function drawEmployees(user) {
-	// Add div with menu items page div
-	$('#page').append(
+	if(user.Role != 'Administrator'){
+		var userDisplayString = 
 			'<div id="user' + user.UserID + '" class="user">'
 				+ '<input class="userID" type="hidden" value="'+user.UserID+'"/>'
 				+'<table>'
@@ -107,7 +96,7 @@ function drawEmployees(user) {
 					+'</tr>'
 					+'<tr>'
 						+'<td>Role: </td>'
-						+'<td><input type="text" id="role' + user.UserID  + '" value="' + user.Role + '"/></td>'
+						+'<td><select id="user'+user.UserID+'Role"><value="<option></option><option>Host</option><option>Kitchen Staff</option><option>Wait Staff</option><option>Manager</option>"</select></td>'
 					+'</tr>'
 					+'<tr>'
 						+'<td>User Name: </td>'
@@ -115,15 +104,60 @@ function drawEmployees(user) {
 					+'</tr>'
 				+'</table>'
 				+'<input type=button class="submitUserChanges" value="Submit"/><input type=button class="deleteUser" value="Delete"/><br />'				
-		+'</div>');
-			
+		+'</div>';
+		$('#page').append(userDisplayString);	
+	}
+
+	else{
+		drawAdministrator(user);
+	}	
 }
+
+
+function drawAdministrator(user){
+	var userDisplayString = 
+		'<div id="user' + user.UserID + '" class="user">'
+			+ '<input class="userID" type="hidden" value="'+user.UserID+'"/>'
+			+'<table>'
+				+'<tr>'
+					+'<td>Last Name: </td>'
+					+'<td> &nbsp; '+user.LName + '</td>'
+				+'</tr>'
+				+'<tr>' 
+					+'<td>First Name: </td>'
+					+'<td> &nbsp; ' + user.FName + '</td>'
+				+'</tr>'
+				+'<tr>'
+					+'<td>Role: </td>'
+					+ '<td> &nbsp; Administrator</td>'
+				+'</tr>'
+				+'<tr>'
+					+'<td>User Name: </td>'
+					+'<td> &nbsp; '+ user.Username + '</td>'
+				+'</tr>'
+			+'</table>'
+							
+	+'</div>';
+	$('#page').append(userDisplayString);	
+}
+
+
+
+
+function setUserRoleDisplays(){
+	for (i = 0; i < usersCollection.length; i++) {
+		var userRoleID = '#user'+usersCollection[i].UserID+'Role';
+		$(userRoleID).val(usersCollection[i].Role);
+	}
+}
+
+
 
 function submitEmployeeChanges(userID){
 	var fName = $('#fName'+userID).val();
 	var lName = $('#lName'+userID).val();
 	var pass = $('#password'+userID).val();
-	var role = $('#role'+userID).val();
+	var role = $('#user'+userID+'Role').val();
 	var userName = $('#userName'+userID).val();
 	var queryString = "FName="+fName+"&LName="+lName+"&PasswordHash="+pass+"&Role="+role+"&Username="+userName;
 	request("user", userID, RequestType.UPDATE, userInfo, queryString, usersScreen, userErrorFunction);
@@ -139,7 +173,7 @@ function addNewEmployee(){
 	request("user", "", RequestType.CREATE, userInfo, "FName="+first+"&LName="+last+"&PasswordHash="+pass+"&Role="+role+"&Username="+userName, usersScreen);
 }
 
-function addClickEvents() {
+function addUserClickEvents() {
 	// Add click function to buttons
 	$('.submitUserChanges').click(function() {
 		var userID = $(this).closest('.user').find('.userID').val();
@@ -161,3 +195,19 @@ function addClickEvents() {
 function userErrorFunction(){
 }
 
+//request all users
+//foreach user in users:
+//	create user div
+//		First name, last name, role
+//click function on user div -> employeeScreen(user)
+
+//Employee screen:
+//inputs for each user field 
+//text inputs for name, username, password, 
+//	select list for role (hardcoded roles), 
+//	checkbox for locked  
+//	submit -> click -> put request, usersScreen()
+//when form is submitted, if there is no password in the password field, 
+//then the old password is retained
+
+//Called to render users screen
