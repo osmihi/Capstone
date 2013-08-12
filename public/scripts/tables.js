@@ -105,7 +105,7 @@ function drawAddTableForm(){
 	
 	$('#addNewTableButton').click(function() {
 		var createQuery = 'Capacity='+$('#newTableCapacityInput').val()+'&Number='+(tableCollection.length + 1)+'&Status=Available&Paid=0';	
-		request("table", "", RequestType.CREATE, userInfo, createQuery, buildTablesScreen);
+		request("table", "", RequestType.CREATE, userInfo, createQuery, tablesScreen);
 	});
 }
 
