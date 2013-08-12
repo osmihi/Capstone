@@ -1,3 +1,4 @@
+var tableCollection;
 
 function tablesScreen() {
 	refreshFunc = function() {};
@@ -25,15 +26,15 @@ function tablesScreen() {
 function buildTablesScreen(tablesResponse) {
 	$('#page').html("");
 
-	var tables = tablesResponse.data;
+	tableCollection = tablesResponse.data;
 
-	tables.sort(function(a, b) {
+	tableCollection.sort(function(a, b) {
 		if (a.Number < b.Number) return -1;
 		else return 1;
 	});
 
-	for ( i = 0; i < tables.length; i++) {
-		drawTableTable(tables[i], buildTablesScreen.users);
+	for ( i = 0; i < tableCollection.length; i++) {
+		drawTableTable(tableCollection[i], buildTablesScreen.users);
 	}
 }
 
