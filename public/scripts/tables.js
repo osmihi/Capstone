@@ -50,7 +50,7 @@ function drawTableTable(table, userData) {
 	var billAction = userRole == 'Manager' || userRole == 'Administrator' ? 'Edit' : 'View';
 	
 	var tableMarkup = '<div id="tableTables' + table.TableID + '" class="formButton tableTables">';
-	  	if(userRole == 'Manager'){tableMarkup += '<div id="table' + table.TableID + 'Delete" class="formButton tableDeleteButton">Delete Table</div>';}
+	  	if(userRole == 'Manager'){tableMarkup += '<div id="table' + table.TableID + 'Delete" class="formButton tableDeleteButton">Delete</div>';}
 	tableMarkup += 
 	  	'<div id="table' + table.TableID + 'Bill" class="formButton billButton">' + billAction + ' Bill' + '</div>' +
 		'<div id="table' + table.TableID + 'Status" class="formButton tableStatus ' + table.Status + '">' + table.Status + '</div>' +
