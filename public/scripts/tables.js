@@ -89,7 +89,10 @@ function drawTableTable(table, userData) {
 		} else {
 			alert('No one is seated at this table.');
 		}
-		
+	});
+	
+	$('#table' + table.TableID + 'Delete').click(function() {
+		request("table", table.TableID, RequestType.DELETE, userInfo, 'ID='+table.TableID, tablesScreen);
 	});
 }
 
