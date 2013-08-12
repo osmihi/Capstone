@@ -92,7 +92,10 @@ function drawTableTable(table, userData) {
 	});
 	
 	$('#table' + table.TableID + 'Delete').click(function() {
-		request("table", table.TableID, RequestType.DELETE, userInfo, 'ID='+table.TableID, tablesScreen);
+		var isSure =confirm("Are you sure you want to delete this table?");
+		if(isSure){
+			request("table", table.TableID, RequestType.DELETE, userInfo, 'ID='+table.TableID, tablesScreen);			
+		}
 	});
 }
 
