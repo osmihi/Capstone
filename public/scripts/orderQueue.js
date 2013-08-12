@@ -89,12 +89,16 @@ function buildOrderQueueScreen() {
 
 //Adds Name, PrepTime, and Category properties to each orderItem
 function addMenuInfoToOrderItems() {
-	for ( var i = 0; i < orderQueueOrderItems.length; i++) {
-		for ( var j = 0; j < orderQueueMenuItems.length; j++) {
-			if (orderQueueOrderItems[i].MenuItemID == orderQueueMenuItems[j].MenuItemID) {
-				orderQueueOrderItems[i].Name = orderQueueMenuItems[j].Name;
-				orderQueueOrderItems[i].PrepTime = orderQueueMenuItems[j].PrepTime;
-				orderQueueOrderItems[i].Category = orderQueueMenuItems[j].Category;
+	if(orderQueueOrderItems != null){
+		for ( var i = 0; i < orderQueueOrderItems.length; i++) {
+			if(orderQueueMenuItems != null){
+				for ( var j = 0; j < orderQueueMenuItems.length; j++) {
+					if (orderQueueOrderItems[i].MenuItemID == orderQueueMenuItems[j].MenuItemID) {
+						orderQueueOrderItems[i].Name = orderQueueMenuItems[j].Name;
+						orderQueueOrderItems[i].PrepTime = orderQueueMenuItems[j].PrepTime;
+						orderQueueOrderItems[i].Category = orderQueueMenuItems[j].Category;
+					}
+				}
 			}
 		}
 	}
@@ -103,32 +107,40 @@ function addMenuInfoToOrderItems() {
 
 // Adds orderItems to their parent order
 function addOrderItemsToOrders() {
-	for ( var i = 0; i < orderQueueOrders.length; i++) {
-		var allOrderItemsComplete = true;
-		var count = 0;
-		var orderItemsArray = [];
-		for ( var j = 0; j < orderQueueOrderItems.length; j++) {
-			if (orderQueueOrderItems[j].OrderID == orderQueueOrders[i].OrderID) {
-				orderItemsArray[count++] = orderQueueOrderItems[j];
-				if(orderQueueOrderItems[j].Status != "Ready"){
-					allOrderItemsComplete = false;
-				}
+	if(orderQueueOrders != null){
+		for ( var i = 0; i < orderQueueOrders.length; i++) {
+				var allOrderItemsComplete = true;
+				var count = 0;
+				var orderItemsArray = [];
+				if(orderQueueOrderItems != null){
+					for ( var j = 0; j < orderQueueOrderItems.length; j++) {
+						if (orderQueueOrderItems[j].OrderID == orderQueueOrders[i].OrderID) {
+							orderItemsArray[count++] = orderQueueOrderItems[j];
+							if(orderQueueOrderItems[j].Status != "Ready"){
+								allOrderItemsComplete = false;
+							}
+						}
+					}
+					orderQueueOrders[i].orderItems = orderItemsArray;
+					orderQueueOrders[i].allOrderItemsComplete = allOrderItemsComplete;
 			}
 		}
-		orderQueueOrders[i].orderItems = orderItemsArray;
-		orderQueueOrders[i].allOrderItemsComplete = allOrderItemsComplete;
 	}
 }
 
 
 // Adds table number to each order
 function addTablesToOrders(){
-	for ( var i = 0; i < orderQueueOrders.length; i++) {
-		for ( var j = 0; j < orderQueueTables.length; j++) {
-			if (orderQueueTables[j].TableID == orderQueueOrders[i].TableID) {
-				orderQueueOrders[i].tableNumber = orderQueueTables[j].Number;	
+	if(orderQueueOrders != null){
+		for ( var i = 0; i < orderQueueOrders.length; i++) {
+			if(orderQueueTables != null){
+				for ( var j = 0; j < orderQueueTables.length; j++) {
+					if (orderQueueTables[j].TableID == orderQueueOrders[i].TableID) {
+						orderQueueOrders[i].tableNumber = orderQueueTables[j].Number;	
+					}
+				}
 			}
-		}	
+		}
 	}
 }
 

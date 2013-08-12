@@ -26,10 +26,15 @@ function tablesScreen() {
 
 function buildTablesScreen(tablesResponse) {
 	$('#page').html("");
+	
+	if(userIsManagement()){
+		drawAddTableForm();
+	}
+	
 	tableCollection = tablesResponse.data;
 	
 	if(tableCollection == null){
-		$('#page').html("<h2>There are currently no tables to display</h2>");
+		$('#page').append("<h2>There are currently no tables to display</h2>");
 	}
 	else{
 		tableCollection.sort(function(a, b) {
@@ -40,10 +45,6 @@ function buildTablesScreen(tablesResponse) {
 		for ( i = 0; i < tableCollection.length; i++) {
 			drawTableTable(tableCollection[i], buildTablesScreen.users);
 		}
-	}
-
-	if(userIsManagement()){
-		drawAddTableForm();
 	}
 
 }

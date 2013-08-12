@@ -19,7 +19,7 @@ function buildWaitListScreen(response) {
 		//Wipe page clean (remove previous existing content)
 		$('#page').html("");
 		if(waitLists == null){
-			$('#page').html("<h2>There are currently no parties in the wait list</h2>");
+			$('#page').append("<h2>There are currently no parties in the wait list</h2>");
 		}
 		else{
 			//Sort waitLists in descending order by timestamp (oldest time stamp first) 

@@ -32,11 +32,16 @@ function buildDiscountScreen(response) {
 		
 	});
 
-	// Iterate through waitLists, call drawDiscount for each Discount
-	for (i = 0; i < discounts.length; i++) {
-		drawDiscount(discounts[i]);
+	if(discounts == null){
+		$('#page').append("<h2>There are currently no discounts in the system</h2>");
 	}
-	
+	else{
+		// Iterate through waitLists, call drawDiscount for each Discount
+		for (i = 0; i < discounts.length; i++) {
+			drawDiscount(discounts[i]);
+		}
+	}
+
 	//Add click function to discountUpdateButton
 	$('.discountUpdateButton').click(function() {
 		discountCode = $(this).parents(".discount:first").find(".discountCode").val();
