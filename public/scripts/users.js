@@ -33,7 +33,9 @@ function buildUsersScreen(response) {
 	
 	// Iterate through USERS, call EMPLOYEES
 	for (i = 0; i < usersCollection.length; i++) {
-		drawEmployees(usersCollection[i]);
+		if (usersCollection[i].Role != 'Administrator') {
+			drawEmployees(usersCollection[i]);
+		}
 	}
 	
 	setUserRoleDisplays();
@@ -42,37 +44,27 @@ function buildUsersScreen(response) {
 }
 
 function drawNewUserForm() {
-
 	//Add a div with inputs to enter a new user
 	$('#page').append(
-			'<div id="newUserForm" class="user">'
-			+'<table>'
-				+'<tr>'
-					+'<td>Last Name: </td>'
-					+'<td><input type="text" id="newUserLastName" value=""/></td>'
-				+'</tr>'
-				+'<tr>' 
-					+'<td>First Name: </td>'
-					+'<td><input type="text" id="newUserFirstName" value=""/></td>'
-				+'</tr>'
-				+'<tr>'
-					+'<td>Password: </td>'
-					+'<td><input type="password" id="newUserPassword" value=""/></td>'
-				+'</tr>'
-				+'<tr>'
-					+'<td>Role: </td>'
-					+'<td><select id="newUserRole"><value="<option></option><option>Host</option><option>Kitchen Staff</option><option>Wait Staff</option><option>Manager</option>"</select></td>'
-				+'</tr>'
-				+'<tr>'
-					+'<td>User Name: </td>'
-					+'<td><input type="text" id="newUserName" value=""/></td>'
-			+'</tr>'
-			+'</table>'
-			
-			+'<input type=button id="addEmployee" value="Add Employee"/><br />'
-			+
-						
-		'</div>');
+		'<div id="newUserForm" class="formButton user newUser">'
+			+'<input type=button id="addEmployee" class="formButton addEmployeeButton" value="Add"/>'
+			+'<div class="inputLabel employeeLabel">Username: </div>'
+			+'<input type="text" id="newUserName" class="inputField" value=""/>' + '<br />'
+			+'<div class="inputLabel employeeLabel">Password </div>'
+			+'<input type="password" id="newUserPassword" class="inputField" value=""/>' + '<br />'
+			+'<div class="inputLabel employeeLabel">Role </div>'
+			+'<select id="newUserRole" class="inputField">'
+				+'<option value="Host">Host</option>'
+				+'<option value="Kitchen Staff">Kitchen Staff</option>'
+				+'<option value="Wait Staff">Wait Staff</option>'
+				+'<option value="Manager">Manager</option>'
+			+'</select>' + '<br />'
+			+'<div class="inputLabel employeeLabel">First Name </div>'
+			+'<input type="text" id="newUserFirstName" class="inputField" value=""/>' + '<br />'
+			+'<div class="inputLabel employeeLabel">Last Name </div>'
+			+'<input type="text" id="newUserLastName" class="inputField" value=""/>' + '<br />'
+		+'</div>'
+	);
 }
 
 
@@ -80,31 +72,24 @@ function drawNewUserForm() {
 function drawEmployees(user) {
 	if(user.Role != 'Administrator'){
 		var userDisplayString = 
-			'<div id="user' + user.UserID + '" class="user">'
+			'<div id="user' + user.UserID + '" class="formButton user">'
+				+'<input type="button" class="formButton submitUserChanges" value="Submit"/><input type="button" class="formButton deleteUser" value="Delete"/>'
 				+ '<input class="userID" type="hidden" value="'+user.UserID+'"/>'
-				+'<table>'
-					+'<tr>'
-						+'<td>Last Name: </td>'
-						+'<td><input type="text" id="lName' + user.UserID  + '" value="' + user.LName + '"/></td>'
-					+'</tr>'
-					+'<tr>' 
-						+'<td>First Name: </td>'
-						+'<td><input type="text" id="fName' + user.UserID  + '" value="' + user.FName + '"/></td>'
-					+'</tr>'
-					+'<tr>'
-						+'<td>Password: </td>'
-						+'<td><input type="password" id="password' + user.UserID  + '" value="' + user.PasswordHash + '"/></td>'
-					+'</tr>'
-					+'<tr>'
-						+'<td>Role: </td>'
-						+'<td><select id="user'+user.UserID+'Role"><value="<option></option><option>Host</option><option>Kitchen Staff</option><option>Wait Staff</option><option>Manager</option>"</select></td>'
-					+'</tr>'
-					+'<tr>'
-						+'<td>User Name: </td>'
-						+'<td><input type="text" id="userName' + user.UserID  + '" value="' + user.Username + '"/></td>'
-					+'</tr>'
-				+'</table>'
-				+'<input type=button class="submitUserChanges" value="Submit"/><input type=button class="deleteUser" value="Delete"/><br />'				
+				+'<div class="inputLabel employeeLabel">Username: </div>'
+				+'<input type="text" id="userName' + user.UserID  + '" class="inputField" value="' + user.Username + '"/>' + '<br />'
+				+'<div class="inputLabel employeeLabel">Password </div>'
+				+'<input type="password" id="password' + user.UserID  + '" class="inputField" value="' + user.PasswordHash + '"/>' + '<br />'
+				+'<div class="inputLabel employeeLabel">Role </div>'
+				+'<select id="user' + user.UserID + 'Role" class="inputField" value="' + user.Role + '">'
+					+'<option value="Host">Host</option>'
+					+'<option value="Kitchen Staff">Kitchen Staff</option>'
+					+'<option value="Wait Staff">Wait Staff</option>'
+					+'<option value="Manager">Manager</option>'
+				+'</select>' + '<br />'
+				+'<div class="inputLabel employeeLabel">First Name </div>'
+				+'<input type="text" id="fName' + user.UserID  + '" class="inputField" value="' + user.FName + '"/>' + '<br />'
+				+'<div class="inputLabel employeeLabel">Last Name </div>'
+				+'<input type="text" id="lName' + user.UserID  + '" class="inputField" value="' + user.LName + '"/>' + '<br />'
 		+'</div>';
 		$('#page').append(userDisplayString);	
 	}
