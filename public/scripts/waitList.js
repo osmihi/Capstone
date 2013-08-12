@@ -70,7 +70,7 @@ function drawWaitlist(waitList) {
 	$('#page').append(
 			'<div id="waitList' + waitList.WaitListID + '" class="formButton waitList">' +
 				'<div id="waitListSelect' + waitList.WaitListID + '" class="formButton waitListSelectBtn">Select</div>' +
-				'<div id="waitListDelete' + waitList.WaitListID + '"class="formButton waitListDeleteBtn">Delete</div>' +
+				'<div id="waitListDelete' + waitList.WaitListID + '"class="formButton waitListDeleteBtn">X</div>' +
 				'<div class="waitListLabel waitListName">' + waitList.Name + '</div>' +  
 				'<div class="waitListLabel waitListSize">Party of ' + waitList.Size + '</div>' +
 				'<div class="waitListLabel waitListTimestamp">Waiting since ' + thisDate.toLocaleTimeString() + '</div>' +
