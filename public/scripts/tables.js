@@ -1,4 +1,5 @@
 var tableCollection;
+var existingTableNumbers;
 
 function tablesScreen() {
 	refreshFunc = function() {};
@@ -105,16 +106,54 @@ function drawAddTableForm(){
 	var addTableMarkup = 
 		'<div id="addNewTableForm" class="formButton tableTables">' +
 			'Add a new table to this restaurant.' +
-			'<div id="newTableName">Table ' + (tableCollection.length + 1) + ' </div>' + 
+			'<div id="newTableName">Number: ' + tableNumberSelector() + '</div>'
+			//<input type="text" id="newTableNumber" value="" maxlength="4" size="4"/></div>' + 
 			'<div class="newTableCapacity">Capacity: <input type="text" id="newTableCapacityInput" value="" maxlength="2" size="3"/></div>' + 
 			'<div id="addNewTableButton" class="formButton">Add Table</div>' +
 		'</div>'
 	$('#page').append(addTableMarkup);
 	
 	$('#addNewTableButton').click(function() {
+		var tableNumber = $('#newTableNumber').val();
+		var tableCapacity = $('#newTableCapacityInput').val();
+		if(!isNumber(tableNumber) || !tableNumber(tableCapacity)){
+			alert("Table number and capacity must be integer values")
+		}
 		var createQuery = 'Capacity='+$('#newTableCapacityInput').val()+'&Number='+(tableCollection.length + 1)+'&Status=Available&Paid=0';	
 		request("table", "", RequestType.CREATE, userInfo, createQuery, tablesScreen);
 	});
+//	var addTableMarkup = 
+//		'<div id="addNewTableForm" class="formButton tableTables">' +
+//			'Add a new table to this restaurant.' +
+//			'<div id="newTableName">Table ' + (tableCollection.length + 1) + ' </div>' + 
+//			'<div class="newTableCapacity">Capacity: <input type="text" id="newTableCapacityInput" value="" maxlength="2" size="3"/></div>' + 
+//			'<div id="addNewTableButton" class="formButton">Add Table</div>' +
+//		'</div>'
+//	$('#page').append(addTableMarkup);
+//	
+//	$('#addNewTableButton').click(function() {
+//		var createQuery = 'Capacity='+$('#newTableCapacityInput').val()+'&Number='+(tableCollection.length + 1)+'&Status=Available&Paid=0';	
+//		request("table", "", RequestType.CREATE, userInfo, createQuery, tablesScreen);
+//	});
+}
+
+
+function tableNumberSelector(){
+	populateExistingTableNumbers();
+	var selectorString = '<select id="newTableNumber"><option value="NULL"></option>';
+	for(var i=1; i<101; i++){
+		if($.inArray(i, existingTableNumbers)) continue;
+		else selectorString += '<option value="' + i + '">' + i + '</option>';
+	}
+	selectorString += '</select>';
+	return selectorString;
+}
+
+function populateExistingTableNumbers(){
+	existingTableNumbers = new array();
+	for(var i=0; i<tableCollection; i++){
+		existingTableNumbers.push(tableCollection[i].Number); 
+	}
 }
 
 function userIsManagement(){
