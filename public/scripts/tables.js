@@ -50,14 +50,18 @@ function drawTableTable(table, userData) {
 
 	var billAction = userRole == 'Manager' || userRole == 'Administrator' ? 'Edit' : 'View';
 	
+	var tableMarkup = '<div id="tableTables' + table.TableID + '" class="formButton tableTables">';
+	  	if(userRole == 'Manager'){tableMarkup += '<div id="table' + table.TableID + 'Delete" class="formButton tableDeleteButton">Delete Table</div>';}
+	tableMarkup += 
+	  	'<div id="table' + table.TableID + 'Bill" class="formButton billButton">' + billAction + ' Bill' + '</div>' +
+		'<div id="table' + table.TableID + 'Status" class="formButton tableStatus ' + table.Status + '">' + table.Status + '</div>' +
+		'<div class="tableName">Table ' + table.Number + ' </div>' + 
+		'<div class="tableCapacity">Capacity: ' + table.Capacity + '</div>' + 
+		'<div class="tableAssignee">Assignee: ' + userOptions + '</div>' +
+	'</div>'
+	
 	$('#page').append(
-		'<div id="tableTables' + table.TableID + '" class="formButton tableTables">' +
-			'<div id="table' + table.TableID + 'Bill" class="formButton billButton">' + billAction + ' Bill' + '</div>' +
-			'<div id="table' + table.TableID + 'Status" class="formButton tableStatus ' + table.Status + '">' + table.Status + '</div>' +
-			'<div class="tableName">Table ' + table.Number + ' </div>' + 
-			'<div class="tableCapacity">Capacity: ' + table.Capacity + '</div>' + 
-			'<div class="tableAssignee">Assignee: ' + userOptions + '</div>' +
-		'</div>'
+			tableMarkup
 	);
 
 	$('#table' + table.TableID + 'Assignee option[value="' + table.UserID + '"]').attr("selected", "selected");
