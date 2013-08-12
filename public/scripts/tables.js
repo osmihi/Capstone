@@ -1,5 +1,5 @@
 var tableCollection;
-var existingTableNumbers;
+
 
 function tablesScreen() {
 	refreshFunc = function() {};
@@ -103,21 +103,17 @@ function drawTableTable(table, userData) {
 }
 
 function drawAddTableForm(){
-	alert("1");
 	var addTableMarkup = 
 		'<div id="addNewTableForm" class="formButton tableTables">' +
 			'Add a new table to this restaurant.';
-	alert("2");
 	addTableMarkup += 
 			'<div id="newTableName">Number: ' + tableNumberSelector() + '</div>';
-	alert("3");
 			//<input type="text" id="newTableNumber" value="" maxlength="4" size="4"/></div>' + 
 			
 	addTableMarkup += 
 	'<div class="newTableCapacity">Capacity: <input type="text" id="newTableCapacityInput" value="" maxlength="2" size="3"/></div>' + 
 			'<div id="addNewTableButton" class="formButton">Add Table</div>' +
 		'</div>';
-	alert("4");
 	$('#page').append(addTableMarkup);
 	
 	$('#addNewTableButton').click(function() {
@@ -147,7 +143,7 @@ function drawAddTableForm(){
 
 
 function tableNumberSelector(){
-	populateExistingTableNumbers();
+	var existingTableNumbers = getExistingTableNumbers();
 	var selectorString = '<select id="newTableNumber"><option value="NULL"></option>';
 	for(var i=1; i<101; i++){
 		if($.inArray(i, existingTableNumbers)) continue;
@@ -157,11 +153,16 @@ function tableNumberSelector(){
 	return selectorString;
 }
 
-function populateExistingTableNumbers(){
-	existingTableNumbers = new array();
+function getExistingTableNumbers(){
+	alert("1");
+	var existingTableNumbers = new array();
+	alert("2");
 	for(var i=0; i<tableCollection; i++){
 		existingTableNumbers.push(tableCollection[i].Number); 
 	}
+	alert("__");
+	console.log(existingTableNumbers);
+	return existingTableNumbers;
 }
 
 function userIsManagement(){
