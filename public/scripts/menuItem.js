@@ -39,36 +39,23 @@ function buildMenuItemScreen(response) {
 function drawAddMenuItem() {
 	//Add a div with inputs to enter a new MENU ITEM
 	$('#page').append(
-			'<div id="addMenuItem" class="addMenuItem">'
-			+'<table>'
-				+'<tr>' 
-					+'<td>Item Name: </td>'
-					+'<td><input type="text" id="itemName" value=""/></td>'
-				+'</tr>'
-				+'<tr>'
-					+'<td>Item Category: </td>'
-					+ '<td>'
-					+ '<select id="itemCategory" class="menuItemCategory">'
-						+ '<option value="Appetizer">Appetizer</option>'
-						+ '<option value="Main Course">Main Course</option>'
-						+ '<option value="Dessert">Dessert</option>'
-					+ '</select>'
-					+ '</td>'
-				+'</tr>'
-				+'<tr>'
-					+'<td>Item Prep Time: </td>'
-					+'<td><input type="text" id="itemPrepTime" value=""/></td>'
-				+'</tr>'
-				+'<tr>'
-					+'<td>Item Price: </td>'
-					+'<td><input type="text" id="itemPrice" value=""/></td>'
-				+'</tr>'
-			+'</table>'
-			
-			+'<input type="button" id="addMenuItemSubmit" value="Add"/><br />'
-			+
-						
-		'</div>');
+		'<div id="addMenuItem" class="formButton menuItem addMenuItem">'
+			+'<input type=button id="addMenuItemSubmit" class="formButton submitItemChanges addMenuItemSubmit" value="Add"/>'
+			+'<div class="inputLabel employeeLabel">Name </div>'
+			+'<input type="text" id="itemName" class="inputField menuItemName"/>' + '<br />'
+			+'<div class="inputLabel employeeLabel">Category </div>'
+			+ '<select id="itemCategory" class="inputField menuItemCategory">'
+				+ '<option value="Appetizer">Appetizer</option>'
+				+ '<option value="Main Course">Main Course</option>'
+				+ '<option value="Dessert">Dessert</option>'
+			+ '</select>' + '<br />'
+			+'<div class="inputLabel employeeLabel">Prep Time </div>'
+			+'<input type="text" id="itemPrepTime" class="inputField menuItemPrepTime" value=""/>' + '<br />'
+			+'<div class="inputLabel employeeLabel">Price </div>'
+			+'<input type="text" id="itemPrice" class="inputField menuItemPrice" value=""/>' + '<br />'
+		+'</div>'
+	);
+
 	//Add click function to button
 	$('#addMenuItemSubmit').click(function() {
 		addItemToMenu();
@@ -84,42 +71,27 @@ function addItemToMenu(){
 	request("menuItem", "", RequestType.CREATE, userInfo, "Name="+name+"&Category="+category+"&PrepTime="+prepTime+"&Price="+price, menuScreen);
 }
 
-
-
 // Creates box containing menu items
 function drawItems(menuItem) {
 	// Add div with menu items page div
 	$('#page').append(
-			'<div id="menu' + menuItem.MenuItemID + '" class="menuItem">'
-				+'<table>'
-					+'<tr>' 
-						+'<td>Item Name: </td>'
-						+'<td><input type="text" id="menuItem' + menuItem.MenuItemID + 'Name" class="menuItemName" value="'+ menuItem.Name +'"/></td>'
-					+'</tr>'
-					+'<tr>'
-						+'<td>Item Category: </td>'
-						+ '<td>'
-							+ '<select id="menuItem' + menuItem.MenuItemID + 'Category" class="menuItemCategory">'
-								+ '<option value="Appetizer">Appetizer</option>'
-								+ '<option value="Main Course">Main Course</option>'
-								+ '<option value="Dessert">Dessert</option>'
-							+ '</select>'
-						+ '</td>'
-					+'</tr>'
-					+'<tr>'
-						+'<td>Item Prep Time: </td>'
-						+'<td><input type="text" id="menuItem' + menuItem.MenuItemID + 'PrepTime" class="menuItemPrepTime" value="'+ menuItem.PrepTime +'"/></td>'
-					+'</tr>'
-					+'<tr>'
-						+'<td>Item Price: </td>'
-						+'<td><input type="text" id="menuItem' + menuItem.MenuItemID + 'Price" class="menuItemPrice" value="'+ menuItem.Price +'"/></td>'
-					+'</tr>'
-					+'</table>'
-					+'<input type=button id="submitItemChanges' + menuItem.MenuItemID + '" value="Submit"/><br />'
-					+'<input type=button id="deleteMenuItem' + menuItem.MenuItemID + '" value="Delete"/><br />'
-					+
-							
-			'</div>');
+		'<div id="menu' + menuItem.MenuItemID + '" class="formButton menuItem">'
+			+'<input type=button id="submitItemChanges' + menuItem.MenuItemID + '" class="formButton submitItemChanges" value="Submit"/>'
+			+'<input type=button id="deleteMenuItem' + menuItem.MenuItemID + '" class="formButton deleteMenuItem" value="Delete"/>'
+			+'<div class="inputLabel employeeLabel">Name </div>'
+			+'<input type="text" id="menuItem' + menuItem.MenuItemID + 'Name" class="inputField menuItemName" value="'+ menuItem.Name +'"/>' + '<br />'
+			+'<div class="inputLabel employeeLabel">Category </div>'
+			+ '<select id="menuItem' + menuItem.MenuItemID + 'Category" class="inputField menuItemCategory">'
+				+ '<option value="Appetizer">Appetizer</option>'
+				+ '<option value="Main Course">Main Course</option>'
+				+ '<option value="Dessert">Dessert</option>'
+			+ '</select>' + '<br />'
+			+'<div class="inputLabel employeeLabel">Prep Time </div>'
+			+'<input type="text" id="menuItem' + menuItem.MenuItemID + 'PrepTime" class="inputField menuItemPrepTime" value="'+ menuItem.PrepTime +'"/>' + '<br />'
+			+'<div class="inputLabel employeeLabel">Price </div>'
+			+'<input type="text" id="menuItem' + menuItem.MenuItemID + 'Price" class="inputField menuItemPrice" value="'+ menuItem.Price +'"/>' + '<br />'
+		+'</div>'
+	);
 
 	$('#menuItem' + menuItem.MenuItemID + 'Category').val(menuItem.Category);
 
