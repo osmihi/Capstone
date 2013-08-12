@@ -19,15 +19,15 @@ var Bill = function (selTable) {
 	this.table = selTable;
 	this.tableID = selTable.TableID;
 
-	request("order", "", RequestType.READ, userInfo, "&tableID=" + this.tableID, function(response) {
+	request("order", "", RequestType.READ, userInfo, "&tableID=" + _this.tableID, function(response) {
 		_this.orderData = response.data !== undefined ? response.data : new Array();
 		request("orderItem", "", RequestType.READ, userInfo, "", function(response) {
 			_this.orderItemData = response.data !== undefined ? response.data : new Array();
 			request("menuItem", "", RequestType.READ, userInfo, "", function(response) {
 				_this.menuItemData = response.data !== undefined ? response.data : new Array();
-				request("tip", "", RequestType.READ, userInfo, "&tableID=" + this.tableID, function(response) {
+				request("tip", "", RequestType.READ, userInfo, "&tableID=" + _this.tableID, function(response) {
 					_this.tipData = response.data !== undefined ? response.data : new Array();
-					request("discounted", "", RequestType.READ, userInfo, "&tableID=" + this.tableID, function(response) {
+					request("discounted", "", RequestType.READ, userInfo, "&tableID=" + _this.tableID, function(response) {
 						_this.discountedData = response.data !== undefined ? response.data : new Array();
 						request("discount", "", RequestType.READ, userInfo, "", function(response) {
 							_this.discountData = response.data !== undefined ? response.data : new Array();
