@@ -90,8 +90,7 @@ function drawWaitlist(waitList) {
 	//Add click function to waitlist delete button
 	$('#waitListDelete' + waitList.WaitListID).click(function() {
 		var isSure =confirm("Are you sure you want to delete this party?");
-		if(isSure){
-			console.log(waitList);			
+		if(isSure){		
 			request("waitList", waitList.WaitListID, RequestType.DELETE, userInfo, 'ID='+waitList.WaitListID, waitListScreen);			
 		}
 	});

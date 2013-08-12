@@ -168,8 +168,11 @@ function addUserClickEvents() {
 	
 	// Add click function to buttons
 	$('.deleteUser').click(function() {
-		var userID = $(this).closest('.user').find('.userID').val();
-		request("user", userID, RequestType.DELETE, userInfo, "UserID="+userID, usersScreen, userErrorFunction);		
+		var isSure = confirm("Are you sure you want to delete this user?");
+		if(isSure){
+			var userID = $(this).closest('.user').find('.userID').val();
+			request("user", userID, RequestType.DELETE, userInfo, "UserID="+userID, usersScreen, userErrorFunction);
+		}
 	});
 	
 	//Add click function to button
