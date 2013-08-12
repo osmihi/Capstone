@@ -1,3 +1,4 @@
+var tableCollection;
 
 function tablesScreen() {
 	refreshFunc = function() {};
@@ -25,15 +26,19 @@ function tablesScreen() {
 function buildTablesScreen(tablesResponse) {
 	$('#page').html("");
 
-	var tables = tablesResponse.data;
+	tableCollection = tablesResponse.data;
 
-	tables.sort(function(a, b) {
+	tableCollection.sort(function(a, b) {
 		if (a.Number < b.Number) return -1;
 		else return 1;
 	});
 
-	for ( i = 0; i < tables.length; i++) {
-		drawTableTable(tables[i], buildTablesScreen.users);
+	for ( i = 0; i < tableCollection.length; i++) {
+		drawTableTable(tableCollection[i], buildTablesScreen.users);
+	}
+	
+	if(userIsManagement()){
+		drawAddTableForm();
 	}
 }
 
@@ -47,10 +52,10 @@ function drawTableTable(table, userData) {
 	
 	userOptions += '</select>';
 
-	var billAction = userRole == 'Manager' || userRole == 'Administrator' ? 'Edit' : 'View';
+	var billAction = userIsManagement() ? 'Edit' : 'View';
 	
 	var tableMarkup = '<div id="tableTables' + table.TableID + '" class="formButton tableTables">';
-	  	if(userRole == 'Manager'){tableMarkup += '<div id="table' + table.TableID + 'Delete" class="formButton tableDeleteButton">Delete</div>';}
+	  	if(userIsManagement()){tableMarkup += '<div id="table' + table.TableID + 'Delete" class="formButton tableDeleteButton">Delete</div>';}
 	tableMarkup += 
 	  	'<div id="table' + table.TableID + 'Bill" class="formButton billButton">' + billAction + ' Bill' + '</div>' +
 		'<div id="table' + table.TableID + 'Status" class="formButton tableStatus ' + table.Status + '">' + table.Status + '</div>' +
@@ -59,9 +64,7 @@ function drawTableTable(table, userData) {
 		'<div class="tableAssignee">Assignee: ' + userOptions + '</div>' +
 	'</div>'
 
-	$('#page').append(
-			tableMarkup
-	);
+	$('#page').append(tableMarkup);
 
 	$('#table' + table.TableID + 'Assignee option[value="' + table.UserID + '"]').attr("selected", "selected");
 	
@@ -88,4 +91,17 @@ function drawTableTable(table, userData) {
 		}
 		
 	});
+}
+
+function drawAddTableForm(){
+	var addTableMarkup = '<div id="addNewTableForm" class="formButton tableTables">' +
+		'Add a new table to this restaurant.' +
+		'<div class="newTableName">Table ' + (tableCollection.length + 1) + ' </div>' + 
+		'<div class="newTableCapacity">Capacity: <input type="text" id="newTableCapacity" value=""/></div>' + 
+		'</div>'
+	$('#page').append(addTableMarkup);
+}
+
+function userIsManagement(){
+	return(userRole == 'Manager' || userRole == 'Administrator');
 }
