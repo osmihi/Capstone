@@ -105,13 +105,9 @@ function drawTableTable(table, userData) {
 function drawAddTableForm(){
 	var addTableMarkup = 
 		'<div id="addNewTableForm" class="formButton tableTables">' +
-			'Add a new table to this restaurant.';
-	addTableMarkup += 
-			'<div id="newTableName">Number: ' + tableNumberSelector() + '</div>';
-			//<input type="text" id="newTableNumber" value="" maxlength="4" size="4"/></div>' + 
-			
-	addTableMarkup += 
-	'<div class="newTableCapacity">Capacity: <input type="text" id="newTableCapacityInput" value="" maxlength="2" size="3"/></div>' + 
+			'Add a new table to this restaurant.' + 
+			'<div id="newTableName">Number: ' + tableNumberSelector() + '</div>'+ 
+			'<div class="newTableCapacity">Capacity: <input type="text" id="newTableCapacityInput" value="" maxlength="2" size="3"/></div>' + 
 			'<div id="addNewTableButton" class="formButton">Add Table</div>' +
 		'</div>';
 	$('#page').append(addTableMarkup);
@@ -126,27 +122,18 @@ function drawAddTableForm(){
 		request("table", "", RequestType.CREATE, userInfo, createQuery, tablesScreen);
 	});
 	
-//	var addTableMarkup = 
-//		'<div id="addNewTableForm" class="formButton tableTables">' +
-//			'Add a new table to this restaurant.' +
-//			'<div id="newTableName">Table ' + (tableCollection.length + 1) + ' </div>' + 
-//			'<div class="newTableCapacity">Capacity: <input type="text" id="newTableCapacityInput" value="" maxlength="2" size="3"/></div>' + 
-//			'<div id="addNewTableButton" class="formButton">Add Table</div>' +
-//		'</div>'
-//	$('#page').append(addTableMarkup);
-//	
-//	$('#addNewTableButton').click(function() {
-//		var createQuery = 'Capacity='+$('#newTableCapacityInput').val()+'&Number='+(tableCollection.length + 1)+'&Status=Available&Paid=0';	
-//		request("table", "", RequestType.CREATE, userInfo, createQuery, tablesScreen);
-//	});
 }
 
 
 function tableNumberSelector(){
 	var existingTableNumbers = getExistingTableNumbers();
 	var selectorString = '<select id="newTableNumber"><option value="NULL"></option>';
+	console.log(existingTableNumbers);
 	for(var i=1; i<101; i++){
-		if($.inArray(i, existingTableNumbers)) continue;
+		if($.inArray(i, existingTableNumbers) != -1){
+			alert(i);
+			continue;
+		}
 		else selectorString += '<option value="' + i + '">' + i + '</option>';
 	}
 	selectorString += '</select>';
@@ -154,15 +141,11 @@ function tableNumberSelector(){
 }
 
 function getExistingTableNumbers(){
-	alert("1");
-	var existingTableNumbers = new array();
-	alert("2");
-	for(var i=0; i<tableCollection; i++){
+	var existingTableNumbers = [];
+	for(var i=0; i<tableCollection.length; i++){
 		existingTableNumbers.push(tableCollection[i].Number); 
 	}
-	alert("__");
-	console.log(existingTableNumbers);
-	return existingTableNumbers;
+	return existingTableNumbers; 
 }
 
 function userIsManagement(){
