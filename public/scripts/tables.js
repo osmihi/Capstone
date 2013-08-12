@@ -55,13 +55,15 @@ function drawTableTable(table, userData) {
 	var billAction = userIsManagement() ? 'Edit' : 'View';
 	
 	var tableMarkup = '<div id="tableTables' + table.TableID + '" class="formButton tableTables">';
-	  	if(userIsManagement()){tableMarkup += '<div id="table' + table.TableID + 'Delete" class="formButton tableDeleteButton">Delete</div>';}
+	  	if(userIsManagement()){tableMarkup += '<div id="table' + table.TableID + 'Delete" class="formButton tableDeleteButton">X</div>';}
 	tableMarkup += 
 	  	'<div id="table' + table.TableID + 'Bill" class="formButton billButton">' + billAction + ' Bill' + '</div>' +
 		'<div id="table' + table.TableID + 'Status" class="formButton tableStatus ' + table.Status + '">' + table.Status + '</div>' +
-		'<div class="tableName">Table ' + table.Number + ' </div>' + 
-		'<div class="tableCapacity">Capacity: ' + table.Capacity + '</div>' + 
-		'<div class="tableAssignee">Assignee: ' + userOptions + '</div>' +
+		'<div class="tableInfo">' +
+			'<div class="tableName">Table ' + table.Number + ' </div>' + 
+			'<div class="tableCapacity">Capacity: ' + table.Capacity + '</div>' + 
+			'<div class="tableAssignee">Assignee: ' + userOptions + '</div>' +
+		'</div>' +
 	'</div>'
 
 	$('#page').append(tableMarkup);
