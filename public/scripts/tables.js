@@ -105,7 +105,6 @@ function drawTableTable(table, userData) {
 function drawAddTableForm(){
 	var addTableMarkup = 
 		'<div id="addNewTableForm" class="formButton addTable">' +
-		'Add a new table FIX ME 8^D ' +
 			'<div id="addNewTableButton" class="formButton">Add</div>' + 
 			'<div class="inputLabel tableNameLabel">Number </div><input type="text" id="newTableNumber" class="inputField" value="" maxlength="2" size="3"/>' + 
 			'<div class="newTableCapacity inputLabel tableCapacityLabel">Capacity </div><input type="text" id="newTableCapacityInput" class="inputField" value="" maxlength="2" size="3"/>' + 

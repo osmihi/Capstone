@@ -70,6 +70,7 @@ function drawWaitlist(waitList) {
 	$('#page').append(
 			'<div id="waitList' + waitList.WaitListID + '" class="formButton waitList">' +
 				'<div id="waitListSelect' + waitList.WaitListID + '" class="formButton waitListSelectBtn">Select</div>' +
+				'<div id="waitListDelete' + waitList.WaitListID + '"class="formButton waitListDeleteBtn">Delete</div>' +
 				'<div class="waitListLabel waitListName">' + waitList.Name + '</div>' +  
 				'<div class="waitListLabel waitListSize">Party of ' + waitList.Size + '</div>' +
 				'<div class="waitListLabel waitListTimestamp">Waiting since ' + thisDate.toLocaleTimeString() + '</div>' +
@@ -79,5 +80,14 @@ function drawWaitlist(waitList) {
 	$('#waitListSelect' + waitList.WaitListID).click(function() {
 		partyIsSelected = true;
 		seatingScreen(waitList);
+	});
+	
+	//Add click function to waitlist delete button
+	$('#waitListDelete' + waitList.WaitListID).click(function() {
+		var isSure =confirm("Are you sure you want to delete this party?");
+		if(isSure){
+			console.log(waitList);			
+			request("waitList", waitList.WaitListID, RequestType.DELETE, userInfo, 'ID='+waitList.WaitListID, waitListScreen);			
+		}
 	});
 }
