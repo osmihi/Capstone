@@ -12,30 +12,35 @@ function menuScreen() {
 
 // response is result of API request call
 function buildMenuItemScreen(response) {
-	
 	var items = response.data;
-
-	items.sort(function(objA, objB) {
-		var nameA=objA.Name.toLowerCase();
-		var nameB=objB.Name.toLowerCase();
-		if (nameA < nameB)
-			return -1;
-		else if (nameA > nameB)
-			return 1;
-		else return 0;
-	});
-
-	// Wipe page clean (remove previous existing content)
 	$('#page').html("");
 	
 	drawAddMenuItem();
-
-	// Iterate through menuItems, call menu items
-	for (i = 0; i < items.length; i++) {
-		drawItems(items[i]);
+	
+	if(items == null){
+		$('#page').append("<h2>There are no menu items currently in the system.");
 	}
+	else{
+		items.sort(function(objA, objB) {
+			var nameA=objA.Name.toLowerCase();
+			var nameB=objB.Name.toLowerCase();
+			if (nameA < nameB)
+				return -1;
+			else if (nameA > nameB)
+				return 1;
+			else return 0;
+		});
+
+		// Iterate through menuItems, call menu items
+		for (i = 0; i < items.length; i++) {
+			drawItems(items[i]);
+		}
+	
+	}
+
 }
 
+	
 function drawAddMenuItem() {
 	//Add a div with inputs to enter a new MENU ITEM
 	$('#page').append(
@@ -67,8 +72,15 @@ function addItemToMenu(){
 	var category = $('#itemCategory').val();
 	var prepTime = $('#itemPrepTime').val();
 	var price = $('#itemPrice').val();
-	
-	request("menuItem", "", RequestType.CREATE, userInfo, "Name="+name+"&Category="+category+"&PrepTime="+prepTime+"&Price="+price, menuScreen);
+	if(name == "" || name == null){
+		alert("Name cannot be empty");
+	}
+	else if(!isNumber(prepTime) || !isNumber(price)){
+		alert("Prep time and price must be numbers")
+	}
+	else{
+		request("menuItem", "", RequestType.CREATE, userInfo, "Name="+name+"&Category="+category+"&PrepTime="+prepTime+"&Price="+price, menuScreen);
+	}
 }
 
 // Creates box containing menu items
@@ -101,7 +113,10 @@ function drawItems(menuItem) {
 	});
 		
 	$('#deleteMenuItem' + menuItem.MenuItemID).click(function() {
-		request("menuItem", menuItem.MenuItemID, RequestType.DELETE, userInfo, "", menuScreen);
+		var isSure = confirm("Are you sure you want to delete this menu item?");
+		if(isSure){
+			request("menuItem", menuItem.MenuItemID, RequestType.DELETE, userInfo, "", menuScreen);
+		}
 	});
 }
 	
@@ -111,7 +126,14 @@ function SubmitMenuItemChanges(menuItemID) {
 		var itemCategory = $('#menuItem' + menuItemID + 'Category').val();
 		var itemPrepTime = $('#menuItem' + menuItemID + 'PrepTime').val();
 		var itemPrice = $('#menuItem' + menuItemID + 'Price').val();
-		
-		request("menuItem", menuItemID, RequestType.UPDATE, userInfo, "Name="+itemName+"&Category="+itemCategory+"&PrepTime="+itemPrepTime+"&Price="+itemPrice, menuScreen);
+		if(itemName == "" || itemName == null){
+			alert("Name cannot be empty");
+		}
+		else if(!isNumber(itemPrepTime) || !isNumber(itemPrice)){
+			alert("Prep time and price must be numbers")
+		}
+		else{
+			request("menuItem", menuItemID, RequestType.UPDATE, userInfo, "Name="+itemName+"&Category="+itemCategory+"&PrepTime="+itemPrepTime+"&Price="+itemPrice, menuScreen);		
+		}
 }
 
