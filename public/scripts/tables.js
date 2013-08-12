@@ -26,21 +26,26 @@ function tablesScreen() {
 
 function buildTablesScreen(tablesResponse) {
 	$('#page').html("");
-
 	tableCollection = tablesResponse.data;
-
-	tableCollection.sort(function(a, b) {
-		if (a.Number < b.Number) return -1;
-		else return 1;
-	});
+	
+	if(tableCollection == null){
+		$('#page').html("<h2>There are currently no tables to display</h2>");
+	}
+	else{
+		tableCollection.sort(function(a, b) {
+			if (a.Number < b.Number) return -1;
+			else return 1;
+		});
+		
+		for ( i = 0; i < tableCollection.length; i++) {
+			drawTableTable(tableCollection[i], buildTablesScreen.users);
+		}
+	}
 
 	if(userIsManagement()){
 		drawAddTableForm();
 	}
 
-	for ( i = 0; i < tableCollection.length; i++) {
-		drawTableTable(tableCollection[i], buildTablesScreen.users);
-	}
 }
 
 function drawTableTable(table, userData) {
@@ -133,10 +138,16 @@ function drawAddTableForm(){
 
 function getExistingTableNumbers(){
 	var existingTableNumbers = [];
-	for(var i=0; i<tableCollection.length; i++){
+	if(tableCollection == null){
+		return existingTableNumbers
+	}
+	else{
+		for(var i=0; i<tableCollection.length; i++){
 		existingTableNumbers.push(tableCollection[i].Number); 
 	}
 	return existingTableNumbers; 
+	}
+
 }
 
 function userIsManagement(){
