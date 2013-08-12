@@ -103,14 +103,21 @@ function drawTableTable(table, userData) {
 }
 
 function drawAddTableForm(){
+	alert("1");
 	var addTableMarkup = 
 		'<div id="addNewTableForm" class="formButton tableTables">' +
-			'Add a new table to this restaurant.' +
-			'<div id="newTableName">Number: ' + tableNumberSelector() + '</div>'
+			'Add a new table to this restaurant.';
+	alert("2");
+	addTableMarkup += 
+			'<div id="newTableName">Number: ' + tableNumberSelector() + '</div>';
+	alert("3");
 			//<input type="text" id="newTableNumber" value="" maxlength="4" size="4"/></div>' + 
-			'<div class="newTableCapacity">Capacity: <input type="text" id="newTableCapacityInput" value="" maxlength="2" size="3"/></div>' + 
+			
+	addTableMarkup += 
+	'<div class="newTableCapacity">Capacity: <input type="text" id="newTableCapacityInput" value="" maxlength="2" size="3"/></div>' + 
 			'<div id="addNewTableButton" class="formButton">Add Table</div>' +
-		'</div>'
+		'</div>';
+	alert("4");
 	$('#page').append(addTableMarkup);
 	
 	$('#addNewTableButton').click(function() {
@@ -122,6 +129,7 @@ function drawAddTableForm(){
 		var createQuery = 'Capacity='+$('#newTableCapacityInput').val()+'&Number='+(tableCollection.length + 1)+'&Status=Available&Paid=0';	
 		request("table", "", RequestType.CREATE, userInfo, createQuery, tablesScreen);
 	});
+	
 //	var addTableMarkup = 
 //		'<div id="addNewTableForm" class="formButton tableTables">' +
 //			'Add a new table to this restaurant.' +
