@@ -27,8 +27,14 @@ function orderQueueScreen() {
 //orderQueueOrders will hold the order data locally
 function populateOrderQueueOrders(response) {
 	orderQueueOrders = response.data;
-	request("orderItem", "", RequestType.READ, userInfo, "",
+	if(orderQueueOrders == null){
+			$('#page').html("");
+			drawNoOrdersMessage();
+	}
+	else{
+			request("orderItem", "", RequestType.READ, userInfo, "",
 			populateOrderQueueOrderItems);
+	}
 }
 
 //orderQueueOrderItems will hold orderItem data locally
