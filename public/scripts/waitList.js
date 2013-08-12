@@ -16,25 +16,30 @@ function buildWaitListScreen(response) {
 
 	if (response.statusCode == "200") {
 		waitLists = response.data;
-	
-	//Sort waitLists in descending order by timestamp (oldest time stamp first) 
-		waitLists.sort(function(objA, objB) {
-			if (objA.Timestamp < objB.Timestamp)
-				return -1;
-			else
-				return 1;
-		});
-	}
-	
-	//Wipe page clean (remove previous existing content)
-	$('#page').html("");
-
-	//Form to add party to wait list 
-	drawAddToWaitListForm();
-	
-	//Iterate through waitLists, call drawWaitlist for each party
-	for (i = 0; i < waitLists.length; i++) {
-		drawWaitlist(waitLists[i]);
+		//Wipe page clean (remove previous existing content)
+		$('#page').html("");
+		if(waitLists == null){
+			$('#page').html("<h2>There are currently no parties in the wait list</h2>");
+		}
+		else{
+			//Sort waitLists in descending order by timestamp (oldest time stamp first) 
+			if(waitLists.length > 1){
+				waitLists.sort(function(objA, objB) {
+					if (objA.Timestamp < objB.Timestamp)
+						return -1;
+					else
+						return 1;
+				});	
+			}
+		}
+			
+		//Form to add party to wait list 
+		drawAddToWaitListForm();
+		
+		//Iterate through waitLists, call drawWaitlist for each party
+		for (i = 0; i < waitLists.length; i++) {
+			drawWaitlist(waitLists[i]);
+		}		
 	}
 }
 
