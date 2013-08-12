@@ -94,12 +94,19 @@ function drawTableTable(table, userData) {
 }
 
 function drawAddTableForm(){
-	var addTableMarkup = '<div id="addNewTableForm" class="formButton tableTables">' +
-		'Add a new table to this restaurant.' +
-		'<div class="newTableName">Table ' + (tableCollection.length + 1) + ' </div>' + 
-		'<div class="newTableCapacity">Capacity: <input type="text" id="newTableCapacity" value=""/></div>' + 
+	var addTableMarkup = 
+		'<div id="addNewTableForm" class="formButton tableTables">' +
+			'Add a new table to this restaurant.' +
+			'<div id="newTableName">Table ' + (tableCollection.length + 1) + ' </div>' + 
+			'<div class="newTableCapacity">Capacity: <input type="text" id="newTableCapacityInput" value="" maxlength="2" size="3"/></div>' + 
+			'<div id="addNewTableButton" class="formButton">Add Table</div>' +
 		'</div>'
 	$('#page').append(addTableMarkup);
+	
+	$('#addNewTableButton').click(function() {
+		var createQuery = 'Capacity='+$('#newTableCapacityInput').val()+'&Number='+(tableCollection.length + 1)+'&Status=Available&Paid=0';	
+		request("table", "", RequestType.CREATE, userInfo, createQuery, buildTablesScreen);
+	});
 }
 
 function userIsManagement(){
