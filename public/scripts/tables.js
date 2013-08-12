@@ -94,14 +94,12 @@ function drawTableTable(table, userData) {
 }
 
 function drawAddTableForm(){
-	var addTableMarkup = '<div id="addNewTableForm" class="formButton tableTables">' + tableCollection.length + '</div>';
+	var addTableMarkup = '<div id="addNewTableForm" class="formButton tableTables">' +
+		'Add a new table to this restaurant.' +
+		'<div class="newTableName">Table ' + (tableCollection.length + 1) + ' </div>' + 
+		'<div class="newTableCapacity">Capacity: <input type="text" id="newTableCapacity" value=""/></div>' + 
+		'</div>'
 	$('#page').append(addTableMarkup);
-//	'<input id="newTableNumber" class="formButton billButton">' + billAction + ' Bill' + '</div>' +
-//	'<div id="table' + table.TableID + 'Status" class="formButton tableStatus ' + table.Status + '">' + table.Status + '</div>' +
-//	'<div class="tableName">Table ' + table.Number + ' </div>' + 
-//	'<div class="tableCapacity">Capacity: ' + table.Capacity + '</div>' + 
-//	'<div class="tableAssignee">Assignee: ' + userOptions + '</div>' +
-//	'</div>'
 }
 
 function userIsManagement(){
