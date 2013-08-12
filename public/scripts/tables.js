@@ -35,7 +35,6 @@ function buildTablesScreen(tablesResponse) {
 	for ( i = 0; i < tables.length; i++) {
 		drawTableTable(tables[i], buildTablesScreen.users);
 	}
-
 }
 
 function drawTableTable(table, userData) {
@@ -49,7 +48,7 @@ function drawTableTable(table, userData) {
 	userOptions += '</select>';
 
 	var billAction = userRole == 'Manager' || userRole == 'Administrator' ? 'Edit' : 'View';
-	
+
 	$('#page').append(
 		'<div id="tableTables' + table.TableID + '" class="formButton tableTables">' +
 			'<div id="table' + table.TableID + 'Bill" class="formButton billButton">' + billAction + ' Bill' + '</div>' +

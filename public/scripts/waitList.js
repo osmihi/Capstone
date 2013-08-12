@@ -42,18 +42,12 @@ function buildWaitListScreen(response) {
 function drawAddToWaitListForm() {
 	//Add a div with inputs to enter a new party
 	$('#page').append(
-			'<div id="addToWaitListForm"  class="addToWaitListForm">'
-				+'<table>'
-					+'<tr>' 
-						+'<td> Party Name: </td>' 
-						+'<td><input type="text" id="partyNameInput" value=""/></td>'
-					+'</tr>'
-					+'<tr>'
-						+'<td> Party Size </td>'
-						+'<td><input type="text" id="partySizeInput" value="" maxlength="2" style="width:30px"/></td>'
-					+'</tr>'
-				+'</table>'
-				+'<input type=button id="addPartyButton" value="Add"/><br />'
+			'<div id="addToWaitListForm" class="formButton addToWaitListForm">'
+						+'<div class="waitListLabel waitListNameLabel">Party Name </div>' 
+						+'<input type="text" id="partyNameInput" class="inputField" value=""/>'
+						+'<div class="waitListLabel waitListSizeLabel"> Size </div>'
+						+'<input type="text" id="partySizeInput" class="inputField" value="" maxlength="2"/>'
+				+'<input type=button id="addPartyButton" class="formButton" value="Add"/>'
 			+'</div>');
 
 	//Add click function to button
@@ -70,16 +64,19 @@ function addPartyToWaitList(){
 
 //Creates box containing party information
 function drawWaitlist(waitList) {
+	var thisDate = new Date(waitList.Timestamp);
+
 	//Add div with party waitlist info to page div  
 	$('#page').append(
-			'<div id="waitList' + waitList.WaitListID + '" class="waitList">'
-					+ 'Name: ' + waitList.Name + '<br />' 
-					+ 'Size: ' + waitList.Size + '<br />' 
-					+ 'Timestamp: ' + waitList.Timestamp + '<br />' +
+			'<div id="waitList' + waitList.WaitListID + '" class="formButton waitList">' +
+				'<div id="waitListSelect' + waitList.WaitListID + '" class="formButton waitListSelectBtn">Select</div>' +
+				'<div class="waitListLabel waitListName">' + waitList.Name + '</div>' +  
+				'<div class="waitListLabel waitListSize">Party of ' + waitList.Size + '</div>' +
+				'<div class="waitListLabel waitListTimestamp">Waiting since ' + thisDate.toLocaleTimeString() + '</div>' +
 			'</div>');
 
 	//Add click function to waitlist div - show seating screen
-	$('#waitList' + waitList.WaitListID).click(function() {
+	$('#waitListSelect' + waitList.WaitListID).click(function() {
 		partyIsSelected = true;
 		seatingScreen(waitList);
 	});
