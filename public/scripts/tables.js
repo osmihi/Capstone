@@ -36,6 +36,10 @@ function buildTablesScreen(tablesResponse) {
 	for ( i = 0; i < tableCollection.length; i++) {
 		drawTableTable(tableCollection[i], buildTablesScreen.users);
 	}
+	
+	if(userIsManagement()){
+		drawAddTableForm();
+	}
 }
 
 function drawTableTable(table, userData) {
@@ -60,9 +64,7 @@ function drawTableTable(table, userData) {
 		'<div class="tableAssignee">Assignee: ' + userOptions + '</div>' +
 	'</div>'
 
-	$('#page').append(
-			tableMarkup
-	);
+	$('#page').append(tableMarkup);
 
 	$('#table' + table.TableID + 'Assignee option[value="' + table.UserID + '"]').attr("selected", "selected");
 	
@@ -89,6 +91,17 @@ function drawTableTable(table, userData) {
 		}
 		
 	});
+}
+
+function drawAddTableForm(){
+	var addTableMarkup = '<div id="addNewTableForm" class="formButton tableTables">' + tableCollection.length + '</div>';
+	$('#page').append(addTableMarkup);
+//	'<input id="newTableNumber" class="formButton billButton">' + billAction + ' Bill' + '</div>' +
+//	'<div id="table' + table.TableID + 'Status" class="formButton tableStatus ' + table.Status + '">' + table.Status + '</div>' +
+//	'<div class="tableName">Table ' + table.Number + ' </div>' + 
+//	'<div class="tableCapacity">Capacity: ' + table.Capacity + '</div>' + 
+//	'<div class="tableAssignee">Assignee: ' + userOptions + '</div>' +
+//	'</div>'
 }
 
 function userIsManagement(){
