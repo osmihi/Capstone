@@ -34,12 +34,12 @@ function buildTablesScreen(tablesResponse) {
 		else return 1;
 	});
 
-	for ( i = 0; i < tableCollection.length; i++) {
-		drawTableTable(tableCollection[i], buildTablesScreen.users);
-	}
-	
 	if(userIsManagement()){
 		drawAddTableForm();
+	}
+
+	for ( i = 0; i < tableCollection.length; i++) {
+		drawTableTable(tableCollection[i], buildTablesScreen.users);
 	}
 }
 
@@ -104,31 +104,28 @@ function drawTableTable(table, userData) {
 
 function drawAddTableForm(){
 	var addTableMarkup = 
-		'<div id="addNewTableForm" class="formButton tableTables">' +
-			'Add a new table to this restaurant.' + 
-			'<div id="newTableName">Number: ' + tableNumberSelector() + '</div>'+ 
-			'<div class="newTableCapacity">Capacity: <input type="text" id="newTableCapacityInput" value="" maxlength="2" size="3"/></div>' + 
-			'<div id="addNewTableButton" class="formButton">Add Table</div>' +
+		'<div id="addNewTableForm" class="formButton addTable">' +
+			'<div id="addNewTableButton" class="formButton">Add</div>' + 
+			'<div id="newTableName" class="inputLabel tableNameLabel">Number </div>' + tableNumberSelector() + ''+ 
+			'<div class="newTableCapacity inputLabel tableCapacityLabel">Capacity </div><input type="text" id="newTableCapacityInput" class="inputField" value="" maxlength="2" size="3"/>' + 
 		'</div>';
 	$('#page').append(addTableMarkup);
 	
 	$('#addNewTableButton').click(function() {
 		var tableNumber = $('#newTableNumber').val();
 		var tableCapacity = $('#newTableCapacityInput').val();
-		if(!isNumber(tableNumber) || !tableNumber(tableCapacity)){
+		if(!isNumber(tableNumber) || !isNumber(tableCapacity)){
 			alert("Table number and capacity must be integer values")
 		}
-		var createQuery = 'Capacity='+$('#newTableCapacityInput').val()+'&Number='+(tableCollection.length + 1)+'&Status=Available&Paid=0';	
+		var createQuery = 'Capacity=' + $('#newTableCapacityInput').val() + '&Number=' + tableNumber;	
 		request("table", "", RequestType.CREATE, userInfo, createQuery, tablesScreen);
 	});
-	
 }
 
 
 function tableNumberSelector(){
 	var existingTableNumbers = getExistingTableNumbers();
-	var selectorString = '<select id="newTableNumber"><option value="NULL"></option>';
-	console.log(existingTableNumbers);
+	var selectorString = '<select id="newTableNumber" class="inputField"><option value="NULL"></option>';
 	for(var i=1; i<101; i++){
 		if($.inArray(i, existingTableNumbers) != -1){
 			alert(i);
