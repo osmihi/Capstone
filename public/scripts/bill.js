@@ -374,7 +374,7 @@ Bill.prototype.printBill = function() {
 
 		if (this.billItems[i][0] == 'total') {
 			if (this.tipData.length < 1) {
-				printTable.append('<tr><td>Gratuity</td><td></td><td></td>__________</tr>');
+				printTable.append('<tr><td>Gratuity</td><td></td><td>__________</td></tr>');
 				printTable.append('<tr><td></td><td></td><td></td></tr>');
 			}
 			

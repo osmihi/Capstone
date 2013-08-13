@@ -195,6 +195,18 @@ INSERT INTO `MenuItem` (`RestaurantID`, `Name`, `PrepTime`, `Category`, `Price`)
 SELECT `RestaurantID`, 'Chocolate Pie', '10', 'Dessert', '5.99' 
 FROM `Restaurant` WHERE `Restaurant`.`Name` = 'BurgerJoint';
 
+INSERT INTO `MenuItem` (`RestaurantID`, `Name`, `PrepTime`, `Category`, `Price`)
+SELECT `RestaurantID`, 'Water', '1', 'Beverage', '0.00' 
+FROM `Restaurant` WHERE `Restaurant`.`Name` = 'BurgerJoint';
+
+INSERT INTO `MenuItem` (`RestaurantID`, `Name`, `PrepTime`, `Category`, `Price`)
+SELECT `RestaurantID`, 'Soda', '1', 'Beverage', '1.99' 
+FROM `Restaurant` WHERE `Restaurant`.`Name` = 'BurgerJoint';
+
+INSERT INTO `MenuItem` (`RestaurantID`, `Name`, `PrepTime`, `Category`, `Price`)
+SELECT `RestaurantID`, 'Smoothie', '4', 'Beverage', '4.99' 
+FROM `Restaurant` WHERE `Restaurant`.`Name` = 'BurgerJoint';
+
 -- MenuItem - TacoTown
 INSERT INTO `MenuItem` (`RestaurantID`, `Name`, `PrepTime`, `Category`, `Price`)
 SELECT `RestaurantID`, 'Chips and Salsa', '4', 'Appetizer', '5.99' 
@@ -226,6 +238,18 @@ FROM `Restaurant` WHERE `Restaurant`.`Name` = 'TacoTown';
 
 INSERT INTO `MenuItem` (`RestaurantID`, `Name`, `PrepTime`, `Category`, `Price`)
 SELECT `RestaurantID`, 'Sopapillas', '10', 'Dessert', '2.99' 
+FROM `Restaurant` WHERE `Restaurant`.`Name` = 'TacoTown';
+
+INSERT INTO `MenuItem` (`RestaurantID`, `Name`, `PrepTime`, `Category`, `Price`)
+SELECT `RestaurantID`, 'Water', '1', 'Beverage', '0.00' 
+FROM `Restaurant` WHERE `Restaurant`.`Name` = 'TacoTown';
+
+INSERT INTO `MenuItem` (`RestaurantID`, `Name`, `PrepTime`, `Category`, `Price`)
+SELECT `RestaurantID`, 'Soda', '1', 'Beverage', '1.99' 
+FROM `Restaurant` WHERE `Restaurant`.`Name` = 'TacoTown';
+
+INSERT INTO `MenuItem` (`RestaurantID`, `Name`, `PrepTime`, `Category`, `Price`)
+SELECT `RestaurantID`, 'Horchata', '4', 'Beverage', '4.99' 
 FROM `Restaurant` WHERE `Restaurant`.`Name` = 'TacoTown';
 
 -- Order - BurgerJoint
@@ -350,6 +374,20 @@ WHERE `Order`.`TableID` = `Table`.`TableID` AND `Table`.`RestaurantID` = `Restau
 AND `Restaurant`.`Name` = 'BurgerJoint' AND `MenuItem`.`Name` = 'Steak'
 AND `Table`.`Number` = '1' AND `Order`.`Timestamp` = '2013-07-08 13:01:01';
 
+INSERT INTO `OrderItem` (`MenuItemID`, `OrderID`, `PurchasePrice`, `Status`, `Notes`)
+SELECT `MenuItem`.`MenuItemID`, `Order`.`OrderID`, `MenuItem`.`Price`, 'Ready', 'No Ice'
+FROM `Order`, `Table`, `MenuItem`, `Restaurant`
+WHERE `Order`.`TableID` = `Table`.`TableID` AND `Table`.`RestaurantID` = `Restaurant`.`RestaurantID` AND `MenuItem`.`RestaurantID` = `Restaurant`.`RestaurantID` 
+AND `Restaurant`.`Name` = 'BurgerJoint' AND `MenuItem`.`Name` = 'Water'
+AND `Table`.`Number` = '1' AND `Order`.`Timestamp` = '2013-07-08 13:01:01';
+
+INSERT INTO `OrderItem` (`MenuItemID`, `OrderID`, `PurchasePrice`, `Status`, `Notes`)
+SELECT `MenuItem`.`MenuItemID`, `Order`.`OrderID`, `MenuItem`.`Price`, 'Ready', ''
+FROM `Order`, `Table`, `MenuItem`, `Restaurant`
+WHERE `Order`.`TableID` = `Table`.`TableID` AND `Table`.`RestaurantID` = `Restaurant`.`RestaurantID` AND `MenuItem`.`RestaurantID` = `Restaurant`.`RestaurantID` 
+AND `Restaurant`.`Name` = 'BurgerJoint' AND `MenuItem`.`Name` = 'Water'
+AND `Table`.`Number` = '1' AND `Order`.`Timestamp` = '2013-07-08 13:01:01';
+
 -- table 4
 INSERT INTO `OrderItem` (`MenuItemID`, `OrderID`, `PurchasePrice`, `Status`)
 SELECT `MenuItem`.`MenuItemID`, `Order`.`OrderID`, `MenuItem`.`Price`, 'Ready'
@@ -393,6 +431,20 @@ WHERE `Order`.`TableID` = `Table`.`TableID` AND `Table`.`RestaurantID` = `Restau
 AND `Restaurant`.`Name` = 'BurgerJoint' AND `MenuItem`.`Name` = 'Chocolate Pie'
 AND `Table`.`Number` = '4' AND `Order`.`Timestamp` = '2013-07-08 14:01:01';
 
+INSERT INTO `OrderItem` (`MenuItemID`, `OrderID`, `PurchasePrice`, `Status`)
+SELECT `MenuItem`.`MenuItemID`, `Order`.`OrderID`, `MenuItem`.`Price`, 'Ready'
+FROM `Order`, `Table`, `MenuItem`, `Restaurant`
+WHERE `Order`.`TableID` = `Table`.`TableID` AND `Table`.`RestaurantID` = `Restaurant`.`RestaurantID` AND `MenuItem`.`RestaurantID` = `Restaurant`.`RestaurantID` 
+AND `Restaurant`.`Name` = 'BurgerJoint' AND `MenuItem`.`Name` = 'Soda'
+AND `Table`.`Number` = '4' AND `Order`.`Timestamp` = '2013-07-08 14:01:01';
+
+INSERT INTO `OrderItem` (`MenuItemID`, `OrderID`, `PurchasePrice`, `Status`)
+SELECT `MenuItem`.`MenuItemID`, `Order`.`OrderID`, `MenuItem`.`Price`, 'Ready'
+FROM `Order`, `Table`, `MenuItem`, `Restaurant`
+WHERE `Order`.`TableID` = `Table`.`TableID` AND `Table`.`RestaurantID` = `Restaurant`.`RestaurantID` AND `MenuItem`.`RestaurantID` = `Restaurant`.`RestaurantID` 
+AND `Restaurant`.`Name` = 'BurgerJoint' AND `MenuItem`.`Name` = 'Smoothie'
+AND `Table`.`Number` = '4' AND `Order`.`Timestamp` = '2013-07-08 14:01:01';
+
 -- OrderItem - TacoTown
 -- table 4
 INSERT INTO `OrderItem` (`MenuItemID`, `OrderID`, `PurchasePrice`, `Status`)
@@ -421,6 +473,20 @@ SELECT `MenuItem`.`MenuItemID`, `Order`.`OrderID`, `MenuItem`.`Price`, 'InPrep'
 FROM `Order`, `Table`, `MenuItem`, `Restaurant`
 WHERE `Order`.`TableID` = `Table`.`TableID` AND `Table`.`RestaurantID` = `Restaurant`.`RestaurantID` AND `MenuItem`.`RestaurantID` = `Restaurant`.`RestaurantID` 
 AND `Restaurant`.`Name` = 'TacoTown' AND `MenuItem`.`Name` = 'Sopapillas'
+AND `Table`.`Number` = '4' AND `Order`.`Timestamp` = '2013-07-08 13:01:01';
+
+INSERT INTO `OrderItem` (`MenuItemID`, `OrderID`, `PurchasePrice`, `Status`)
+SELECT `MenuItem`.`MenuItemID`, `Order`.`OrderID`, `MenuItem`.`Price`, 'Ready'
+FROM `Order`, `Table`, `MenuItem`, `Restaurant`
+WHERE `Order`.`TableID` = `Table`.`TableID` AND `Table`.`RestaurantID` = `Restaurant`.`RestaurantID` AND `MenuItem`.`RestaurantID` = `Restaurant`.`RestaurantID` 
+AND `Restaurant`.`Name` = 'TacoTown' AND `MenuItem`.`Name` = 'Water'
+AND `Table`.`Number` = '4' AND `Order`.`Timestamp` = '2013-07-08 13:01:01';
+
+INSERT INTO `OrderItem` (`MenuItemID`, `OrderID`, `PurchasePrice`, `Status`)
+SELECT `MenuItem`.`MenuItemID`, `Order`.`OrderID`, `MenuItem`.`Price`, 'Ready'
+FROM `Order`, `Table`, `MenuItem`, `Restaurant`
+WHERE `Order`.`TableID` = `Table`.`TableID` AND `Table`.`RestaurantID` = `Restaurant`.`RestaurantID` AND `MenuItem`.`RestaurantID` = `Restaurant`.`RestaurantID` 
+AND `Restaurant`.`Name` = 'TacoTown' AND `MenuItem`.`Name` = 'Horchata'
 AND `Table`.`Number` = '4' AND `Order`.`Timestamp` = '2013-07-08 13:01:01';
 
 -- table 1
@@ -464,5 +530,19 @@ SELECT `MenuItem`.`MenuItemID`, `Order`.`OrderID`, `MenuItem`.`Price`, 'InPrep'
 FROM `Order`, `Table`, `MenuItem`, `Restaurant`
 WHERE `Order`.`TableID` = `Table`.`TableID` AND `Table`.`RestaurantID` = `Restaurant`.`RestaurantID` AND `MenuItem`.`RestaurantID` = `Restaurant`.`RestaurantID` 
 AND `Restaurant`.`Name` = 'TacoTown' AND `MenuItem`.`Name` = 'Sopapillas'
+AND `Table`.`Number` = '1' AND `Order`.`Timestamp` = '2013-07-08 16:51:01';
+
+INSERT INTO `OrderItem` (`MenuItemID`, `OrderID`, `PurchasePrice`, `Status`)
+SELECT `MenuItem`.`MenuItemID`, `Order`.`OrderID`, `MenuItem`.`Price`, 'Ready'
+FROM `Order`, `Table`, `MenuItem`, `Restaurant`
+WHERE `Order`.`TableID` = `Table`.`TableID` AND `Table`.`RestaurantID` = `Restaurant`.`RestaurantID` AND `MenuItem`.`RestaurantID` = `Restaurant`.`RestaurantID` 
+AND `Restaurant`.`Name` = 'TacoTown' AND `MenuItem`.`Name` = 'Soda'
+AND `Table`.`Number` = '1' AND `Order`.`Timestamp` = '2013-07-08 16:51:01';
+
+INSERT INTO `OrderItem` (`MenuItemID`, `OrderID`, `PurchasePrice`, `Status`)
+SELECT `MenuItem`.`MenuItemID`, `Order`.`OrderID`, `MenuItem`.`Price`, 'Ready'
+FROM `Order`, `Table`, `MenuItem`, `Restaurant`
+WHERE `Order`.`TableID` = `Table`.`TableID` AND `Table`.`RestaurantID` = `Restaurant`.`RestaurantID` AND `MenuItem`.`RestaurantID` = `Restaurant`.`RestaurantID` 
+AND `Restaurant`.`Name` = 'TacoTown' AND `MenuItem`.`Name` = 'Water'
 AND `Table`.`Number` = '1' AND `Order`.`Timestamp` = '2013-07-08 16:51:01';
 

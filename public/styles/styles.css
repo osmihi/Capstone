@@ -398,6 +398,7 @@ select.inputField {
 .discount {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	line-height: 1.2em;
+	padding-bottom:1em;
 	
 	background: rgb(246,230,180); /* Old browsers */
 	/* IE9 SVG, needs conditional override of 'filter' to 'none' */
