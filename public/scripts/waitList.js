@@ -18,6 +18,8 @@ function buildWaitListScreen(response) {
 		waitLists = response.data;
 		//Wipe page clean (remove previous existing content)
 		$('#page').html("");
+		//Form to add party to wait list 
+		drawAddToWaitListForm();
 		if(waitLists == null){
 			$('#page').append("<h2>There are currently no parties in the wait list</h2>");
 		}
@@ -31,15 +33,13 @@ function buildWaitListScreen(response) {
 						return 1;
 				});	
 			}
-		}
 			
-		//Form to add party to wait list 
-		drawAddToWaitListForm();
-		
-		//Iterate through waitLists, call drawWaitlist for each party
-		for (i = 0; i < waitLists.length; i++) {
-			drawWaitlist(waitLists[i]);
-		}		
+			//Iterate through waitLists, call drawWaitlist for each party
+			for (i = 0; i < waitLists.length; i++) {
+				drawWaitlist(waitLists[i]);
+			}	
+		}
+	
 	}
 }
 
@@ -64,7 +64,15 @@ function drawAddToWaitListForm() {
 function addPartyToWaitList(){
 	var partyName = $('#partyNameInput').val();
 	var partySize = $('#partySizeInput').val();
-	request("waitlist", "", RequestType.CREATE, userInfo, "Name="+partyName+"&Size="+partySize, waitListScreen);
+	if(partyName == "" || partyName == null){
+		alert("Party must have a name.")
+	}
+	else if(!isNumber(partySize)){
+		alert("Party size must be a number.")
+	}
+	else{
+		request("waitlist", "", RequestType.CREATE, userInfo, "Name="+partyName+"&Size="+partySize, waitListScreen);		
+	}
 }
 
 //Creates box containing party information
