@@ -80,8 +80,6 @@ function drawTableTable(table, userData) {
 	$('#table' + table.TableID + 'Status').click(function() {
 		var newValue = $(this).html() == 'Available' ? 'Occupied' : 'Available';
 
-		console.log(table);
-		
 		if (table.Status == 'Occupied' && table.Paid == '0') {
 			alert('Bill has not been paid yet.');
 		} else {
