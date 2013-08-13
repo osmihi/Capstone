@@ -189,13 +189,16 @@ function sortOrderItems() {
 
 //Renders the order div 
 function drawOrderDiv(order) {
-	var tableString = $.isNumeric(order.tableNumber) ? order.tableNumber : "None";
+	var tableString = $.isNumeric(order.tableNumber) ? order.tableNumber : "None";	
+	var ts = new Date(order.Timestamp);
+	var timeString = ts.toLocaleTimeString();
+
 	var orderHeadingString = '<div id="order' + order.OrderID
-			+ '" class="order">' + '<div class="orderHeading">'
+			+ '" class="order formButton">' + '<div class="orderHeading">'
 			+ '<div class="orderHeadingInfo">'
 			+ 'Table #<span class="orderTableID">' + tableString + '</span>'
-			+ '</div>' + '<div class="orderHeadingInfo">' + 'Placed: '
-			+ order.Timestamp + '</div>' + '</div>' + '</div>';
+			+ '</div>' + '<div class="orderHeadingTime">' + timeString
+			+ '</div>' + '</div>' + '</div>';
 	$('#page').append(orderHeadingString)
 }
 
@@ -203,28 +206,38 @@ function drawOrderDiv(order) {
 // Renders the order item divs inside of their parent order div
  function drawOrderItems(order) {
 	 var orderItems = order.orderItems;
+
 	 for (i = 0; i < orderItems.length; i++) {
 		 var orderItemString =
-			 '<div id="orderItem' + orderItems[i].OrderItemID + '" class="orderItem orderItemStatus' + orderItems[i].Status + '">';
+			 '<div id="orderItem' + orderItems[i].OrderItemID + '" class="formButton orderItem orderItemStatus' + orderItems[i].Status + '">';
 		 orderItemString += '<input type="hidden" class="orderItemIdHolder" value="'+orderItems[i].OrderItemID +'"/>';
 		 orderItemString += '<input type="hidden" class="orderItemStatusHolder" id="orderItemStatus'+ orderItems[i].OrderItemID +'" value="'+orderItems[i].Status +'"/>';
-		 orderItemString += '<div class="orderItemInfo orderItemStatusDisplay">Status: ' + orderItemStatusString(orderItems[i]) + '</div>';
+		 orderItemString += '<div class="orderItemInfo orderItemStatusDisplay">' + orderItemStatusString(orderItems[i]) + '</div>';
 		 orderItemString += '<div class="orderItemInfo orderItemName">' + orderItems[i].Name +'</div>';
-		 orderItemString += '<div class="orderItemInfo orderItemCategory">' + orderItems[i].Category +'</div>';
 		 if(orderItems[i].Notes){
-			 orderItemString += '<div class="orderItemInfo" orderItemNotes>' + orderItems[i].Notes +'</div>';
+			 orderItemString += '<div class="orderItemInfo orderItemNotes">' + orderItems[i].Notes +'</div>';
 		 }
-		 orderItemString += '<div class="orderItemInfo">Prep time: ' +
-		 orderItems[i].PrepTime + '</div></div>';
-		 var orderDivId = '#order' + orderItems[i].OrderID;
-		 $(orderDivId).append(orderItemString);	
-		 if(order.allOrderItemsComplete){
-			 $(orderDivId).hide('slow');
-		 }
+		 orderItemString += '<div class="orderItemDetails">';
+		 orderItemString += '<div class="orderItemInfo orderItemCategory">' + orderItems[i].Category +'</div><br />';
+		 orderItemString += '<div class="orderItemInfo orderItemPrep">' + orderItems[i].PrepTime + ' min prep</div>';
+		 orderItemString += '</div>';
+		 orderItemString += '</div>';
+
+		var orderDivId = '#order' + orderItems[i].OrderID;
+
+		$(orderDivId).append(orderItemString);
+
+		if(order.allOrderItemsComplete){
+			$(orderDivId).hide('slow');
+		}
+
+		if (orderItems[i].Status == 'Ready') {
+			$('#orderItem' + orderItems[i].OrderItemID).children().addClass('orderItemReady');
+		}
 	}
 }
 
- 
+
 // Returns the status string to be displayed on screen for an order item
 function orderItemStatusString(orderItem){
 	 if (orderItem.Status == "Ready"){ return 'Ready'; }
@@ -241,14 +254,16 @@ function addOrderQueueClickFunctions(){
 		var orderItemStatusId = '#orderItemStatus' + orderItemId;
 		var orderItemStatus = $(orderItemStatusId).val();
 		if(orderItemStatus == 'New'){
-			$(this).attr('class', 'orderItem orderItemStatusInPrep');
+			$(this).attr('class', 'formButton orderItem orderItemStatusInPrep');
 			$(orderItemStatusId).val('InPrep');
-			$(this).find('.orderItemStatusDisplay').html('Status: In Prep');
+			$(this).find('.orderItemStatusDisplay').html('In Prep');
 		}
 		else{			
-				$(this).attr('class', 'orderItem orderItemStatusReady');
+				$(this).attr('class', 'formButton orderItem orderItemStatusReady');
 				$(orderItemStatusId).val('Ready');
-				$(this).find('.orderItemStatusDisplay').html('Status: Ready')
+				$(this).find('.orderItemStatusDisplay').html('Ready');
+				$(this).find('.orderItemPrep').hide('fast');
+				$(this).children().addClass('orderItemReady');
 		}
 		updateOrderItemStatus(orderItemId, orderItemStatus);
 	});
