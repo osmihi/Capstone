@@ -145,8 +145,23 @@ function submitEmployeeChanges(userID){
 	var pass = $('#password'+userID).val();
 	var role = $('#user'+userID+'Role').val();
 	var userName = $('#userName'+userID).val();
-	var queryString = "FName="+fName+"&LName="+lName+"&PasswordHash="+pass+"&Role="+role+"&Username="+userName;
-	request("user", userID, RequestType.UPDATE, userInfo, queryString, usersScreen, userErrorFunction);
+	if(userName == "" || userName == null){
+		alert("User name must have a value.");
+	}
+	else if(fName == "" || fName == null){
+		alert("First name must have a value.");
+	}
+	else if(fName == "" || fName == null){
+		alert("Last name must have a value.");
+	}
+	else{
+		var queryString = "UserID="+userID+"&FName="+fName+"&LName="+lName+"&Role="+role+"&Username="+userName;
+		if(pass != "undefined"){
+				queryString += "&PasswordHash="+pass;
+		}
+		request("user", userID, RequestType.UPDATE, userInfo, queryString, usersScreen, userErrorFunction);		
+	}
+
 }
 
 
@@ -156,7 +171,21 @@ function addNewEmployee(){
 	var pass = $('#newUserPassword').val();
 	var role = $('#newUserRole').val();
 	var userName = $('#newUserName').val();
-	request("user", "", RequestType.CREATE, userInfo, "FName="+first+"&LName="+last+"&PasswordHash="+pass+"&Role="+role+"&Username="+userName, usersScreen, userErrorFunction);
+	if(userName == "" || userName == null){
+		alert("User name must have a value.");
+	}
+	else if(pass == "" || pass == null){
+		alert("Password name must have a value.");
+	}
+	else if(first == "" || first == null){
+		alert("First name must have a value.");
+	}
+	else if(last == "" || last == null){
+		alert("Last name must have a value.");
+	}
+	else{
+		request("user", "", RequestType.CREATE, userInfo, "&FName="+first+"&LName="+last+"&PasswordHash="+pass+"&Role="+role+"&Username="+userName, usersScreen, userErrorFunction);
+	}
 }
 
 function addUserClickEvents() {

@@ -38,7 +38,7 @@ function buildTablesScreen(tablesResponse) {
 	}
 	else{
 		tableCollection.sort(function(a, b) {
-			if (a.Number < b.Number) return -1;
+			if (parseInt(a.Number) < parseInt(b.Number)) return -1;
 			else return 1;
 		});
 		
@@ -83,7 +83,7 @@ function drawTableTable(table, userData) {
 		if (table.Status == 'Occupied' && table.Paid == '0') {
 			alert('Bill has not been paid yet.');
 		} else {
-			request("table", table.TableID, RequestType.UPDATE, userInfo, "Status=" + newValue + "&Paid=0", tablesScreen);
+			request("table", table.TableID, RequestType.UPDATE, userInfo, "Status=" + newValue, tablesScreen);
 		}
 	});
 	
@@ -119,9 +119,7 @@ function drawAddTableForm(){
 	
 	$('#addNewTableButton').click(function() {
 		var tableNumber = $('#newTableNumber').val();
-		console.log(tableNumber);
 		var tableCapacity = $('#newTableCapacityInput').val();
-		console.log(tableCapacity);
 		var existingTableNumbers = getExistingTableNumbers();
 		if(!isNumber(tableNumber) || !isNumber(tableCapacity)){
 			alert("Table number and capacity must be integer values");
