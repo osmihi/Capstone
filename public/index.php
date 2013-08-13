@@ -38,15 +38,6 @@
 
 				navBar();
 
-				if (userRole != '')	{
-
-					request("restaurant", "", RequestType.READ, userInfo, "", function(response) {
-						restaurant = response.data[0];
-					});
-
-					window[NavInitial[userRole]]();
-				}
-
 			});
 
 		</script>

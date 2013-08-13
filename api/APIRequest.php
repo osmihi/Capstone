@@ -35,9 +35,8 @@ class APIRequest {
 	}
 
 	private function buildParams($rq) {
-		while ( $r = current($rq) ) {
-			$this->addParam(key($rq), $r);
-			next($rq);
+		foreach ($rq as $k => $v) {
+			$this->addParam($k, $v);
 		}
 	}
 

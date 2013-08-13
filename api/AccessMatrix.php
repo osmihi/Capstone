@@ -20,7 +20,7 @@ class AccessMatrix {
 		ResourceType::TABLE => array(
 			Role::ADMINISTRATOR => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
 			Role::MANAGER => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
-			Role::WAIT_STAFF => array(RequestType::READ),
+			Role::WAIT_STAFF => array(RequestType::CREATE, RequestType::READ, RequestType::UPDATE, RequestType::DELETE),
 			Role::KITCHEN_STAFF => array(RequestType::READ),
 			Role::HOSTESS => array(RequestType::READ, RequestType::UPDATE)
 		),

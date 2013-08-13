@@ -122,7 +122,7 @@ abstract class Resource {
 
 		$stmt = $this->db->prepare("INSERT INTO `". get_class($this) . "` (" . QueryHelper::buildFieldsList($fieldsList) . ") VALUES (" . QueryHelper::buildBindList($fieldsList) . ")");
 		for ($i = 0; $i < count($fieldsList); $i++) {
-			$stmt->bindValue(':' . $fieldsList[$i] . 'Value', $valuesList[$i], ResourceType::getPDOParamType($valuesList[$i]));
+			$stmt->bindValue(':' . $fieldsList[$i] . 'Value', $valuesList[$i], ResourceType::getPDOParamType($valuesList[$i], $fieldsList[$i]));
 		}
 
 		$res = $this->db->executeInsert($stmt);
@@ -175,7 +175,7 @@ abstract class Resource {
 
 		$stmt = $this->db->prepare("SELECT ". QueryHelper::buildFieldsList(array_unique($this->fieldMap), get_class($this)) . " FROM `" . get_class($this) . "` " . $join . " WHERE " . QueryHelper::buildWhereList($fieldsList, get_class($this)));
 		for ($i = 0; $i < count($fieldsList); $i++) {
-			$stmt->bindValue(':' . $fieldsList[$i] . 'Value', $valuesList[$i], ResourceType::getPDOParamType($valuesList[$i]));
+			$stmt->bindValue(':' . $fieldsList[$i] . 'Value', $valuesList[$i], ResourceType::getPDOParamType($valuesList[$i], $fieldsList[$i]));
 		}
 
 		$res = $this->db->execute($stmt);
@@ -222,10 +222,10 @@ abstract class Resource {
 
 		$stmt = $this->db->prepare("UPDATE `". get_class($this) . "` SET " . QueryHelper::buildUpdateValuesList($fieldsList) . " WHERE " . QueryHelper::buildWhereList($reqFieldsList, get_class($this)));
 		for ($i = 0; $i < count($fieldsList); $i++) {
-			$stmt->bindValue(':' . $fieldsList[$i] . 'Value', $valuesList[$i], ResourceType::getPDOParamType($valuesList[$i]));
+			$stmt->bindValue(':' . $fieldsList[$i] . 'Value', $valuesList[$i], ResourceType::getPDOParamType($valuesList[$i], $fieldsList[$i]));
 		}
 		for ($i = 0; $i < count($reqFieldsList); $i++) {
-			$stmt->bindValue(':' . $reqFieldsList[$i] . 'Value', $reqValuesList[$i], ResourceType::getPDOParamType($reqValuesList[$i]));
+			$stmt->bindValue(':' . $reqFieldsList[$i] . 'Value', $reqValuesList[$i], ResourceType::getPDOParamType($reqValuesList[$i], $reqFieldsList[$i]));
 		}
 
 		$res = $this->db->executeInsert($stmt);
@@ -241,7 +241,7 @@ abstract class Resource {
 
 		$stmt = $this->db->prepare("SELECT ". $fieldNames . " FROM `" . get_class($this) . "` WHERE " . QueryHelper::buildWhereList($reqFieldsList, get_class($this)));
 		for ($i = 0; $i < count($reqFieldsList); $i++) {
-			$stmt->bindValue(':' . $reqFieldsList[$i] . 'Value', $reqValuesList[$i], ResourceType::getPDOParamType($reqValuesList[$i]));
+			$stmt->bindValue(':' . $reqFieldsList[$i] . 'Value', $reqValuesList[$i], ResourceType::getPDOParamType($reqValuesList[$i], $reqFieldsList[$i]));
 		}
 
 		$res = $this->db->execute($stmt);
@@ -281,7 +281,7 @@ abstract class Resource {
 
 		$stmt = $this->db->prepare("DELETE FROM `". get_class($this) . "` WHERE " . QueryHelper::buildWhereList($fieldsList, get_class($this)));
 		for ($i = 0; $i < count($fieldsList); $i++) {
-			$stmt->bindValue(':' . $fieldsList[$i] . 'Value', $valuesList[$i], ResourceType::getPDOParamType($valuesList[$i]));
+			$stmt->bindValue(':' . $fieldsList[$i] . 'Value', $valuesList[$i], ResourceType::getPDOParamType($valuesList[$i], $fieldsList[$i]));
 		}
 
 		$res = $this->db->executeInsert($stmt);

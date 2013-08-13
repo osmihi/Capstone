@@ -101,6 +101,14 @@ function buildNavBar(response) {
 			makeNavButton(NavButtons[role][i])
 		);
 	}
+	
+	if (userRole != '')	{
+		request("restaurant", "", RequestType.READ, userInfo, "", function(response) {
+			restaurant = response.data[0];
+		});
+		
+		window[NavInitial[userRole]]();
+	}
 }
 
 function drawUserInfo(fName, lName, role) {

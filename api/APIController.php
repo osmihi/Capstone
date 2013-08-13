@@ -46,7 +46,7 @@ class APIController {
 			$this->dbc = new DbConnection();
 
 			$this->request = new APIRequest();
-			
+
 			if ( !$this->request->getRequestType() ) throw new Exception("Invalid request type:" . $_SERVER['REQUEST_METHOD'], 200);
 
 			if ( !$this->request->getResourceType() ) throw new Exception("Invalid resource requested.", 400);

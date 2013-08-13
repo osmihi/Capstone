@@ -87,10 +87,12 @@ class ResourceType {
 		return false;
 	}
 
-	public static function getPDOParamType($value) {
-		if (strval(intval($value)) == $value)
+	public static function getPDOParamType($value, $fieldName = null) {
+		if ( $fieldName != null && $fieldName == 'Paid' ) 
+			return PDO::PARAM_BOOL;
+		elseif (strval(intval($value)) == $value)
 			return PDO::PARAM_INT;
-		elseif (is_bool($value))
+		elseif (is_bool($value) )
 			return PDO::PARAM_BOOL;
 		elseif (is_null($value))
 			return PDO::PARAM_NULL;

@@ -9,7 +9,7 @@
 
 function billScreen() {
 	refreshFunc = function() {};
-	
+
 	selectedBill = new Bill(selectedTable);
 }
 
