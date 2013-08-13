@@ -26,21 +26,27 @@ function tablesScreen() {
 
 function buildTablesScreen(tablesResponse) {
 	$('#page').html("");
-
-	tableCollection = tablesResponse.data;
-
-	tableCollection.sort(function(a, b) {
-		if (a.Number < b.Number) return -1;
-		else return 1;
-	});
-
+	
 	if(userIsManagement()){
 		drawAddTableForm();
 	}
-
-	for ( i = 0; i < tableCollection.length; i++) {
-		drawTableTable(tableCollection[i], buildTablesScreen.users);
+	
+	tableCollection = tablesResponse.data;
+	
+	if(tableCollection == null){
+		$('#page').append("<h2>There are currently no tables to display</h2>");
 	}
+	else{
+		tableCollection.sort(function(a, b) {
+			if (a.Number < b.Number) return -1;
+			else return 1;
+		});
+		
+		for ( i = 0; i < tableCollection.length; i++) {
+			drawTableTable(tableCollection[i], buildTablesScreen.users);
+		}
+	}
+
 }
 
 function drawTableTable(table, userData) {
@@ -108,43 +114,43 @@ function drawAddTableForm(){
 	var addTableMarkup = 
 		'<div id="addNewTableForm" class="formButton addTable">' +
 			'<div id="addNewTableButton" class="formButton">Add</div>' + 
-			'<div id="newTableName" class="inputLabel tableNameLabel">Number </div>' + tableNumberSelector() + ''+ 
+			'<div class="inputLabel tableNameLabel">Number </div><input type="text" id="newTableNumber" class="inputField" value="" maxlength="2" size="3"/>' + 
 			'<div class="newTableCapacity inputLabel tableCapacityLabel">Capacity </div><input type="text" id="newTableCapacityInput" class="inputField" value="" maxlength="2" size="3"/>' + 
 		'</div>';
 	$('#page').append(addTableMarkup);
 	
 	$('#addNewTableButton').click(function() {
 		var tableNumber = $('#newTableNumber').val();
+		console.log(tableNumber);
 		var tableCapacity = $('#newTableCapacityInput').val();
+		console.log(tableCapacity);
+		var existingTableNumbers = getExistingTableNumbers();
 		if(!isNumber(tableNumber) || !isNumber(tableCapacity)){
-			alert("Table number and capacity must be integer values")
+			alert("Table number and capacity must be integer values");
 		}
-		var createQuery = 'Capacity=' + $('#newTableCapacityInput').val() + '&Number=' + tableNumber;	
-		request("table", "", RequestType.CREATE, userInfo, createQuery, tablesScreen);
+		else if($.inArray(tableNumber, existingTableNumbers) != -1){
+			alert("Table number " + tableNumber + " is already taken");
+		}
+		else{
+			var createQuery = 'Capacity=' + $('#newTableCapacityInput').val() + '&Number=' + tableNumber;	
+			request("table", "", RequestType.CREATE, userInfo, createQuery, tablesScreen);			
+		}
 	});
 }
 
 
-function tableNumberSelector(){
-	var existingTableNumbers = getExistingTableNumbers();
-	var selectorString = '<select id="newTableNumber" class="inputField"><option value="NULL"></option>';
-	for(var i=1; i<101; i++){
-		if($.inArray(i, existingTableNumbers) != -1){
-			alert(i);
-			continue;
-		}
-		else selectorString += '<option value="' + i + '">' + i + '</option>';
-	}
-	selectorString += '</select>';
-	return selectorString;
-}
-
 function getExistingTableNumbers(){
 	var existingTableNumbers = [];
-	for(var i=0; i<tableCollection.length; i++){
+	if(tableCollection == null){
+		return existingTableNumbers
+	}
+	else{
+		for(var i=0; i<tableCollection.length; i++){
 		existingTableNumbers.push(tableCollection[i].Number); 
 	}
 	return existingTableNumbers; 
+	}
+
 }
 
 function userIsManagement(){

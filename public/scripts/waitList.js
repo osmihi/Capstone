@@ -16,25 +16,30 @@ function buildWaitListScreen(response) {
 
 	if (response.statusCode == "200") {
 		waitLists = response.data;
+		//Wipe page clean (remove previous existing content)
+		$('#page').html("");
+		//Form to add party to wait list 
+		drawAddToWaitListForm();
+		if(waitLists == null){
+			$('#page').append("<h2>There are currently no parties in the wait list</h2>");
+		}
+		else{
+			//Sort waitLists in descending order by timestamp (oldest time stamp first) 
+			if(waitLists.length > 1){
+				waitLists.sort(function(objA, objB) {
+					if (objA.Timestamp < objB.Timestamp)
+						return -1;
+					else
+						return 1;
+				});	
+			}
+			
+			//Iterate through waitLists, call drawWaitlist for each party
+			for (i = 0; i < waitLists.length; i++) {
+				drawWaitlist(waitLists[i]);
+			}	
+		}
 	
-	//Sort waitLists in descending order by timestamp (oldest time stamp first) 
-		waitLists.sort(function(objA, objB) {
-			if (objA.Timestamp < objB.Timestamp)
-				return -1;
-			else
-				return 1;
-		});
-	}
-	
-	//Wipe page clean (remove previous existing content)
-	$('#page').html("");
-
-	//Form to add party to wait list 
-	drawAddToWaitListForm();
-	
-	//Iterate through waitLists, call drawWaitlist for each party
-	for (i = 0; i < waitLists.length; i++) {
-		drawWaitlist(waitLists[i]);
 	}
 }
 
@@ -59,7 +64,15 @@ function drawAddToWaitListForm() {
 function addPartyToWaitList(){
 	var partyName = $('#partyNameInput').val();
 	var partySize = $('#partySizeInput').val();
-	request("waitlist", "", RequestType.CREATE, userInfo, "Name="+partyName+"&Size="+partySize, waitListScreen);
+	if(partyName == "" || partyName == null){
+		alert("Party must have a name.")
+	}
+	else if(!isNumber(partySize)){
+		alert("Party size must be a number.")
+	}
+	else{
+		request("waitlist", "", RequestType.CREATE, userInfo, "Name="+partyName+"&Size="+partySize, waitListScreen);		
+	}
 }
 
 //Creates box containing party information
@@ -70,6 +83,7 @@ function drawWaitlist(waitList) {
 	$('#page').append(
 			'<div id="waitList' + waitList.WaitListID + '" class="formButton waitList">' +
 				'<div id="waitListSelect' + waitList.WaitListID + '" class="formButton waitListSelectBtn">Select</div>' +
+				'<div id="waitListDelete' + waitList.WaitListID + '"class="formButton waitListDeleteBtn">X</div>' +
 				'<div class="waitListLabel waitListName">' + waitList.Name + '</div>' +  
 				'<div class="waitListLabel waitListSize">Party of ' + waitList.Size + '</div>' +
 				'<div class="waitListLabel waitListTimestamp">Waiting since ' + thisDate.toLocaleTimeString() + '</div>' +
@@ -79,5 +93,13 @@ function drawWaitlist(waitList) {
 	$('#waitListSelect' + waitList.WaitListID).click(function() {
 		partyIsSelected = true;
 		seatingScreen(waitList);
+	});
+	
+	//Add click function to waitlist delete button
+	$('#waitListDelete' + waitList.WaitListID).click(function() {
+		var isSure =confirm("Are you sure you want to delete this party?");
+		if(isSure){		
+			request("waitList", waitList.WaitListID, RequestType.DELETE, userInfo, 'ID='+waitList.WaitListID, waitListScreen);			
+		}
 	});
 }
