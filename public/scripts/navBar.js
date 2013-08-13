@@ -91,31 +91,31 @@ function buildNavBar(response) {
 		'</div>'
 	);
 
-	drawUserInfo(fName, lName, role);
-
-	$('#header').append('<div id="navBar"></div>');
-
-	// make a button/link for each page they have access to
-	for (i = 0; i < NavButtons[role].length; i++) {
-		$('#navBar').append(
-			makeNavButton(NavButtons[role][i])
-		);
-	}
-	
-	if (userRole != '')	{
-		request("restaurant", "", RequestType.READ, userInfo, "", function(response) {
-			restaurant = response.data[0];
-		});
+	request("restaurant", "", RequestType.READ, userInfo, "", function(response) {
+		restaurant = response.data[0];
 		
-		window[NavInitial[userRole]]();
-	}
+		drawUserInfo(fName, lName, role);
+
+		$('#header').append('<div id="navBar"></div>');
+
+		// make a button/link for each page they have access to
+		for (i = 0; i < NavButtons[role].length; i++) {
+			$('#navBar').append(
+				makeNavButton(NavButtons[role][i])
+			);
+		}
+		
+		if (userRole != '')	{
+			window[NavInitial[userRole]]();
+		}
+	});
 }
 
 function drawUserInfo(fName, lName, role) {
 	$('#header').append(
-		'<div id="userInfo" class="userInfoBox">' +
-			'<div class="userFullName">' + fName + ' ' + lName + '</div>' +
-			'<div class="userRole">' + role + '</div>' +
+		'<div id="userInfo" class="userInfoBox">' + 
+			'<div class="userFullName">' + fName + ' ' + lName + '</div>' + 
+			'<div class="userRole">' + role + ', ' + restaurant.Name + '</div>' +
 			'<input id="logoutSubmit" type="submit" value="Log Out">' + '<br />' +
 		'</div>');
 	
