@@ -5,6 +5,8 @@ var orderQueueMenuItems;
 var orderQueueTables;
 var tempOrderItemID;
 
+var scrollScreen = false;
+
 // request(resource, key, rqType, userInfoString, dataString, successFunc, errorFunc)
 
 // request for all orders
@@ -14,13 +16,13 @@ function orderQueueScreen() {
 	
 	refreshFunc = function() {};
 	
+	$("html, body").stop(true);
+	window.scrollTo(0,0);
+	
 	request("order", "", RequestType.READ, userInfo, "",
 			populateOrderQueueOrders, populateOrderQueueOrders);
 	
-	refreshFunc = function() {
-		request("order", "", RequestType.READ, userInfo, "",
-			populateOrderQueueOrders, populateOrderQueueOrders); 
-	};
+	refreshFunc = orderQueueScreen;
 }
 
 
@@ -64,6 +66,7 @@ function populateOrderQueueTables(response){
 function buildOrderQueueScreen() {
 	
 	$('#page').html("");
+
 	addMenuInfoToOrderItems();
 	addOrderItemsToOrders();
 	addTablesToOrders();
@@ -74,7 +77,19 @@ function buildOrderQueueScreen() {
 	else{
 		sortOrders();
 		sortOrderItems();
-				
+
+		var checked = scrollScreen ? 'checked="true"' : '';
+		
+		var scrollCheck = $('<input type="checkbox" id="scrollScreen" ' + checked + '/>'); 
+		
+		scrollCheck.change(function () {
+			scrollScreen = this.checked;
+			enableScroll();
+		});
+		
+		$('#page').append('<div id="scrollCtrl"> Scrolling</div>');
+		$('#scrollCtrl').prepend(scrollCheck);
+
 		// Draw orderQueue
 		for ( var i = 0; i < orderQueueOrders.length; i++) {
 			if(!orderQueueOrders[i].allOrderItemsComplete){
@@ -84,6 +99,8 @@ function buildOrderQueueScreen() {
 		}
 	}
 	addOrderQueueClickFunctions();
+	
+	enableScroll();
 }
 
 
@@ -302,5 +319,13 @@ function updateStatusDisplay(response){
 	}
 }
 
+function enableScroll() {
+	$("html, body").keydown(cancelScroll);
+	$("html, body").mousedown(cancelScroll);
 
+	if (scrollScreen) $("html, body").animate({ scrollTop: $(document).height() }, 40000);
+}
 
+function cancelScroll() {
+	$("html, body").stop(true);
+}
