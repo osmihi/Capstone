@@ -320,7 +320,7 @@ Bill.prototype.payBill = function() {
 
 	var ccNum = prompt('Swipe credit card, or enter \'0\' for Cash.', '');
 
-	if (ccNum && ccNum.length > 0) {
+	if (isNumber(ccNum) && ccNum && ccNum.length > 0) {
 		request('table', '', RequestType.DELETE, userInfo, 'tableID=' + _this.tableID, function() {
 			request('table', '', RequestType.CREATE, userInfo, 'Number=' + _this.table.Number + '&Status=Occupied&Paid=1&Capacity=' + _this.table.Capacity + '&UserID=' + _this.table.UserID, function(response) {
 				selectedTable = response.data[0];
