@@ -137,6 +137,9 @@ function SubmitMenuItemChanges(menuItemID) {
 		else if(!isNumber(itemPrepTime) || !isNumber(itemPrice)){
 			alert("Prep time and price must be numbers")
 		}
+		else if(prepTime < 1 || prepTime > 201){
+			alert("Prep time must be between 1 and 200 minutes");
+		}
 		else{
 			request("menuItem", menuItemID, RequestType.UPDATE, userInfo, "Name="+itemName+"&Category="+itemCategory+"&PrepTime="+itemPrepTime+"&Price="+itemPrice, menuScreen);		
 		}
