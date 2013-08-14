@@ -74,7 +74,8 @@ function addPartyToWaitList(){
 		alert("Party size must 1 or more.")
 	}
 	else{
-		request("waitlist", "", RequestType.CREATE, userInfo, "Name="+partyName+"&Size="+parseInt(partySize), waitListScreen);		
+		partyName = partyName.replace(/(<([^>]+)>)/ig,"");
+		request("waitlist", "", RequestType.CREATE, userInfo, "Name="+ partyName +"&Size="+parseInt(partySize), waitListScreen);		
 	}
 }
 
