@@ -79,6 +79,9 @@ function addItemToMenu(){
 	else if(!isNumber(prepTime) || !isNumber(price)){
 		alert("Prep time and price must be numbers")
 	}
+	else if(prepTime < 1 || prepTime > 201){
+		alert("Prep time must be between 1 and 200 minutes");
+	}
 	else{
 		request("menuItem", "", RequestType.CREATE, userInfo, "Name="+name+"&Category="+category+"&PrepTime="+prepTime+"&Price="+price, menuScreen);
 	}
