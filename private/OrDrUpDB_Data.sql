@@ -265,7 +265,7 @@ AND `Restaurant`.`RestaurantID` = `Table`.`RestaurantID` AND `Restaurant`.`Name`
 
 INSERT INTO `Tip` (`UserID`, `TableID`, `Amount`, `Paid`)
 SELECT `User`.`UserID`, `Order`.`TableID`, 7.75, 0
-FROM `User`, `Order` WHERE `User`.`Username` = 'bootsy.collins'
+FROM `User`, `Order` WHERE `User`.`Username` = 'steve.arrington'
 AND `Order`.`OrderID` = LAST_INSERT_ID();
 
 INSERT INTO `Discounted` (`DiscountID`, `TableID`)
@@ -289,8 +289,8 @@ FROM `Table`, `Restaurant` WHERE `Table`.`Number` = '4'
 AND `Restaurant`.`RestaurantID` = `Table`.`RestaurantID` AND `Restaurant`.`Name` = 'BurgerJoint';
 
 INSERT INTO `Tip` (`UserID`, `TableID`, `Amount`, `Paid`)
-SELECT `User`.`UserID`, `Order`.`TableID`, 3.75, 1
-FROM `User`, `Order` WHERE `Order`.`TableID` AND `User`.`Username` = 'rick.james'
+SELECT `User`.`UserID`, `Order`.`TableID`, 3.75, 0
+FROM `User`, `Order` WHERE `Order`.`TableID` AND `User`.`Username` = 'quincy.jones'
 AND `Order`.`OrderID` = LAST_INSERT_ID();
 
 INSERT INTO `Discounted` (`DiscountID`, `TableID`)
@@ -315,7 +315,7 @@ FROM `Table`, `Restaurant` WHERE `Table`.`Number` = '1'
 AND `Restaurant`.`RestaurantID` = `Table`.`RestaurantID` AND `Restaurant`.`Name` = 'TacoTown';
 
 INSERT INTO `Tip` (`UserID`, `TableID`, `Amount`, `Paid`)
-SELECT `User`.`UserID`, `Order`.`TableID`, 2.50, 1
+SELECT `User`.`UserID`, `Order`.`TableID`, 2.50, 0
 FROM `User`, `Order` WHERE `Order`.`TableID` AND `User`.`Username` = 'dr.dre'
 AND `Order`.`OrderID` = LAST_INSERT_ID();
 
@@ -336,7 +336,7 @@ AND `Restaurant`.`RestaurantID` = `Table`.`RestaurantID` AND `Restaurant`.`Name`
 
 INSERT INTO `Tip` (`UserID`, `TableID`, `Amount`, `Paid`)
 SELECT `User`.`UserID`, `Order`.`TableID`, 4.50, 0
-FROM `User`, `Order` WHERE `Order`.`TableID` AND `User`.`Username` = 'tupac.shakur'
+FROM `User`, `Order` WHERE `Order`.`TableID` AND `User`.`Username` = 'q.tip'
 AND `Order`.`OrderID` = LAST_INSERT_ID();
 
 INSERT INTO `Discounted` (`DiscountID`, `TableID`)

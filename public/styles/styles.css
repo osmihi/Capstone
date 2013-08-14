@@ -166,6 +166,10 @@ img {
 	width:160px;
 }
 
+.inputField.rightAlign {
+	text-align:right;
+}
+
 select.inputField {
 	width: 170px;
 }
@@ -659,7 +663,7 @@ select.inputField {
 
 .orderItemNotes {
 	font-style:italic;
-	margin: 0 10px;
+	margin: 0 15px;
 }
 
 .orderItemNotes.orderItemReady {
@@ -1051,6 +1055,10 @@ select.inputField {
 	width:120px;
 }
 
+.employeeLabel.col2 {
+	margin-left:15px;
+}
+
 .addEmployeeButton {
 	cursor:pointer;
 	display:inline-block;
@@ -1059,7 +1067,7 @@ select.inputField {
 
 	margin-top:3px;
 	padding: 0 8px;
-	width:100px;
+	width:120px;
 	font-size:14pt;
 	
 	text-align:center;
@@ -1085,7 +1093,22 @@ select.inputField {
 
 	margin-top:3px;
 	padding: 0 8px;
-	width:100px;
+	width:120px;
+	font-size:14pt;
+	
+	text-align:center;
+	vertical-align:middle;
+}
+
+.clearTips {
+	cursor:pointer;
+	display:inline-block;
+	float:right;
+	clear:both;
+
+	margin-top:3px;
+	padding: 0 8px;
+	width:120px;
 	font-size:14pt;
 	
 	text-align:center;
@@ -1100,7 +1123,7 @@ select.inputField {
 
 	margin-top:3px;
 	padding: 0 8px;
-	width:100px;
+	width:120px;
 	font-size:14pt;
 	
 	text-align:center;
