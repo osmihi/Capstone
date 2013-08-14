@@ -70,8 +70,11 @@ function addPartyToWaitList(){
 	else if(!isNumber(partySize)){
 		alert("Party size must be a number.")
 	}
+	else if(partySize < 1){
+		alert("Party size must 1 or more.")
+	}
 	else{
-		request("waitlist", "", RequestType.CREATE, userInfo, "Name="+partyName+"&Size="+partySize, waitListScreen);		
+		request("waitlist", "", RequestType.CREATE, userInfo, "Name="+partyName+"&Size="+parseInt(partySize), waitListScreen);		
 	}
 }
 
