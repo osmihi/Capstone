@@ -129,12 +129,12 @@ function drawItems(menuItem) {
 function SubmitMenuItemChanges(menuItemID) {
 		var itemName = $('#menuItem' + menuItemID + 'Name').val();
 		var itemCategory = $('#menuItem' + menuItemID + 'Category').val();
-		var itemPrepTime = $('#menuItem' + menuItemID + 'PrepTime').val();
+		var prepTime = $('#menuItem' + menuItemID + 'PrepTime').val();
 		var itemPrice = $('#menuItem' + menuItemID + 'Price').val();
 		if(itemName == "" || itemName == null){
 			alert("Name cannot be empty");
 		}
-		else if(!isNumber(itemPrepTime) || !isNumber(itemPrice)){
+		else if(!isNumber(prepTime) || !isNumber(itemPrice)){
 			alert("Prep time and price must be numbers")
 		}
 		else if(prepTime < 1 || prepTime > 201){
